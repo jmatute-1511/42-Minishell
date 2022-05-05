@@ -6,11 +6,11 @@
 #    By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/03 17:19:28 by jmatute-          #+#    #+#              #
-#    Updated: 2022/05/04 19:24:45 by jmatute-         ###   ########.fr        #
+#    Updated: 2022/05/05 22:16:56 by jmatute-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=  minishell.c built_echo.c built_pwd.c built_cd.c
+SRCS	=  minishell.c built_echo.c built_pwd.c built_cd.c initialize_vars.c
 
 LIBFT_DIR	= libft/
 
