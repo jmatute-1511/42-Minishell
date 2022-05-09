@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/05 22:44:42 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/09 17:33:49 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 int main(int argc,char **argv,char **envp)
 {
     t_myvars myvars;
-    int count;
+    char    *str;
 
     start_vars(&myvars,envp);
-    count = 0;
-   /* while (myvars.enviroment[count])
+    if (!myvars.my_env)
+        return(0);
+    while (1)
     {
-        printf("%s\n",myvars.enviroment[count]);
-        count++;
-    }*/
-    built_get_pwd();
-    built_cd(&myvars,argv[1]);
-    built_get_pwd();
+        str = readline("🧠🧠🧠Myshell🧠🧠🧠\n");
+        parse_cmd(str);
+        if (strcmp(str,"exit") == 0)
+            break;
+    }
 }

@@ -6,43 +6,45 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 18:53:55 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/05 22:43:17 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/08 13:38:54 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	find_path(char **envp, char *str)
+t_enviroment 	*find_path(t_myvars *myvars, char *str)
 {
-	int	i;
-
-	i = 0;
-	while (envp[i] != 0)
-	{
-		if (ft_strncmp(envp[i], str, ft_strlen(str)) == 0)
-			return (i);
-		i++;
-	}
-	return (0);
+    t_enviroment *aux;
+    
+    aux = myvars->my_env;
+    while (aux->next)
+    {
+        if(ft_strncmp(aux->env_var, str, ft_strlen(str)) == 0)
+            return(aux);
+        aux = aux->next;
+    }
+    return (NULL);
 }
 
-static void change_location(char **pwd, char *str)
+static void change_location(t_enviroment **env_var, char *str)
 {
-    char  *current;
+    char    *current;
+    char    *aux;
 
     chdir(str);
     current = getcwd(NULL, 0);
-   (*pwd) = ft_strjoin("PWD=",current);
- //   printf("%s\n", (*pwd));
+    aux = (*env_var)->env_var;
+    (*env_var)->env_var = ft_strjoin ("PWD=", current);
+    printf("%s\n",(*env_var)->env_var);
 }
 
 void built_cd(t_myvars *myvars,char *str)
 {
-    int pwd;
+    t_enviroment *pwd;
 
-    if (access(str, X_OK) != 0 || *myvars->enviroment == NULL)
+    if (access(str, X_OK) != 0 || myvars->my_env == NULL)
         return ;    
-    pwd = find_path(myvars->enviroment, "PWD=");
-    if (ft_strncmp(myvars->enviroment[pwd],"PWD=", ft_strlen("PWD=")) == 0)
-        change_location(&myvars->enviroment[pwd], str);
+    pwd = find_path(myvars, "PWD=");
+    if (ft_strncmp(pwd->env_var,"PWD=", ft_strlen("PWD=")) == 0)
+        change_location(&pwd, str);
 }

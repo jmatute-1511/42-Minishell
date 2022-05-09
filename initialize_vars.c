@@ -6,39 +6,32 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:13:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/05 22:58:38 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/09 16:24:24 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **fill_enviroment(char **envp)
+t_enviroment *create_env(char **envp)
 {
-    int len;
-    int it;
-    char **enviroment;
-
-    len =  0;
-    it = 0;
-    if(*envp == NULL)
-        return(NULL);
-    while (envp[len])
-        len++;
-    enviroment = (char **)malloc(sizeof(char *) * len + 1);
-    while (envp[it])
+    t_vars_env vars;
+    
+    vars.count = 0;
+    vars.my_env = NULL;
+    if (envp == NULL)
+        return (NULL);
+    while (envp[vars.count])
     {
-        enviroment[it] = envp[it];
-        it++;
+        vars.str = ft_strdup(envp[vars.count]);
+        ft_nodeadd_alphabet(&vars.my_env, ft_nodenew(vars.str));
+		//alphabet_env(&vars, envp);
+        vars.count++;
     }
-    enviroment[len] = NULL;
-    return (enviroment);
+    return (vars.my_env);
 }
-char **set_enviroment(t_myvars *myvars, char *str)
-{
-}
-void start_vars(t_myvars *myvars, char **envp)   
+
+void start_vars(t_myvars *myvars,char **envp)   
 {
     myvars->first_pwd = getcwd(NULL, 0);
-    myvars->enviroment = fill_enviroment(envp);
-    
+    myvars->my_env = create_env(envp);
 }
