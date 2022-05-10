@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 17:03:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/07 19:55:32 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/10 21:03:29 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ size_t	ft_strlen(const char *s);
 size_t	ft_strlcpy(char *dst, const	char *src, size_t dstsize);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 void	free_matrix(char **matrix);
+int		ft_bolean_operator( char diff, char *str);
 
 typedef struct s_list
 {

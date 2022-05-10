@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 16:36:26 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/10 17:55:43 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/10 21:28:58 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,39 @@ int parse_quote(char *str)
 		return (1);
 	return (0);
 }
+int check_if_expand(t_myvars *myvars ,char *str)
+{
+	int  it;
+	int expand_len;
+	char *path;
 
-int return_len(char *str)
+	it  = 0;
+	expand_len  = 0;
+	while (str[it] != ' ' && str[it] != '\f'\
+	&& str[it] != '\n' && str[it] != '\r' && \
+	str[it] != '\t' && str[it] != '\v' && str[it])
+		it++;
+	if(it > 0)
+	{
+		path = find_path(myvars, &str[it], it);
+		if(path != NULL)
+			expand_len = ft_strlen(path);
+		free(path);
+		it = 0;
+	}
+	return(expand_len);
+}
+int return_len(t_myvars * myvars, char *str)
 {
 	int count;
 	int simple_quote;
 	int pair_quote;
-	int rest;
-	int	expand_len;
-
+	int len;
+	
 	pair_quote = 0;
 	simple_quote = 0;
 	count = 0;
-	rest  = 0;
+	len = 0;
 	while (str[count])
 	{
 		if (str[count] == '"'  && pair_quote == 0 && simple_quote == 0)
@@ -57,28 +77,23 @@ int return_len(char *str)
 		else if (str[count] == '"'  && pair_quote == 1)
 		{
 			pair_quote--;
-			rest += 2;
+			len -= 2;
 		}
 		if (str[count] == '\''  && simple_quote == 0 && pair_quote == 0)
 			simple_quote++;
 		else if (str[count] == '\''  && simple_quote == 1)
 		{
 			simple_quote--;
-			rest += 2;
+			len -= 2;
 		}
 		if (pair_quote == 1 && str[count] == '$')
-		{
-			while ()
-			{
-				/* code */
-			}
-			
-		}
+			len += check_if_expand(myvars,&str[count]);
 		if (str[count] == '|' && simple_quote == 0 && pair_quote == 0)
-			return(count - rest);
+			return(len);
 		count++;
+		len++;
 	}
-	return (count - rest);
+	return (len);
 }
 
 
@@ -93,7 +108,7 @@ char  *find_path(t_myvars *myvars, char *str, int top)
 	{	
 		if (ft_strncmp(aux->env_var, str, top))
 		{
-			expand = ft_strdup(&aux->env_var[top]);
+			expand = ft_strdup(&aux->env_var[top + 1]);
 			return (expand);
 		}
 		aux = aux ->next;
@@ -124,7 +139,6 @@ int	parse_cmd(char *str)
 	
 	if(parse_quote(str))
 		return (1);
-	count = return_len(str);
 	printf("%d\n",count);
 	
 }
