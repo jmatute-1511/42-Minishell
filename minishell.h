@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/09 17:59:54 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/10 17:23:54 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include "/usr/include/readline/readline.h"
-#include "/usr/include/readline/history.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <dirent.h>
 #include <sys/types.h>
 
