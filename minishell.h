@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/10 17:23:54 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/11 22:01:25 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,10 @@ typedef struct s_myvars
 }               t_myvars;
 typedef struct s_vars_env
 {
-    t_enviroment    *aux;
-    t_enviroment    *end;
+
     t_enviroment    *my_env;
+    t_enviroment    *export_env;
     char            *str;
-    int             sort;
     int             count;
     
 }           t_vars_env;
@@ -54,7 +53,7 @@ typedef struct s_cmd_line
     char    *line;
     char    type;
     
-    
+
 }               t_cmd_line;
 void			start_vars(t_myvars *myvars, char **envp) ;
 void			built_get_pwd(void);
@@ -65,6 +64,7 @@ t_enviroment	*ft_nodenew(char *new_var);
 void			ft_nodeadd_back(t_enviroment **lst, t_enviroment *new);
 void            ft_nodeadd_alphabet(t_enviroment **lst, t_enviroment *new);
 void			free_lst(t_enviroment *node);
-void            built_export(t_enviroment **my_env, char *str);
-int             parse_cmd(char *str);
+void            built_export(t_enviroment **my_env ,t_enviroment **export_env, char *str);
+void            print_env(t_enviroment *export_env);
+//int             parse_cmd(char *str);
 #endif

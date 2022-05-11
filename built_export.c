@@ -6,61 +6,103 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:53:04 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/09 17:27:05 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/11 21:58:58 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int parse_str(char *str)
+int		ft_point_strchr(const char *s, int c)
 {
-	int count;
-	int simple_quote;
-	int pair_quote;
+	size_t		count;
+	char		*cpy_s;
+	int 		len;
 
-	pair_quote = 0;
-	simple_quote = 0;
+	cpy_s = (char *)s;
 	count = 0;
-	while (str[count])
+	len = ft_strlen(s);
+	while (count <= len)
 	{
-		if (str[count] == '=' && (str[count - 1] == ' ' || str[count + 1] == ' '))
-			return(1);
-		if (str[count] == '"'  && pair_quote == 0 && simple_quote == 0)
-			pair_quote++;
-		else if (str[count] == '"'  && pair_quote == 1)
-			pair_quote--;
-		if (str[count] == '\''  && simple_quote == 0 && pair_quote == 0)
-			simple_quote++;
-		else if (str[count] == '\''  && simple_quote == 1)
-			simple_quote--;
+		if (cpy_s[count] == (char)c)
+			return (count);
 		count++;
 	}
-	if (pair_quote != 0  || simple_quote != 0)
-		return (1);
 	return (0);
 }
 
-void print_env(t_enviroment **my_env)
+void set_or_new_node_env(t_enviroment *my_env, char *str)
 {
 	t_enviroment *aux;
 
-	aux = (*my_env);
+	aux = my_env;
 	while (aux->next)
+	{
+		if (ft_strncmp(aux->env_var, str, ft_point_strchr(str, '=')))
+		{
+			free(aux->env_var);
+			aux->env_var = ft_strdup(str);
+		}
+		aux = aux->next;
+	}
+	if (ft_strncmp(aux->env_var, str, ft_point_strchr(str, '=')))
+	{
+		free(aux->env_var);
+		aux->env_var = ft_strdup(str);
+	}
+	else if (aux->next == NULL)
+		ft_nodeadd_back(&my_env, ft_nodenew(str));
+}
+
+void set_or_new_node_export(t_enviroment *export_env, char *str)
+{
+	t_enviroment *aux;
+
+	aux = export_env;
+	while (aux->next)
+	{
+		if (ft_strncmp(aux->env_var, str, ft_point_strchr(str, '=')))
+		{
+			free(aux->env_var);
+			aux->env_var = ft_strdup(str);
+		}
+		aux = aux->next;
+	}
+	if (ft_strncmp(aux->env_var, str, ft_point_strchr(str, '=')))
+	{
+		free(aux->env_var);
+		aux->env_var = ft_strdup(str);
+	}
+	else if (aux->next == NULL)
+		ft_nodeadd_back(&export_env, ft_nodenew(str));
+}
+
+void print_env(t_enviroment *export_env)
+{
+	t_enviroment *aux;
+
+	aux = export_env;
+	while (aux)
 	{
 		printf("declare -x %s\n",aux->env_var);
 		aux = aux->next;
 	}
-	
 }
 
-void built_export(t_enviroment **my_env, char *str)
+void built_export(t_enviroment **my_env,t_enviroment **export_env, char *str)
 {
 	int same;
 	
-	if (str == NULL)
-		print_env(my_env);
-	else if (parse_str(str))
-		return ;
-	else
-		ft_nodeadd_alphabet(my_env,ft_nodenew(str));
+	if (ft_strchr(str, '=') != NULL)
+	{
+		ft_putstr_fd("ENTRE", 1);
+		//set_or_new_node_env(*my_env, str);
+		//set_or_new_node_export(*export_env, str);
+		print_env(*my_env);
+		print_env(*export_env);
+	}
+	else if (ft_strchr(str, '=') == NULL)
+	{
+		ft_nodeadd_alphabet(export_env, ft_nodenew(str));
+		print_env(*export_env);
+	}
 }

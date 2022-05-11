@@ -6,11 +6,35 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 20:28:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/08 16:13:24 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/11 22:08:41 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+void	ft_nodeadd_front(t_enviroment **alst, t_enviroment *new)
+{
+	if (alst && new)
+	{
+		new->next = (*alst);
+		(*alst) = new;
+	}
+}
+int	ft_nodesize(t_enviroment *lst)
+{
+	size_t	len;
+	t_enviroment	*aux;
+
+	len = 0;
+	aux = lst;
+	while (aux)
+	{
+		aux = aux->next;
+		len++;
+	}
+	return (len);
+}
 
 t_enviroment	*ft_nodenew(char *new_var)
 {
@@ -51,38 +75,33 @@ void	ft_nodeadd_back(t_enviroment **lst, t_enviroment *new)
 	}
 }
 
-void	ft_nodeadd_alphabet(t_enviroment **lst, t_enviroment *new)
+void	ft_nodeadd_alphabet(t_enviroment  	**lst, t_enviroment *new)
 {
 	t_enviroment	*aux;
-	t_enviroment	*aux_node;
 	
-	if (lst)
+	if (lst == NULL)
+		*lst = new;
+	else if (ft_nodesize(*lst) == 1)
 	{
-		if (*lst == NULL)
-		{
-			(*lst) = new;
-			return ;
-		}
+		if (ft_strcmp((*lst)->env_var, new->env_var) > 0)
+			ft_nodeadd_front(lst, new);
+		else
+			ft_nodeadd_back(lst, new);
+	}
+	else
+	{
 		aux = (*lst);
-		if(ft_strcmp(aux->env_var, new->env_var) > 0 && aux->next == NULL)
+		while (aux)
 		{
-			new->next = aux;
-			(*lst) = new;
-		}
-		while (aux->next)
-		{
-			if (ft_strcmp(aux->env_var, new->env_var) > 0)
+			if (ft_strcmp((*lst)->env_var, new->env_var) > 0)
+			{
+				ft_nodeadd_front(&aux, new);
 				break;
-			aux_node = aux;
-			aux = aux->next;
+			}
+			else if (aux->next == NULL)
+				ft_nodeadd_back(&aux, new);
+			aux =aux->next;
 		}
-		if (ft_strcmp(aux->env_var, new->env_var) > 0)
-		{
-			aux_node->next = new;
-			new->next = aux;
-		}
-		else 
-			ft_nodeadd_back(lst,new);
 	}
 }
 

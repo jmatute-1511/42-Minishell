@@ -6,13 +6,13 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:55:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/09 16:57:04 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/11 16:54:32 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int  after_string(char *str, char *find)
+static int  after_option(char *str, char *find)
 {
 	int	after;
 	int	begin;
@@ -21,41 +21,19 @@ static int  after_string(char *str, char *find)
 	begin  = 0;
 	while (str[after])
 	{
-		while (str[after] == find[begin])
+		if (str[after] == find[begin])
 		{
-			after++;
 			begin++;
+			after++;
+			while (str[after] == find[begin])
+				after++;
+			if (str[after] == ' ')
+				return(after + 1);
+			else 
+				return (0);
 		}
-		if (begin == ft_strlen(find))
-			return(after + 1);
-		begin  = 0;
 		after++;
 	}
-	return (0);
-}
-static int parse_str(char *str)
-{
-	int count;
-	int simple_quote;
-	int pair_quote;
-
-	pair_quote = 0;
-	simple_quote = 0;
-	count = 0;
-	while (str[count])
-	{
-		if (str[count] == '"'  && pair_quote == 0 && simple_quote == 0)
-			pair_quote++;
-		else if (str[count] == '"'  && pair_quote == 1)
-			pair_quote--;
-		if (str[count] == '\''  && simple_quote == 0 && pair_quote == 0)
-			simple_quote++;
-		else if (str[count] == '\''  && simple_quote == 1)
-			simple_quote--;
-		count++;
-	}
-	if (pair_quote != 0  || simple_quote != 0)
-		return (1);
 	return (0);
 }
 
@@ -63,10 +41,17 @@ static char    *print_str(char *str)
 {
 	char	*cpy;
 	char	*aux;
+	char 	*aux2;
 
-	if(parse_str(str))
+	aux2 = ft_strtrim(str, " ");
+	if (ft_strlen(aux2) == 0)
+	{		
+		free(aux2);
 		return(NULL);
+	}
 	cpy = (char *)malloc(sizeof(char) * ((ft_strlen(str)  + 1)));
+	if(!cpy)
+		return(NULL);
 	aux = cpy;
 	while (*str != '\0')
 	{
@@ -84,13 +69,13 @@ static char    *print_str(char *str)
 void    built_echo(char *str)
 {
 	int		begin;
-	int		new_begin;;
+	int		new_begin;
 	char	*echo;
 
-	if (after_string(str, "echo"))
+	if (ft_strncmp(str, "echo",(ft_strlen("echo"))) == 0)
 	{
-		begin = after_string(str, "echo");
-		new_begin = after_string(str, "-n");
+		begin = ft_strlen("echo");
+		new_begin = after_option(str, "-n");
 		if(new_begin > 0)
 		{
 			echo = print_str(&str[new_begin]);
@@ -99,9 +84,10 @@ void    built_echo(char *str)
 		}
 		else
 		{
-			echo = print_str(&str[begin]);
+			echo = print_str(&str[begin + 1]);
 			if (echo != NULL)
-			printf("%s\n", ft_strtrim(echo, " "));
+				printf("%s\n", ft_strtrim(echo, " "));
 		}
 	}
+	
 }
