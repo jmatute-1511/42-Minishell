@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 20:28:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/11 22:08:41 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/12 20:38:30 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_nodeadd_front(t_enviroment **alst, t_enviroment *new)
 }
 int	ft_nodesize(t_enviroment *lst)
 {
-	size_t	len;
+	size_t			len;
 	t_enviroment	*aux;
 
 	len = 0;
@@ -40,7 +40,7 @@ t_enviroment	*ft_nodenew(char *new_var)
 {
 	t_enviroment	*new;
 
-	new = malloc(sizeof(t_list));
+	new = malloc(sizeof(t_enviroment));
 	if (!new)
 		return (NULL);
 	new->env_var = new_var;
@@ -75,33 +75,40 @@ void	ft_nodeadd_back(t_enviroment **lst, t_enviroment *new)
 	}
 }
 
-void	ft_nodeadd_alphabet(t_enviroment  	**lst, t_enviroment *new)
+void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
 {
 	t_enviroment	*aux;
+	t_enviroment	*aux_node;
 	
-	if (lst == NULL)
-		*lst = new;
-	else if (ft_nodesize(*lst) == 1)
+	if ((*lst) == NULL)
+		(*lst)= (*new);
+	else if(ft_strcmp((*lst)->env_var,(*new)->env_var) > 0)
 	{
-		if (ft_strcmp((*lst)->env_var, new->env_var) > 0)
-			ft_nodeadd_front(lst, new);
-		else
-			ft_nodeadd_back(lst, new);
+		 (*new)->next = (*lst) ;
+		 (*lst) = (*new);
 	}
-	else
-	{
+	else{
 		aux = (*lst);
-		while (aux)
+		aux_node = NULL;
+		while(aux)
 		{
-			if (ft_strcmp((*lst)->env_var, new->env_var) > 0)
+			if (ft_nodesize(aux) > 1 && ft_strcmp(aux->env_var, (*new)->env_var) > 0 && aux_node)
 			{
-				ft_nodeadd_front(&aux, new);
+				aux_node->next = (*new);
+				(*new)->next = aux;
 				break;
 			}
-			else if (aux->next == NULL)
-				ft_nodeadd_back(&aux, new);
-			aux =aux->next;
+			aux_node = aux;
+			aux = aux->next;
 		}
-	}
+		if(aux == NULL)
+			aux_node->next = (*new);
+		/*if (aux_node)
+		{
+			printf("%p\n",aux_node);
+			printf("%p\n", aux);
+			printf("===================================================\n");
+		}*/
+}
 }
 
