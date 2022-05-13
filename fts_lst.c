@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 20:28:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/12 20:38:30 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/13 21:02:58 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_enviroment	*ft_nodenew(char *new_var)
 	new = malloc(sizeof(t_enviroment));
 	if (!new)
 		return (NULL);
-	new->env_var = new_var;
+	new->env_var = ft_strdup(new_var);
 	new->next = NULL;
 	return (new);
 }
@@ -57,7 +57,7 @@ void free_lst(t_enviroment *node)
     free(node);
 }
 
-void	ft_nodeadd_back(t_enviroment **lst, t_enviroment *new)
+void	ft_nodeadd_back(t_enviroment **lst, t_enviroment **new)
 {
 	t_enviroment	*aux;
 	
@@ -65,13 +65,13 @@ void	ft_nodeadd_back(t_enviroment **lst, t_enviroment *new)
 	{
 		if (*lst == NULL)
 		{
-			(*lst) = new;
+			(*lst) = *new;
 			return ;
 		}
 		aux = (*lst);
 		while (aux->next)
 			aux = aux->next;
-		aux->next = new;
+		aux->next = *new;
 	}
 }
 
@@ -87,7 +87,8 @@ void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
 		 (*new)->next = (*lst) ;
 		 (*lst) = (*new);
 	}
-	else{
+	else
+	{
 		aux = (*lst);
 		aux_node = NULL;
 		while(aux)
@@ -103,12 +104,6 @@ void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
 		}
 		if(aux == NULL)
 			aux_node->next = (*new);
-		/*if (aux_node)
-		{
-			printf("%p\n",aux_node);
-			printf("%p\n", aux);
-			printf("===================================================\n");
-		}*/
-}
+	}
 }
 

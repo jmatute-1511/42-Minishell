@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 20:14:51 by jmatute-          #+#    #+#             */
-/*   Updated: 2021/05/28 18:16:18 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:47:51 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 		while (haystack[a + d] == needle[d] && needle[d] && a + d < len)
 		{
 			if (d + 1 == ft_strlen(needle))
-				return ((char *)haystack + a);
+				return ((char *)haystack + a + d + 1);
 			d++;
 		}
 		d = 0;
 		a++;
 	}
-	return (0);
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:13:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/12 20:47:35 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/13 21:00:46 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ t_enviroment *create_export_env(char **envp)
 t_enviroment *create_env( char **envp)
 {
     t_enviroment	*my_env;
-    char			*str;
+    t_enviroment    *new;
     int				count;
+    
     
     count = 0;
     my_env  = NULL;
@@ -44,8 +45,8 @@ t_enviroment *create_env( char **envp)
         return (NULL);
     while (envp[count])
     {
-        str = ft_strdup(envp[count]);
-        ft_nodeadd_back(&my_env, ft_nodenew(str));
+        new = ft_nodenew(envp[count]);
+        ft_nodeadd_back(&my_env, &new);
         count++;
     }
     return (my_env);
