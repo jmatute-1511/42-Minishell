@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 17:03:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/11 21:14:01 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/14 00:32:11 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		ft_isprint(int c);
 int		ft_atoi(const char *str);
 long	ft_long_atoi(const char *str);
 int		ft_strcmp(char *s1,char *s2);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strncmp(char *s1, char *s2, size_t n);
 int		ft_memcmp(const void *str1, const void *str2, size_t n);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_bzero(void *s, size_t n);

@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/13 21:01:03 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/14 04:31:29 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_cmd_line
 }               t_cmd_line;
 void			start_vars(t_myvars *myvars, char **envp) ;
 void			built_get_pwd(void);
+void            built_env(t_enviroment **myenv);
 void			built_echo(char *str);
 void			open_directory(char *str);
 void			built_cd(t_myvars *myvars,char *str);
@@ -63,7 +64,9 @@ t_enviroment	*ft_nodenew(char *new_var);
 void			ft_nodeadd_back(t_enviroment **lst, t_enviroment **new);
 void            ft_nodeadd_alphabet(t_enviroment **lst, t_enviroment **new);
 void			free_lst(t_enviroment *node);
+int		        ft_point_strchr(char *s, char c);
 void            built_export(t_enviroment **my_env ,t_enviroment **export_env, char *str);
 void            print_env(t_enviroment *export_env, char *option);
+void            buil_unset(t_enviroment **myenv, t_enviroment **export_env, char *str);
 //int             parse_cmd(char *str);
 #endif

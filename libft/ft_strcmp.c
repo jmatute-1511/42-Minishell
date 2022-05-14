@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 17:23:10 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/11 21:19:59 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/14 03:05:24 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,8 @@ int	ft_strcmp(char *s1, char *s2)
 	count = 0;
 	while ((s1[count] || s2[count]))
 	{
-		n = s1[count];
-		s = s2[count];
-		l = n - s;
 		if (s1[count] != s2[count])
-			return (l);
+			return ((int)s1[count] - (int)s2[count]);
 		count++;
 	}
 	return (0);

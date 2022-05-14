@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 16:36:26 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/11 16:56:18 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/14 04:59:55 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,43 +59,6 @@ int check_if_expand(t_myvars *myvars ,char *str)
 	}
 	return(expand_len);
 }
-int return_len(t_myvars * myvars, char *str)
-{
-	int count;
-	int simple_quote;
-	int pair_quote;
-	int len;
-	
-	pair_quote = 0;
-	simple_quote = 0;
-	count = 0;
-	len = 0;
-	while (str[count])
-	{
-		if (str[count] == '"'  && pair_quote == 0 && simple_quote == 0)
-			pair_quote++;
-		else if (str[count] == '"'  && pair_quote == 1)
-		{
-			pair_quote--;
-			len -= 2;
-		}
-		if (str[count] == '\''  && simple_quote == 0 && pair_quote == 0)
-			simple_quote++;
-		else if (str[count] == '\''  && simple_quote == 1)
-		{
-			simple_quote--;
-			len -= 2;
-		}
-		if (pair_quote == 1 && str[count] == '$')
-			len += check_if_expand(myvars,&str[count]);
-		if (str[count] == '|' && simple_quote == 0 && pair_quote == 0)
-			return(len);
-		count++;
-		len++;
-	}
-	return (len);
-}
-
 
 char  *find_path(t_myvars *myvars, char *str, int top)
 {
@@ -116,29 +79,4 @@ char  *find_path(t_myvars *myvars, char *str, int top)
 	return (NULL);
 }
 
-char * filtered_str(t_cmd_line *line_cmd,t_myvars *myvars, char  str)
-{
-	
-}
-
-int len_newstr(t_myvars *myvars, char *str)
-{
-	int count;
-	int len;
-	int aux_len;
-	
-	count = 0;
-}
-char *return_str(char *  str)
-{
-	
-}
-int	parse_cmd(char *str)
-{
-	int count;
-	
-	if(parse_quote(str))
-		return (1);
-	printf("%d\n",count);
-	
-}
+int parse_str	

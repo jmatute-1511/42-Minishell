@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 20:28:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/13 21:02:58 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/14 03:18:52 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
 {
 	t_enviroment	*aux;
 	t_enviroment	*aux_node;
+	int				a;
 	
 	if ((*lst) == NULL)
 		(*lst)= (*new);
@@ -93,7 +94,7 @@ void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
 		aux_node = NULL;
 		while(aux)
 		{
-			if (ft_nodesize(aux) > 1 && ft_strcmp(aux->env_var, (*new)->env_var) > 0 && aux_node)
+			if (ft_strcmp(aux->env_var, (*new)->env_var) > 0 && aux_node)
 			{
 				aux_node->next = (*new);
 				(*new)->next = aux;
@@ -102,8 +103,9 @@ void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
 			aux_node = aux;
 			aux = aux->next;
 		}
-		if(aux == NULL)
+		if (aux == NULL)
 			aux_node->next = (*new);
+		
 	}
 }
 
