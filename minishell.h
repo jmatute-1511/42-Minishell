@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/14 04:31:29 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/16 13:58:36 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,15 @@
 #include <readline/history.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <limits.h>
 
+#ifndef P_QUOTE // Pair quotes
+#define P_QUOTE 0
+#endif
+
+#ifndef S_QUOTE // single quotes
+#define S_QUOTE 1
+#endif
 
 typedef struct s_enviroment
 {
@@ -39,21 +47,16 @@ typedef struct s_myvars
 }               t_myvars;
 typedef struct s_vars_env
 {
-
     t_enviroment    *my_env;
     t_enviroment    *export_env;
-    char            *str;
-    int             count;
-    
 }           t_vars_env;
 
 typedef struct s_cmd_line
 {
-    char    *line;
-    char    type;
-    
-
+    char    *line;    char    type;
 }               t_cmd_line;
+
+
 void			start_vars(t_myvars *myvars, char **envp) ;
 void			built_get_pwd(void);
 void            built_env(t_enviroment **myenv);

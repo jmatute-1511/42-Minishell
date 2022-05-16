@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:53:04 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/13 20:58:25 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/16 14:49:29 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		ft_point_strchr(char *s, char c)
 	if (cpy_s[count] != '\0')
 		return(count);
 	else
-		return (0);
+		return (ft_strlen(s));
 }
 
 void set_or_new_node_env(t_enviroment **my_env, char *str)
