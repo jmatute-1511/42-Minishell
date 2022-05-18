@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/16 13:58:36 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/18 18:23:42 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@
 #ifndef S_QUOTE // single quotes
 #define S_QUOTE 1
 #endif
+
+#ifndef IT_STR // string iterator
+#define IT_STR 0
+#endif
+
+#ifndef IT_LINE // line iterator
+#define IT_LINE 1
+#endif  
 
 typedef struct s_enviroment
 {
@@ -71,5 +79,7 @@ int		        ft_point_strchr(char *s, char c);
 void            built_export(t_enviroment **my_env ,t_enviroment **export_env, char *str);
 void            print_env(t_enviroment *export_env, char *option);
 void            buil_unset(t_enviroment **myenv, t_enviroment **export_env, char *str);
+char 	        *filtered_cmd(t_enviroment **myenv, char *str);
+
 //int             parse_cmd(char *str);
 #endif
