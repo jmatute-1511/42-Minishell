@@ -6,14 +6,14 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 20:28:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/14 03:18:52 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/19 17:13:22 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-void	ft_nodeadd_front(t_enviroment **alst, t_enviroment *new)
+void	ft_nodeadd_front(t_enviroment **alst, t_enviroment *new) // add in front new node of enviroment variables to lst
 {
 	if (alst && new)
 	{
@@ -21,22 +21,9 @@ void	ft_nodeadd_front(t_enviroment **alst, t_enviroment *new)
 		(*alst) = new;
 	}
 }
-int	ft_nodesize(t_enviroment *lst)
-{
-	size_t			len;
-	t_enviroment	*aux;
 
-	len = 0;
-	aux = lst;
-	while (aux)
-	{
-		aux = aux->next;
-		len++;
-	}
-	return (len);
-}
 
-t_enviroment	*ft_nodenew(char *new_var)
+t_enviroment	*ft_nodenew(char *new_var) // create a new node of enviroment variables
 {
 	t_enviroment	*new;
 
@@ -48,16 +35,8 @@ t_enviroment	*ft_nodenew(char *new_var)
 	return (new);
 }
 
-void free_lst(t_enviroment *node)
-{
-    t_enviroment *aux;
 
-    aux = node;
-    free(node->env_var);
-    free(node);
-}
-
-void	ft_nodeadd_back(t_enviroment **lst, t_enviroment **new)
+void	ft_nodeadd_back(t_enviroment **lst, t_enviroment **new) // add a new node of enviroment variables to the end of the list
 {
 	t_enviroment	*aux;
 	
@@ -75,7 +54,7 @@ void	ft_nodeadd_back(t_enviroment **lst, t_enviroment **new)
 	}
 }
 
-void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
+void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new) // alphabetize the list of enviroment variables 
 {
 	t_enviroment	*aux;
 	t_enviroment	*aux_node;
@@ -83,8 +62,8 @@ void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
 	
 	if ((*lst) == NULL)
 		(*lst)= (*new);
-	else if(ft_strcmp((*lst)->env_var,(*new)->env_var) > 0)
-	{
+	else if(ft_strcmp((*lst)->env_var,(*new)->env_var) > 0) 
+	{																	// to make short
 		 (*new)->next = (*lst) ;
 		 (*lst) = (*new);
 	}
@@ -108,4 +87,3 @@ void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new)
 		
 	}
 }
-

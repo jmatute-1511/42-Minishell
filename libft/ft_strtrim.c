@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 12:37:36 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/11 17:58:58 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:51:32 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static size_t	ft_set_f(char const *s1, char const *set)
 	return (b);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char *s1, char *set)
 {
 	size_t	a;
 	size_t	c;

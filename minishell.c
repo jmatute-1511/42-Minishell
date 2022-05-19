@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/18 18:33:47 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:43:49 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,19 @@ int main(int argc,char **argv,char **envp)
 {
 	t_myvars myvars;
 	char    *str;
-	char *line;
+	int count;
+	t_cmd_line *lst;
+	
 
 	start_vars(&myvars,envp);
 	if (!myvars.my_env)
 		return(0);
-	line = NULL;
+	count = 0;
 	while (1)
 	{
 		str = readline("🧠🧠🧠Myshell🧠🧠🧠 --->");
-		line = filtered_cmd(&myvars.export_env, str);
+		lst = list_cmds(str);
+		print_cmd(&lst);
 		// if (ft_strnstr(str, "echo", ft_strlen(str)) != NULL)
 		// 	built_echo(str);
 		// else if (ft_strnstr(str, "export", ft_strlen(str)) != NULL)

@@ -6,11 +6,11 @@
 #    By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/03 17:19:28 by jmatute-          #+#    #+#              #
-#    Updated: 2022/05/18 17:33:45 by jmatute-         ###   ########.fr        #
+#    Updated: 2022/05/19 17:13:52 by jmatute-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=  minishell.c built_echo.c built_pwd.c built_cd.c initialize_vars.c fts_lst.c built_export.c built_unset.c built_env.c parse_comand_line.c
+SRCS	=  minishell.c built_echo.c built_pwd.c built_cd.c initialize_vars.c fts_lst.c ft_lst2.c built_export.c built_unset.c built_env.c parser.c#parse_comand_line.c
 
 LIBFT_DIR	= libft/
 
