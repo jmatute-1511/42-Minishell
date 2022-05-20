@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:00:35 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/19 17:10:02 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/20 16:05:05 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,18 @@ void free_lst_node(t_enviroment *node) // free enviroment vars
     free(node);
 }
 
-t_cmd_line	*ft_cmd_nodenew(char *raw_cmd) // create new node of cmds 
+t_cmd_line	*ft_cmd_nodenew(char *raw_cmd, size_t len) // create new node of cmds 
 {
 	t_cmd_line	*new;
+	char		*not_trim;
 
 	new = malloc(sizeof(t_cmd_line));
 	if (!new)
 		return (NULL);
-	new->raw_cmd = ft_strdup(raw_cmd);
+	not_trim = ft_strldup(raw_cmd, len);
+	new->raw_cmd = ft_strtrim(not_trim, "| ");
 	new->next = NULL;
+	free(not_trim);
 	return (new);
 }
 

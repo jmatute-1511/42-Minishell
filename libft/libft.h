@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 17:03:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/19 16:51:24 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:25:32 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ char	**ft_split_ignore(char const *s, char c, char ign);
 char	*ft_strrchr(const char *str, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strnjoin(int nstrings, ...);
+char	*ft_strldup(char *str, size_t len);
 char	*ft_strtrim(char *s1, char *set);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	*ft_substr(char const *s, unsigned int start, size_t len);

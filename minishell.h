@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/19 16:23:30 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/20 17:31:04 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_enviroment	*ft_nodenew(char *new_var);
 void			ft_nodeadd_back(t_enviroment **lst, t_enviroment **new);
 void            ft_nodeadd_alphabet(t_enviroment **lst, t_enviroment **new);
 void			free_lst(t_enviroment *node);
-t_cmd_line	    *ft_cmd_nodenew(char *raw_cmd);
+t_cmd_line	    *ft_cmd_nodenew(char *raw_cmd, size_t len);
 void	        ft_cmds_nodeadd_back(t_cmd_line **lst, t_cmd_line **new);
 int		        ft_point_strchr(char *s, char c);
 void            built_export(t_enviroment **my_env ,t_enviroment **export_env, char *str);
