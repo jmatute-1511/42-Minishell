@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 21:21:47 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/22 13:42:33 by jmatute-         ###   ########.fr       */
+/*   Created: 2022/05/22 12:14:18 by jmatute-          #+#    #+#             */
+/*   Updated: 2022/05/22 16:47:23 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_strncmp(char *s1, char *s2, size_t n)
+int check_chr(char c)
 {
-	size_t	count;
-
-	count = 0;
-	if (s1  == NULL|| s2 == NULL)
-		return(1);
-	while ((s1[count] && s2[count]) && count <= n)
-	{
-		if (s1[count] != s2[count])
-			return ((unsigned char)s1[count] - (unsigned char)s2[count]);
-		count++;
-	}
+	if (c == ' ' || c == '$' || c == '\'' || c == '"')
+		return (1);
 	return (0);
+}
+
+int ft_point_strstr(char *str)
+{
+    
+    int count_str;
+
+    count_str = 0;
+    while(str[count_str])
+    {
+        if (check_chr(str[count_str]))
+            return(count_str);
+        count_str++;   
+    }
+    return (count_str);
 }

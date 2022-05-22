@@ -6,11 +6,11 @@
 #    By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/03 17:19:28 by jmatute-          #+#    #+#              #
-#    Updated: 2022/05/20 15:43:04 by jmatute-         ###   ########.fr        #
+#    Updated: 2022/05/22 17:02:15 by jmatute-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=  minishell.c built_echo.c built_pwd.c built_cd.c initialize_vars.c fts_lst.c ft_lst2.c built_export.c built_unset.c built_env.c list_cmds.c#parse_comand_line.c
+SRCS	=  minishell.c built_echo.c built_pwd.c built_cd.c initialize_vars.c fts_lst.c ft_lst2.c built_export.c built_unset.c built_env.c list_cmds.c utils.c expansions.c #parse_comand_line.c
 
 LIBFT_DIR	= libft/
 
@@ -21,7 +21,7 @@ NAME	= minishell
 CC		= gcc 
 RM		= rm -f
 
-CFLAGS	= -Wall -Wextra -Werror -lreadline#-fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror -lreadline #-fsanitize=address
 
 .c.o: ${SRCS}
 			@${CC}  -c $< -o ${<:.c=.o}

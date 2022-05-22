@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 20:38:50 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/14 02:37:20 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/22 11:45:19 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,15 @@ char *parse_str_unset(char *str)
 {
     char *str_aux;
     char *str_aux2;
+    char *str_aux3;
+    
 
-    str_aux =ft_strtrim(str, " ");
-    str_aux2 = ft_strjoin(str_aux, "=");
+    str_aux = ft_strtrim(str, " ");
+    str_aux2 = ft_strldup(str, ft_point_strchr(str, ' '));
+    str_aux3 = ft_strjoin(str_aux2, "=");
     free(str_aux);
-    return(str_aux2);
+    free(str_aux2);
+    return(str_aux3);
 }
 void unset_export_env(t_enviroment **export_env, t_enviroment **aux_export,  \
 t_enviroment **prev_aux)

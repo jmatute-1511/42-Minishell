@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/20 17:31:04 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/22 16:44:00 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,11 @@
 #include <sys/types.h>
 #include <limits.h>
 
-#ifndef P_QUOTE // Pair quotes
-#define P_QUOTE 0
-#endif
+#define P_QUOTE 0 // Pair quotes
 
-#ifndef S_QUOTE // single quotes
-#define S_QUOTE 1
-#endif
+#define S_QUOTE 1 // single quotes
 
-#ifndef IT_STR // string iterator
-#define IT_STR 0
-#endif
-
-#ifndef IT_LINE // line iterator
-#define IT_LINE 1
-#endif  
+#define DOLLAR_SPACES "$ '\'' \"\n\t\v\f\r"
 
 typedef struct s_enviroment
 {
@@ -87,5 +77,7 @@ char 	        *filtered_cmd(t_enviroment **myenv, char *str);
 int             len_string(char *str);
 t_cmd_line      *list_cmds(char *str);
 void            print_cmd(t_cmd_line **lst);
+int             ft_point_strstr(char *str);
+char	        *expand_str(t_enviroment *myenv, char *str);
 //int             parse_cmd(char *str);
 #endif
