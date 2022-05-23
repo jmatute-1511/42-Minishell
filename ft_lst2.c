@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:00:35 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/20 16:05:05 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/23 14:30:47 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void free_lst_node(t_enviroment *node) // free enviroment vars
     free(node);
 }
 
-t_cmd_line	*ft_cmd_nodenew(char *raw_cmd, size_t len) // create new node of cmds 
+t_cmd_line	*ºft_cmd_nodenew(char *raw_cmd, size_t len) // create new node of cmds 
 {
 	t_cmd_line	*new;
 	char		*not_trim;

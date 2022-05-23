@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 17:03:28 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/22 17:41:24 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/23 14:49:55 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int	lenght_without_quotes(char *str)
 	flag[S_QUOTE] = 0;
 	while (str[count])
 	{
-		len += check_quote(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
+		len -= check_quote(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
+		len++;
 		count++;
 	}
 	return(len);
@@ -69,7 +70,6 @@ char    *set_quotes(char *str)
 	set_quotes =malloc(sizeof(char) * (lenght_without_quotes(str) + 1));
 	while (str[count])
 	{
-		
 		if (check_quote(str[count], &flag[P_QUOTE], &flag[S_QUOTE]))
 			count++;
 		else
@@ -79,5 +79,6 @@ char    *set_quotes(char *str)
 			count++;
 		}
 	}
+	set_quotes[count2] = '\0';
 	return(set_quotes);
 }
