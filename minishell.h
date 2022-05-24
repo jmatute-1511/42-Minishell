@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/23 18:25:27 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/24 18:52:06 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ typedef struct s_cmd_line
 }				t_cmd_line;
 
 void			start_vars(t_myvars *myvars, char **envp) ;
+char * 			ft_strchrdup_quote(char *str,char chr);
+void			check_quotes(char str, int *pair_quote, int *single_quote);
 int				first_filter_errors(char *str);
 void			built_get_pwd(void);
 void			built_env(t_enviroment **myenv);
@@ -82,5 +84,6 @@ void			print_cmd(t_cmd_line **lst);
 int				ft_point_strstr(char *str);
 char			*expand_str(t_enviroment *myenv, char *str);
 char			*set_quotes(char *str);
-//int             parse_cmd(char *str);
+void			init_nodes(t_cmd_line **lst_cmds, t_enviroment **myenv, char *str);
+void			add_first_arg(t_cmd_line **node);
 #endif

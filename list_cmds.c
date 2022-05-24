@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:52:40 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/23 15:08:59 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/24 19:10:55 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ void print_cmd(t_cmd_line **lst)
 	aux = (*lst);
 	while (aux)
 	{
-		printf("%s\n", aux->raw_cmd);
+		printf("TYPE :%s\n",aux->type);
+		printf("FIRST ARG :%s\n",aux->first_arg);
+		printf("RAW CMD :%s\n", aux->raw_cmd);
+		printf("------------------------------------------------------\n");
 		aux = aux->next;
 	}
 }

@@ -6,13 +6,13 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 17:03:28 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/23 14:49:55 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/24 19:17:23 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_quote(char str, int *pair_quote, int *single_quote)
+static int	check_quote(char str, int *pair_quote, int *single_quote)
 {
 	if (str == '"' && *pair_quote == 0 && *single_quote == 0)
 	{
@@ -37,7 +37,7 @@ int	check_quote(char str, int *pair_quote, int *single_quote)
 	return (0);
 }
 
-int	lenght_without_quotes(char *str)
+static int	lenght_without_quotes(char *str)
 {
 	int count;
 	int len;
@@ -67,7 +67,7 @@ char    *set_quotes(char *str)
 	count2 = 0;
 	flag[P_QUOTE] = 0;
 	flag[S_QUOTE] = 0;
-	set_quotes =malloc(sizeof(char) * (lenght_without_quotes(str) + 1));
+	set_quotes = malloc(sizeof(char) * (lenght_without_quotes(str) + 1));
 	while (str[count])
 	{
 		if (check_quote(str[count], &flag[P_QUOTE], &flag[S_QUOTE]))
