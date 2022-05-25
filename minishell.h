@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/24 18:52:06 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/25 11:36:35 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@
 #define P_QUOTE 0 // Pair quotes
 
 #define S_QUOTE 1 // single quotes
-
-#define DOLLAR_SPACES "$ '\'' \"\n\t\v\f\r"
 
 typedef struct	s_enviroment
 {
@@ -51,7 +49,8 @@ typedef struct	s_vars_env
 
 typedef struct s_cmd_line
 {
-	char	*type;
+	char 	*input;
+	char	*output;
 	char	*first_arg;
 	char	*arguments;
 	char	*raw_cmd;
