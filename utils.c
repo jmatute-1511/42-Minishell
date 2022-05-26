@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 12:14:18 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/24 19:05:50 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/26 16:48:37 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,22 @@ void check_quotes(char str, int *pair_quote, int *single_quote)
 	else if (str == '\''  && *single_quote == 1)
 		(*single_quote) -= 1;
 }
+int	comp_with_string(char chr, char *str)
+{
+	int count;
+	int count2;
 
-char *ft_strchrdup_quote(char *str,char chr)
+	count = 0;
+	count2 = 0;
+	while (str[count])
+	{
+		if(str[count] == chr)
+			return(1);
+		count++;
+	}
+	return(0);
+}
+char *ft_strchrdup_quote(char *str,char *chr)
 {
 	int     count;
 	char    *line;
@@ -59,15 +73,16 @@ char *ft_strchrdup_quote(char *str,char chr)
 	flag[S_QUOTE] = 0;
 	while (str[count])
 	{
-		if (str[count] == chr && flag[P_QUOTE] == 0 &&  flag[S_QUOTE] == 0)
+		if (ft_strchr(chr, str[count]) != NULL && \
+		flag[P_QUOTE] == 0 &&  flag[S_QUOTE] == 0)
 			break;
 		check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 		count++;
 	}
 	if(count != 0)
 	{
-		line =(char *)malloc(sizeof(char) * count + 1);
-		ft_memcpy(line, str, count + 1);
+		line =(char *)malloc(sizeof(char) * count);
+		ft_memcpy(line, str, count);
 	}
 	return (line);
 }

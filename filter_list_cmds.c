@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/25 13:59:42 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/26 18:08:16 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,25 @@ void add_hdoc(t_cmd_line **node, char *type, char *output)
 	count = ft_strlen(type);
 	while (output[count] == ' ' && output[count])
 		count++;
-	line = ft_strchrdup_quote(&output[count], ' ');
+	line = ft_strchrdup_quote(&output[count], " <>");
 	if (line  != NULL)
 	{
+		if ((*node)->output  && type[0] == '>')
+		{
+			trim = ft_strnjoin(5,(*node)->output," ", type, " ", line);
+			free((*node)->output);
+		}
+		else if((*node)->input && type[0] == '<')
+		{
+			trim = ft_strnjoin(5,(*node)->input," ", type, " ", line);
+			free((*node)->input);
+		}
+		else
+			trim = ft_strnjoin(3, type, " ", line);
 		if (type[0] == '<')
-		{
-			trim = ft_strnjoin(3, type, " ", line);
 			(*node)->input = ft_strtrim(trim, " ");
-		}
 		else if (type[0] == '>')
-		{
-			trim = ft_strnjoin(3, type, " ", line);
 			(*node)->output = ft_strtrim(trim, " ");
-		}
 		free(line);
 		free(trim);
 	}
@@ -65,15 +71,15 @@ void  select_hdoc_input(t_cmd_line **node, char *str)
 	while (str[count])
 	{
 		if (str[count] == '<'  && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
-			break;
+		{
+			type = select_type_hdoc( &str[count]);
+			add_hdoc(node, type, &str[count]);
+			free(type);	
+			if(str[count + 1] == '<')
+				count++;
+		}
 		check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 		count++;
-	}
-	if (count < ft_strlen(str))
-	{
-		type = select_type_hdoc( &str[count]);
-		add_hdoc(node, type, &str[count]);
-		free(type);
 	}
 }
 void  select_hdoc_output(t_cmd_line **node, char *str)
@@ -88,37 +94,61 @@ void  select_hdoc_output(t_cmd_line **node, char *str)
 	while (str[count])
 	{
 		if (str[count] == '>'  && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
-			break;
+		{
+			type = select_type_hdoc( &str[count]);
+			add_hdoc(node, type, &str[count]);
+			free(type);
+			if (str[count + 1] == '>')
+				count++;
+		}
 		check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 		count++;
 	}
-	if (count < ft_strlen(str))
-	{
-		type = select_type_hdoc( &str[count]);
-		add_hdoc(node, type, &str[count]);
-		free(type);
-	}
+	
 }
-void capture_program(t_cmd_line  **node, char *raw_cmd)
+void init_flags(int *pairquote, int *singlequote, int *first, int *final)
+{
+	*pairquote = 0;
+	*singlequote = 0;
+	*first = 0;
+	*final = 0;
+}
+int bolean_input(char *str, int *count)
+{
+	if(str[*count] == '<' && *signal == 0)
+	{
+		if(str[*count + 1] =='<')
+			count++;
+		return(1);
+	}
+	return(0);
+}
+int bolean_output(char *str, int count)
+{
+	
+	
+}
+void capture_arguments(t_cmd_line **node, char *str)
 {
 	int count;
 	int flag[2];
-
+	int sign[2];
+	int signal;
+	
 	count = 0;
-	flag[P_QUOTE] = 0;
-	flag[S_QUOTE] = 0;
-	while (raw_cmd[count])
+	signal = 0;
+	init_flags(&flag[P_QUOTE], &flag[S_QUOTE], &sign[FIRST], &sign[FINAL]);
+	while (str[count])
 	{
-		if (raw_cmd[count] == ' ' && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
+		if (flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
 		{
-			(*node)->first_arg = ft_strldup(raw_cmd, count);
-			break;
+			if (bolean_input(&str[count], &count))
+				signal++;
+			else if ()
+			
 		}
-		check_quotes(raw_cmd[count], &flag[P_QUOTE], &flag[S_QUOTE]);
-		count++;
 	}
 }
-
 void add_first_arg(t_cmd_line **node)
 {
 	char	*aux;
@@ -131,7 +161,6 @@ void add_first_arg(t_cmd_line **node)
 	aux = (*node)->raw_cmd;
 	select_hdoc_input(node, aux);
 	select_hdoc_output(node, aux);
-	capture_program (node, aux);
 }
 
 void init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)

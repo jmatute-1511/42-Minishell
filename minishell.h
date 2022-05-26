@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/25 11:36:35 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/26 17:02:21 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@
 #include <limits.h>
 
 #define P_QUOTE 0 // Pair quotes
-
 #define S_QUOTE 1 // single quotes
+#define FIRST 0
+#define FINAL 1
 
 typedef struct	s_enviroment
 {
@@ -58,7 +59,7 @@ typedef struct s_cmd_line
 }				t_cmd_line;
 
 void			start_vars(t_myvars *myvars, char **envp) ;
-char * 			ft_strchrdup_quote(char *str,char chr);
+char * 			ft_strchrdup_quote(char *str,char *chr);
 void			check_quotes(char str, int *pair_quote, int *single_quote);
 int				first_filter_errors(char *str);
 void			built_get_pwd(void);
