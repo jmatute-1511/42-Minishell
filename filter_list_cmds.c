@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/26 18:08:16 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/28 21:35:40 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,42 +113,64 @@ void init_flags(int *pairquote, int *singlequote, int *first, int *final)
 	*first = 0;
 	*final = 0;
 }
-int bolean_input(char *str, int *count)
-{
-	if(str[*count] == '<' && *signal == 0)
-	{
-		if(str[*count + 1] =='<')
-			count++;
-		return(1);
-	}
-	return(0);
-}
-int bolean_output(char *str, int count)
-{
-	
-	
-}
-void capture_arguments(t_cmd_line **node, char *str)
+
+void capture_program(t_cmd_line **node, char * str)
 {
 	int count;
+	int count2;
 	int flag[2];
-	int sign[2];
-	int signal;
+	int signal;	
+	char *join;
+	char *cut;
 	
 	count = 0;
 	signal = 0;
-	init_flags(&flag[P_QUOTE], &flag[S_QUOTE], &sign[FIRST], &sign[FINAL]);
+	count2 = 0;
+	flag[P_QUOTE] = 0;
+	flag[S_QUOTE] = 0;
 	while (str[count])
 	{
-		if (flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
+		if((str[count] == '>' || str[count] == '<') && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
 		{
-			if (bolean_input(&str[count], &count))
-				signal++;
-			else if ()
-			
+			count++;
+			if (str[count] == '<' || str[count] == '>')
+				count++;
+			while(str[count] && str[count] == ' ')
+				count++;
+			signal++;
 		}
+		if(str[count] != ' ' && signal == 0 && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0) 
+		{
+			while(str[count + count2])
+			{
+				if ((str[count + count2] == '<' || str[count + count2] == '>' ) && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
+					break;
+				check_quotes(str[count + count2], &flag[P_QUOTE], &flag[S_QUOTE]);
+				count2++;
+			}
+			if ((*node)->first_arg != NULL)
+			{
+				cut = ft_strldup(&str[count], count2);
+				printf("--- %s ---\n", cut);
+				join = ft_strjoin((*node)->first_arg, cut);
+				free((*node)->first_arg);
+				free(cut);
+				(*node)->first_arg = join;
+			}
+			else
+				(*node)->first_arg = ft_strldup(&str[count], count2);
+			printf("**%s**\n", &str[count2 + count]);
+			count += count2 - 1;
+			count2 = 0;
+		}
+		if (str[count] == ' ' && signal > 0 && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
+			signal--;
+		check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
+		count++;
 	}
+	
 }
+
 void add_first_arg(t_cmd_line **node)
 {
 	char	*aux;
@@ -161,6 +183,7 @@ void add_first_arg(t_cmd_line **node)
 	aux = (*node)->raw_cmd;
 	select_hdoc_input(node, aux);
 	select_hdoc_output(node, aux);
+	capture_program(node, aux);
 }
 
 void init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
