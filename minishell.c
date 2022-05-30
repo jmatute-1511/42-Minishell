@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/24 18:31:06 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/30 20:19:06 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int main(int argc,char **argv,char **envp)
 		return(0);
 	while (1)
 	{
-		str = readline("🧠🧠🧠Myshell🧠🧠🧠 --->");
+		str = readline(ROJO_T"Myshell 🧠🧠% ");
+		add_history(str);
 		init_nodes(&lst, &myvars.my_env, str);
 		print_cmd(&lst);
 		// if (ft_strnstr(str, "echo", ft_strlen(str)) != NULL)

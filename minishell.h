@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/26 17:02:21 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/30 20:19:02 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 #include <sys/types.h>
 #include <limits.h>
 
+#define VERDE_T        "\x1b[32m"	
+#define ROJO_F     "\x1b[41m"
+#define ROJO_T     "\x1b[31m"
 #define P_QUOTE 0 // Pair quotes
 #define S_QUOTE 1 // single quotes
 #define FIRST 0
