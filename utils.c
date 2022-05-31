@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 12:14:18 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/26 16:48:37 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/31 14:22:18 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,6 @@ char *ft_strchrdup_quote(char *str,char *chr)
 		count++;
 	}
 	if(count != 0)
-	{
-		line =(char *)malloc(sizeof(char) * count);
-		ft_memcpy(line, str, count);
-	}
+		line = ft_strldup(str, count);
 	return (line);
 }

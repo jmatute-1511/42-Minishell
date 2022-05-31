@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/30 20:19:02 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/31 14:48:21 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <limits.h>
+#include <errno.h>
 
 #define VERDE_T        "\x1b[32m"	
 #define ROJO_F     "\x1b[41m"
@@ -88,5 +89,8 @@ int				ft_point_strstr(char *str);
 char			*expand_str(t_enviroment *myenv, char *str);
 char			*set_quotes(char *str);
 void			init_nodes(t_cmd_line **lst_cmds, t_enviroment **myenv, char *str);
-void			add_first_arg(t_cmd_line **node);
+void			add_first_arg(t_cmd_line **node, t_enviroment **myenv);
+char 			**routes_of_path(t_enviroment **myenv);
+char			*access_cmd(char **split_of_path, char *str);
+int 			error_cmd(t_cmd_line **node, t_enviroment **myenv);
 #endif

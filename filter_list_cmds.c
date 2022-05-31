@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/30 15:54:41 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/31 15:25:50 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,10 +176,31 @@ void capture_arguments(t_cmd_line **node, char * str)
 			check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 			count++;
 		}
-		
 	}
 }
-void add_first_arg(t_cmd_line **node)
+void capture_first_arg(t_cmd_line **node)
+{
+	int count;
+	int flag[2];
+	char	*str;
+	
+	count = 0;
+	flag[P_QUOTE] = 0;
+	flag[S_QUOTE] = 0;
+	if ((*node)->arguments)
+	{
+		str = (*node)->arguments;
+		while(str[count])
+		{
+			if (str[count] == ' ' && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
+				break;
+			check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
+			count++;
+		}
+		(*node)->first_arg = ft_strldup(str, count);
+	}
+}
+void add_first_arg(t_cmd_line **node, t_enviroment **myenv)
 {
 	char	*aux;
 	int		count;
@@ -192,6 +213,7 @@ void add_first_arg(t_cmd_line **node)
 	select_hdoc_input(node, aux);
 	select_hdoc_output(node, aux);
 	capture_arguments(node, aux);
+	capture_first_arg(node);
 }
 
 void init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
@@ -206,7 +228,11 @@ void init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
 	aux = (*lst_cmds);
 	while (aux)
 	{
-		add_first_arg(&aux);
+		add_first_arg(&aux, myenv);
+		if (error_cmd(&aux, myenv))
+		{
+			printf("error\n");
+		}
 		aux = aux->next;
 	}
 } 

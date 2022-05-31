@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/30 20:19:06 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/05/31 15:40:12 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,19 @@ int main(int argc,char **argv,char **envp)
 	t_cmd_line	*lst;
 	char    	*str;
 	char		*parse;
+	char *shell;
 	
 
 	start_vars(&myvars,envp);
 	if (!myvars.my_env)
 		return(0);
+	shell = ROJO_T"Myshell%>"VERDE_T;
 	while (1)
 	{
-		str = readline(ROJO_T"Myshell 🧠🧠% ");
+		str = readline(shell);
 		add_history(str);
 		init_nodes(&lst, &myvars.my_env, str);
+		//print_env(myvars.my_env,"env");
 		print_cmd(&lst);
 		// if (ft_strnstr(str, "echo", ft_strlen(str)) != NULL)
 		// 	built_echo(str);
