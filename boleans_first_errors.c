@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 11:57:03 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/31 15:32:24 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/01 20:47:02 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,72 @@ int first_filter_errors(char *str)
 	return (0);
 }
 
-int error_cmd(t_cmd_line **node, t_enviroment **myenv)
+int cmd_not_found(t_cmd_line **node, t_enviroment **myenv)
 {
 	char 	*str;
 	char 	**split_env;
 	char	*cmd;
-	int		count;
 	
-	cmd = NULL;
-	str = set_quotes((*node)->first_arg);
-	split_env = routes_of_path(myenv);
-	if(split_env != NULL) 
-		cmd = access_cmd(split_env, str);
-	if(cmd == NULL)
+	if ((*node)->first_arg)
+	{
+		cmd = NULL;
+		str = set_quotes((*node)->first_arg);
+		split_env = routes_of_path(myenv);
+		if(split_env != NULL) 
+			cmd = access_cmd(split_env, str);
+		if(cmd == NULL)
+		{
+			printf("Myshell: %s : comand not found\n", str);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+int hdoc_without_arg(char *hdoc, char type)
+{
+	int		count;
+	int		signal;
+	int		flag[2];
+	
+	count = 0;
+	signal = 0;
+	flag[P_QUOTE] = 0;
+	flag[S_QUOTE] = 0;
+	if(!hdoc)
+		return (0);
+	while (hdoc[count])
+	{
+		if(hdoc[count] == type && hdoc[count + 1] != type && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
+		{
+			count++;
+			while (hdoc[count])
+			{
+				if(hdoc[count] == '<' || hdoc[count] == '>')
+					return (1);
+				else if (hdoc[count] != ' ' || hdoc[count] != '<' || hdoc[count] != '>')
+					signal = 1;
+				count++;
+			}
+			if (signal == 0)
+				return (1);
+		}
+		check_quotes(hdoc[count], &flag[P_QUOTE], &flag[S_QUOTE]);
+		count++;
+	}
+	return (0);
+}
+
+int error_cmd(t_cmd_line **node, t_enviroment **myenv)
+{
+	if (cmd_not_found(node, myenv))
+		return (1);
+	else if (hdoc_without_arg((*node)->raw_cmd, '<'))
+	{
+		printf("Myshell: parse error near \n");
+		return (1);
+	}
+	else if (hdoc_without_arg((*node)->raw_cmd, '>'))
 		return (1);
 	return (0);
 }

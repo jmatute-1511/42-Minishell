@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/31 15:40:12 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:40:44 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int main(int argc,char **argv,char **envp)
 		str = readline(shell);
 		add_history(str);
 		init_nodes(&lst, &myvars.my_env, str);
-		//print_env(myvars.my_env,"env");
 		print_cmd(&lst);
+		//print_env(myvars.my_env,"env");
 		// if (ft_strnstr(str, "echo", ft_strlen(str)) != NULL)
 		// 	built_echo(str);
 		// else if (ft_strnstr(str, "export", ft_strlen(str)) != NULL)

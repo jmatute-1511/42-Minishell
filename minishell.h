@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/31 14:48:21 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/01 15:00:32 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <limits.h>
 #include <errno.h>
+#include <string.h>
 
 #define VERDE_T        "\x1b[32m"	
 #define ROJO_F     "\x1b[41m"
@@ -93,4 +94,5 @@ void			add_first_arg(t_cmd_line **node, t_enviroment **myenv);
 char 			**routes_of_path(t_enviroment **myenv);
 char			*access_cmd(char **split_of_path, char *str);
 int 			error_cmd(t_cmd_line **node, t_enviroment **myenv);
+void			free_lst_cmds(t_cmd_line **lst);
 #endif
