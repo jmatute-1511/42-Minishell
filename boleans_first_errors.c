@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 11:57:03 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/01 20:47:02 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/15 15:28:25 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,12 @@ int cmd_not_found(t_cmd_line **node, t_enviroment **myenv)
 	{
 		cmd = NULL;
 		str = set_quotes((*node)->first_arg);
+		free((*node)->first_arg);
+		(*node)->first_arg = str;
 		split_env = routes_of_path(myenv);
 		if(split_env != NULL) 
 			cmd = access_cmd(split_env, str);
-		if(cmd == NULL)
+		if(cmd == NULL && bolean_built(node) == 0)
 		{
 			printf("Myshell: %s : comand not found\n", str);
 			return (1);
@@ -104,14 +106,22 @@ int hdoc_without_arg(char *hdoc, char type)
 
 int error_cmd(t_cmd_line **node, t_enviroment **myenv)
 {
+	if ((*node)->raw_cmd == NULL)
+	{
+		printf("Myshell: parse error near '|' \n");
+		return (1);
+	}
 	if (cmd_not_found(node, myenv))
 		return (1);
-	else if (hdoc_without_arg((*node)->raw_cmd, '<'))
+	if (hdoc_without_arg((*node)->raw_cmd, '<'))
 	{
 		printf("Myshell: parse error near \n");
 		return (1);
 	}
-	else if (hdoc_without_arg((*node)->raw_cmd, '>'))
+	if (hdoc_without_arg((*node)->raw_cmd, '>'))
+	{
+		printf("Myshell: parse error near \n");
 		return (1);
+	}
 	return (0);
 }

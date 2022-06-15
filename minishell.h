@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/01 15:00:32 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/15 15:13:59 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ typedef struct s_cmd_line
 }				t_cmd_line;
 
 void			start_vars(t_myvars *myvars, char **envp) ;
-char * 			ft_strchrdup_quote(char *str,char *chr);
+char 			*ft_strchrdup_quote(char *str,char *chr);
 void			check_quotes(char str, int *pair_quote, int *single_quote);
 int				first_filter_errors(char *str);
 void			built_get_pwd(void);
 void			built_env(t_enviroment **myenv);
-void			built_echo(char *str);
+void			built_echo(t_cmd_line **node);
 void			open_directory(char *str);
 void			built_cd(t_myvars *myvars,char *str);
 t_enviroment	*ft_nodenew(char *new_var);
@@ -81,7 +81,7 @@ void			ft_cmds_nodeadd_back(t_cmd_line **lst, t_cmd_line **new);
 int				ft_point_strchr(char *s, char c);
 void			built_export(t_enviroment **my_env ,t_enviroment **export_env, char *str);
 void			print_env(t_enviroment *export_env, char *option);
-void			buil_unset(t_enviroment **myenv, t_enviroment **export_env, char *str);
+void			built_unset(t_enviroment **myenv, t_enviroment **export_env, char *str);
 char			*filtered_cmd(t_enviroment **myenv, char *str);
 int				len_string(char *str);
 t_cmd_line		*list_cmds(char *str);
@@ -89,10 +89,12 @@ void			print_cmd(t_cmd_line **lst);
 int				ft_point_strstr(char *str);
 char			*expand_str(t_enviroment *myenv, char *str);
 char			*set_quotes(char *str);
-void			init_nodes(t_cmd_line **lst_cmds, t_enviroment **myenv, char *str);
+int				init_nodes(t_cmd_line **lst_cmds, t_enviroment **myenv, char *str);
 void			add_first_arg(t_cmd_line **node, t_enviroment **myenv);
 char 			**routes_of_path(t_enviroment **myenv);
 char			*access_cmd(char **split_of_path, char *str);
 int 			error_cmd(t_cmd_line **node, t_enviroment **myenv);
 void			free_lst_cmds(t_cmd_line **lst);
+int				select_built(t_cmd_line **node, t_myvars *my_vars);
+int				bolean_built(t_cmd_line **node);
 #endif

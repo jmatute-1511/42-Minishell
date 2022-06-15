@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:55:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/15 13:25:58 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/15 19:22:21 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ static int  after_option(char *str, char *find)
 	{
 		if (str[after] == find[begin])
 		{
-			begin++;
 			after++;
+			begin++;
 			while (str[after] == find[begin])
 				after++;
 			if (str[after] == ' ')
-				return(after + 1);
+				return(after);
 			else 
 				return (0);
 		}
@@ -37,56 +37,33 @@ static int  after_option(char *str, char *find)
 	return (0);
 }
 
-static char    *print_str(char *str)
-{
-	char	*cpy;
-	char	*aux;
-	char 	*aux2;
-
-	aux2 = ft_strtrim(str, " ");
-	if (ft_strlen(aux2) == 0)
-	{		
-		free(aux2);
-		return(NULL);
-	}
-	cpy = (char *)malloc(sizeof(char) * ((ft_strlen(str)  + 1)));
-	if(!cpy)
-		return(NULL);
-	aux = cpy;
-	while (*str != '\0')
-	{
-		if (*str != '"')
-		{
-			*cpy = *str;
-			cpy++;
-		}
-		str++;            
-	}
-	*cpy = '\0';
-	return(aux);
-}
-
-void    built_echo(char *str)
+void    built_echo(t_cmd_line **node)
 {
 	int		begin;
 	int		new_begin;
 	char	*echo;
 
-	if (ft_strncmp(str, "echo",(ft_strlen("echo"))) == 0)
+	if (ft_strncmp((*node)->arguments, "echo",(ft_strlen("echo"))) == 0)
 	{
-		begin = ft_strlen("echo");
-		new_begin = after_option(str, "-n");
+		begin = ft_point_strchr((*node)->arguments, ' ');
+		new_begin = after_option((*node)->arguments, "-n");
 		if(new_begin > 0)
 		{
-			echo = print_str(&str[new_begin]);
+			echo = ft_strtrim(&(*node)->arguments[new_begin], " ");
 			if (echo != NULL)
-				printf("%s", ft_strtrim(echo, " "));
+			{
+				printf("%s", echo);
+				free(echo);
+			}
 		}
 		else
 		{
-			echo = print_str(&str[begin + 1]);
+			echo = ft_strtrim(&(*node)->arguments[begin], " ");
 			if (echo != NULL)
-				printf("%s\n", ft_strtrim(echo, " "));
+			{
+				printf("%s\n", echo);
+				free(echo);
+			}
 		}
 	}
 	

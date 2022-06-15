@@ -40,11 +40,15 @@ static void change_location(t_enviroment **env_var, char *str)
 
 void built_cd(t_myvars *myvars,char *str)
 {
-    t_enviroment *pwd;
+    t_enviroment	*pwd;
+    int				point;
+	char			*trim;
 
-    if (access(str, X_OK) != 0 || myvars->my_env == NULL)
+	point = ft_point_strchr(str, ' ');
+	trim = ft_strtrim(&str[point], " ");
+    if (access(trim, X_OK) != 0 || myvars->my_env == NULL)
         return ;    
     pwd = find_path(myvars, "PWD=");
     if (ft_strncmp(pwd->env_var,"PWD=", ft_strlen("PWD=")) == 0)
-        change_location(&pwd, str);
+        change_location(&pwd, trim);
 }

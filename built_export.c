@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:53:04 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/22 12:24:01 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/15 17:00:22 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,22 +90,23 @@ void print_env(t_enviroment *export_env, char *option)
 
 void built_export(t_enviroment **my_env,t_enviroment **export_env, char *str)
 {
-	t_enviroment *new;
+	t_enviroment	*new;
 	char 			*trim;
+	int				point;
 	
-	trim = ft_strtrim(str, " ");
-	if (ft_strchr(str, '=') != NULL)
+	point = ft_point_strchr(str, ' ');
+	trim = ft_strtrim(&str[point], " ");
+	if (ft_strchr(&str[point], '=') != NULL)
 	{	
 		set_or_new_node_env(my_env, trim);
 		set_or_new_node_export(export_env,trim);
 	}
-	else if (ft_strchr(str, '=') == NULL)
+	else if (ft_strchr(str, '=') == NULL && trim != NULL)
 	{
 		new = ft_nodenew(trim);
 		set_or_new_node_export(export_env,trim);
 	}
-	print_env(*my_env, "env");
-	printf("\n");
-	print_env(*export_env,"export");
+	else if(trim == NULL)
+		print_env(*export_env,"export");
 	free(trim);
 }

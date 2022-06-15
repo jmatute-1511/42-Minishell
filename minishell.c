@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/01 14:40:44 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/15 16:47:51 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int main(int argc,char **argv,char **envp)
 	t_cmd_line	*lst;
 	char    	*str;
 	char		*parse;
-	char *shell;
+	char 		*shell;
+	int			*bolean;
 	
 
 	start_vars(&myvars,envp);
@@ -29,8 +30,11 @@ int main(int argc,char **argv,char **envp)
 	{
 		str = readline(shell);
 		add_history(str);
-		init_nodes(&lst, &myvars.my_env, str);
-		print_cmd(&lst);
+		if (init_nodes(&lst, &myvars.my_env, str) == 0)
+		{
+			select_built(&lst,&myvars);
+		}
+		//print_cmd(&lst);
 		//print_env(myvars.my_env,"env");
 		// if (ft_strnstr(str, "echo", ft_strlen(str)) != NULL)
 		// 	built_echo(str);

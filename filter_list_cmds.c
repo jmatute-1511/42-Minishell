@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/01 20:30:42 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/15 16:04:52 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,15 +185,20 @@ void charge_elements(t_cmd_line **node, t_enviroment **myenv)
 	flag[P_QUOTE] = 0;
 	flag[S_QUOTE] = 0;	
 	aux = (*node)->raw_cmd;
-	capture_arguments(node, aux);
-	capture_first_arg(node);
+	if(aux)
+	{
+		capture_arguments(node, aux);
+		capture_first_arg(node);
+	}
 }
 
-void init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
+int init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
 {
-	t_cmd_line *aux;
+	t_cmd_line	*aux;
+	char		*str2;
+	
 	if (first_filter_errors(str))	
-		return;
+		return (1);
 	*lst_cmds = list_cmds(str);
 	aux = (*lst_cmds);
 	while (aux)
@@ -202,9 +207,15 @@ void init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
 		if (error_cmd(&aux, myenv))
 		{
 			free_lst_cmds(lst_cmds);
-
-			break;	
+			return (1);
+		}
+		if (aux->arguments)
+		{	
+			str2 = set_quotes(aux->arguments);
+			free(aux->arguments);
+			aux->arguments = str2;
 		}
 		aux = aux->next;
 	}
+	return (0);
 } 

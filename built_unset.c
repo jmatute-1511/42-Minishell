@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 20:38:50 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/22 11:45:19 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/15 12:26:53 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,18 @@ t_enviroment **prev_aux)
     
 }
 
-void buil_unset(t_enviroment **myenv, t_enviroment **export_env, char *str)
+void built_unset(t_enviroment **myenv, t_enviroment **export_env, char *str)
 {
     t_enviroment    *aux_myenv;
     t_enviroment    *prev_aux;
     t_enviroment    *aux_export;
     char            *str_aux;
+    int             point;
 
     aux_myenv = (*myenv);
     aux_export = (*export_env);
-    str_aux = parse_str_unset(str);
+    point = ft_point_strchr(str, ' ');
+    str_aux = parse_str_unset(&str[point]);
     prev_aux = NULL;
     while (aux_myenv)
     {
