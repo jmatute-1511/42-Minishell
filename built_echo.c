@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:55:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/15 19:22:21 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/18 15:07:13 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,34 +37,42 @@ static int  after_option(char *str, char *find)
 	return (0);
 }
 
-void    built_echo(t_cmd_line **node)
+void print_echo(char *str)
+{
+	char	**echo;
+	char	*clean;
+	int		a;
+	
+	a = 0;
+	echo = ft_split_ignore(str, ' ', "\"'");
+	while (echo[a])
+	{
+		clean = set_quotes(echo[a]);
+		if (clean != NULL)
+		{
+			printf("%s",clean);
+			if (echo[a + 1] != NULL)
+				printf(" ");				
+			free(clean);
+		}
+		a++;
+	}
+	free_matrix(echo);
+}
+
+void    built_echo(char *str)
 {
 	int		begin;
 	int		new_begin;
 	char	*echo;
 
-	if (ft_strncmp((*node)->arguments, "echo",(ft_strlen("echo"))) == 0)
+	begin = ft_point_strchr(str, ' ');
+	new_begin = after_option(str, "-n");
+	if(new_begin > 0)
+		print_echo(&str[new_begin]);
+	else
 	{
-		begin = ft_point_strchr((*node)->arguments, ' ');
-		new_begin = after_option((*node)->arguments, "-n");
-		if(new_begin > 0)
-		{
-			echo = ft_strtrim(&(*node)->arguments[new_begin], " ");
-			if (echo != NULL)
-			{
-				printf("%s", echo);
-				free(echo);
-			}
-		}
-		else
-		{
-			echo = ft_strtrim(&(*node)->arguments[begin], " ");
-			if (echo != NULL)
-			{
-				printf("%s\n", echo);
-				free(echo);
-			}
-		}
+		print_echo(&str[begin]);
+		printf("\n");
 	}
-	
 }

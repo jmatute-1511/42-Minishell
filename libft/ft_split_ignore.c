@@ -6,13 +6,27 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:53:44 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/07 19:54:43 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/18 15:06:41 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_count_word(char const *s, char c, char ign)
+int bolean_str(char c, char *str)
+{
+	int a;
+
+	a = 0;
+	while(str[a])
+	{
+		if(str[a] == c)
+			return(1);
+		a++;
+	}
+	return(0);
+}
+
+static int	ft_count_word(char const *s, char c, char *ign)
 {
 	int	count;
 	int	word;
@@ -27,9 +41,9 @@ static int	ft_count_word(char const *s, char c, char ign)
 		return (0);
 	while (s[count])
 	{
-        if (flag  == 0 && s[count] == ign)
+        if (flag  == 0 && bolean_str(s[count], ign))
             flag += 1;
-        else if (flag  == 1 && s[count] == ign)
+        else if (flag  == 1 && bolean_str(s[count], ign))
             flag -= 1;
 		if (s[count] == c && s[count + 1] != c && flag != 1)
 			word++;
@@ -38,7 +52,7 @@ static int	ft_count_word(char const *s, char c, char ign)
 	return (word);
 }
 
-int len_word(const char *s, char c, char ign)
+int len_word(const char *s, char c, char *ign)
 {
     int len;
     int flag;
@@ -47,9 +61,9 @@ int len_word(const char *s, char c, char ign)
     len = 0;
     while (s[len])
     {
-        if (flag  == 0 && s[len] == ign)
+        if (flag  == 0 && bolean_str(s[len], ign))
             flag += 1;
-        else if (flag  == 1 && s[len] == ign)
+        else if (flag  == 1 && bolean_str(s[len], ign))
             flag -= 1;
         if (s[len] == c && flag == 0)
             break;
@@ -57,7 +71,7 @@ int len_word(const char *s, char c, char ign)
     }
     return (len);
 }
-static char	*save_memory(char const *s, char c, char ign)
+static char	*save_memory(char const *s, char c, char *ign)
 {
 	char	*save_memory;
 	int		len;
@@ -72,9 +86,9 @@ static char	*save_memory(char const *s, char c, char ign)
 		return (NULL);
 	while (s[cpy])
 	{
-        if (flag  == 0 && s[cpy] == ign)
+        if (flag  == 0 && bolean_str(s[cpy], ign))
             flag += 1;
-        else if (flag  == 1 && s[cpy] == ign)
+        else if (flag  == 1 && bolean_str(s[cpy], ign))
             flag -= 1;
         if (s[cpy] == c && flag == 0)
             break ;
@@ -84,7 +98,7 @@ static char	*save_memory(char const *s, char c, char ign)
 	save_memory[len] = '\0';
 	return (save_memory);
 }
-int return_pointer(const char *s, char c, char ign, int count)
+int return_pointer(const char *s, char c, char *ign, int count)
 {
     int flag;
 
@@ -93,9 +107,9 @@ int return_pointer(const char *s, char c, char ign, int count)
         return (count);
     while (s[count])
     {
-        if (flag  == 0 && s[count] == ign)
+        if (flag  == 0 && bolean_str(s[count], ign))
             flag += 1;
-        else if (flag  == 1 && s[count] == ign)
+        else if (flag  == 1 && bolean_str(s[count], ign))
             flag -= 1;
         if (s[count] == c && flag == 0)
             break ;
@@ -103,7 +117,7 @@ int return_pointer(const char *s, char c, char ign, int count)
     }
     return (count);
 }
-char	**ft_split_ignore(char const *s, char c, char ign)
+char	**ft_split_ignore(char const *s, char c, char *ign)
 {
 	char	**matriz;
 	int		count;

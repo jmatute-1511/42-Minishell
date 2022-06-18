@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 17:03:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/20 15:25:32 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/18 15:05:39 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_itoa(int n);
 char	*ft_strdup(const char *s);
 char	*ft_strchr(const char *s, int c);
 char	**ft_split(char const *s, char c);
-char	**ft_split_ignore(char const *s, char c, char ign);
+char	**ft_split_ignore(char const *s, char c, char *ign);
 char	*ft_strrchr(const char *str, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strnjoin(int nstrings, ...);

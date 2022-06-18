@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/15 16:04:52 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:47:01 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,6 @@ void capture_arguments(t_cmd_line **node, char *str)
 	flag[S_QUOTE] = 0;
 	while (str[count])
 	{
-		check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 		if(flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
 		{
 			if(str[count] == '<' || str[count] == '>')
@@ -149,6 +148,7 @@ void capture_arguments(t_cmd_line **node, char *str)
 			else if (str[count] != ' ')
 				count += add_arguments(node, &str[count]);
 		}
+		check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 		count++;
 	}
 }
@@ -208,12 +208,6 @@ int init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
 		{
 			free_lst_cmds(lst_cmds);
 			return (1);
-		}
-		if (aux->arguments)
-		{	
-			str2 = set_quotes(aux->arguments);
-			free(aux->arguments);
-			aux->arguments = str2;
 		}
 		aux = aux->next;
 	}

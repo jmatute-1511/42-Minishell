@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/15 15:13:59 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:43:17 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void			check_quotes(char str, int *pair_quote, int *single_quote);
 int				first_filter_errors(char *str);
 void			built_get_pwd(void);
 void			built_env(t_enviroment **myenv);
-void			built_echo(t_cmd_line **node);
+void			built_echo(char *str);
 void			open_directory(char *str);
 void			built_cd(t_myvars *myvars,char *str);
 t_enviroment	*ft_nodenew(char *new_var);

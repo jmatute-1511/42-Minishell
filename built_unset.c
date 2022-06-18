@@ -6,26 +6,33 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 20:38:50 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/15 12:26:53 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/18 16:23:42 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
 
-char *parse_str_unset(char *str)
+char **parse_str_unset(char *str)
 {
-    char *str_aux;
-    char *str_aux2;
-    char *str_aux3;
+    char    *str_aux;
+    char    **split;
+    char    *aux;
+    int     a;
     
-
-    str_aux = ft_strtrim(str, " ");
-    str_aux2 = ft_strldup(str, ft_point_strchr(str, ' '));
-    str_aux3 = ft_strjoin(str_aux2, "=");
+    a = 0;
+    str_aux = ft_strtrim(&str[ft_point_strchr(str, ' ')], " ");
+    split = ft_split_ignore(str_aux, ' ', "\"'");
+    while (split[a])
+    {
+        aux = set_quotes(split[a]);
+        free(split[a]);
+        split[a] = ft_strjoin(aux, "=");
+        free(aux);
+        a++;
+    }
     free(str_aux);
-    free(str_aux2);
-    return(str_aux3);
+    return(split);
 }
 void unset_export_env(t_enviroment **export_env, t_enviroment **aux_export,  \
 t_enviroment **prev_aux)
@@ -57,34 +64,58 @@ t_enviroment **prev_aux)
     }
     
 }
-
-void built_unset(t_enviroment **myenv, t_enviroment **export_env, char *str)
+void bucle_unset_env(char **split, t_enviroment**my_env)
 {
     t_enviroment    *aux_myenv;
     t_enviroment    *prev_aux;
-    t_enviroment    *aux_export;
-    char            *str_aux;
     int             point;
-
-    aux_myenv = (*myenv);
-    aux_export = (*export_env);
-    point = ft_point_strchr(str, ' ');
-    str_aux = parse_str_unset(&str[point]);
-    prev_aux = NULL;
-    while (aux_myenv)
+    int             a;
+    
+    a = 0;
+    while(split[a])
     {
-        if(ft_strncmp(aux_myenv->env_var, str_aux, ft_point_strchr(str_aux, '=') ) == 0)
-            unset_myenv(myenv,&aux_myenv,&prev_aux);
-        prev_aux = aux_myenv;
-        aux_myenv = aux_myenv->next;
+        aux_myenv = (*my_env);
+        prev_aux = NULL;
+        while (aux_myenv)
+        {
+            point = ft_point_strchr(split[a], '=');
+            if(ft_strncmp(aux_myenv->env_var, split[a], point) == 0)
+                unset_myenv(my_env,&aux_myenv,&prev_aux);
+            prev_aux = aux_myenv;
+            aux_myenv = aux_myenv->next;
+        }
+        a++;
     }
-    prev_aux = NULL;
-    while (aux_export)
+}
+void bucle_unset_export(char **split,t_enviroment **export_env)
+{
+    t_enviroment    *aux_export;
+    t_enviroment    *prev_aux;
+    int             point;
+    int             a;
+    
+    a = 0;
+    while(split[a])
     {
-        if(ft_strncmp(aux_export->env_var, str_aux,  ft_point_strchr(str_aux, '='))== 0)
-            unset_export_env(export_env,&aux_export,&prev_aux);
-        prev_aux = aux_export;
-        aux_export = aux_export->next;
+        prev_aux = NULL;
+        aux_export = (*export_env);
+        point = ft_point_strchr(split[a], '=');
+        while (aux_export)
+        {
+            if(ft_strncmp(aux_export->env_var, split[a], point) == 0)
+                unset_myenv(export_env,&aux_export,&prev_aux);
+            prev_aux = aux_export;
+            aux_export = aux_export->next;
+        }
+        a++;
     }
-    free(str_aux);
+}
+void built_unset(t_enviroment **myenv, t_enviroment **export_env, char *str)
+{
+    char            **split;
+    
+    split = parse_str_unset(str);
+    bucle_unset_env(split, myenv);
+    bucle_unset_export(split,export_env);
+    free_matrix(split);
 }

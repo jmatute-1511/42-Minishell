@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 12:14:18 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/31 14:22:18 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/18 15:17:33 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,18 @@ char *ft_strchrdup_quote(char *str,char *chr)
 	if(count != 0)
 		line = ft_strldup(str, count);
 	return (line);
+}
+void print_env(t_enviroment *export_env, char *option)
+{
+	t_enviroment *aux;
+
+	aux = export_env;
+	while (aux)
+	{
+		if (ft_strcmp("env", option) == 0)
+			printf("%s\n",aux->env_var);
+		else if (ft_strcmp("export", option) == 0)
+			printf("declare -x %s\n",aux->env_var);
+		aux = aux->next;
+	}
 }

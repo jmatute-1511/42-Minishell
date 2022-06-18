@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:53:04 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/15 17:00:22 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/18 15:39:32 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,38 +73,61 @@ void set_or_new_node_export(t_enviroment **export_env, char *str)
 	}
 }
 
-void print_env(t_enviroment *export_env, char *option)
+int error_export(char **split)
 {
-	t_enviroment *aux;
+	int a;
+	char *str;
 
-	aux = export_env;
-	while (aux)
+	a = 0;
+	while(split[a])
 	{
-		if (ft_strcmp("env", option) == 0)
-			printf("%s\n",aux->env_var);
-		else if (ft_strcmp("export", option) == 0)
-			printf("declare -x %s\n",aux->env_var);
-		aux = aux->next;
+		if(ft_strchr(split[a], ' ') != NULL)
+		{
+			str = set_quotes(split[a]);
+			printf("bash: export: `%s': not a valid identifier\n",str);
+			free(str);
+			return(1);
+		}
+		a++;
+	}
+	return (0);
+}
+void export_vars(char **split, t_enviroment **my_env, t_enviroment **export_env)
+{
+	int	a;
+	char	*str;
+	
+	a  = 0;
+	while (split[a])
+	{
+		str = set_quotes(split[a]);
+		if (ft_strchr(split[a], '=') != NULL)
+		{	
+			set_or_new_node_env(my_env, str);
+			set_or_new_node_export(export_env,str);
+		}
+		else if (ft_strchr(split[a], '=')  == NULL )
+			set_or_new_node_export(export_env,str);
+		if (str != NULL)
+			free(str);
+		a++;
 	}
 }
-
 void built_export(t_enviroment **my_env,t_enviroment **export_env, char *str)
 {
-	t_enviroment	*new;
 	char 			*trim;
 	int				point;
+	char			**split;
 	
 	point = ft_point_strchr(str, ' ');
 	trim = ft_strtrim(&str[point], " ");
-	if (ft_strchr(&str[point], '=') != NULL)
-	{	
-		set_or_new_node_env(my_env, trim);
-		set_or_new_node_export(export_env,trim);
-	}
-	else if (ft_strchr(str, '=') == NULL && trim != NULL)
+	
+	if (trim != NULL)
 	{
-		new = ft_nodenew(trim);
-		set_or_new_node_export(export_env,trim);
+		split = ft_split_ignore(trim, ' ', "\"'");
+		if (error_export(split) == 0)
+			export_vars(split, my_env, export_env);
+		free_matrix(split);
 	}
 	else if(trim == NULL)
 		print_env(*export_env,"export");
