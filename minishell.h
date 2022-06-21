@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/21 17:59:54 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/21 20:10:19 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,5 @@ void			free_lst_cmds(t_cmd_line **lst);
 int				select_built(t_cmd_line **node, t_myvars *my_vars);
 int				bolean_built(t_cmd_line **node);
 int 			execute_cmds(t_cmd_line **cmds, t_myvars **my_vars);
+int				size_of_lst(t_cmd_line **lst);
 #endif

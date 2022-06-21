@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 17:13:44 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/21 18:08:03 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/21 20:47:33 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char *find_path_exec(char *str, t_enviroment ** my_env)
 
     split = routes_of_path(my_env);
     path = access_cmd(split, str);
-    return (str); 
+    return (path); 
 }
 
 void son_shell_first(t_cmd_line **cmd,t_pipes **pipes, char **envp_m,  t_myvars **my_vars)
@@ -77,6 +77,7 @@ void son_shell_first(t_cmd_line **cmd,t_pipes **pipes, char **envp_m,  t_myvars 
     char *path;
 
     path = find_path_exec((*cmd)->first_arg, &(*my_vars)->my_env);
+   // | dprintf(2, " SON FIRST %s\n",path);
     dup2((*pipes)->fd[WRITE_P], STDOUT_FILENO);
     close((*pipes)->fd[READ_P]);
     close((*pipes)->fd[WRITE_P]);
@@ -89,6 +90,7 @@ void son_shell_med(t_cmd_line **cmd,t_pipes **pipes, char **envp_m, t_myvars **m
     char *path;
 
     path = find_path_exec((*cmd)->first_arg, &(*my_vars)->my_env);
+   // dprintf(2, "SON MED %s\n",path);
     dup2((*pipes)->prev->fd[READ_P], STDIN_FILENO);
     dup2((*pipes)->fd[WRITE_P], STDOUT_FILENO);
     close((*pipes)->fd[READ_P]);
@@ -102,6 +104,7 @@ void son_shell_last(t_cmd_line **cmd,t_pipes **pipes, char **envp_m, t_myvars **
     char *path;
 
     path = find_path_exec((*cmd)->first_arg, &(*my_vars)->my_env);
+  //  dprintf(2, " SON LAST%s\n",path);
     dup2((*pipes)->prev->fd[READ_P], STDIN_FILENO);
     close((*pipes)->fd[READ_P]);
     close((*pipes)->fd[WRITE_P]);
@@ -135,7 +138,7 @@ int execute_cmds(t_cmd_line **cmds, t_myvars **my_vars)
     aux = 0;
     wait = 0; 
     node =  (*cmds);
-    while (aux < n_childs)
+    while (aux <= n_childs)
     {
         pid = fork();
         if (pid == 0)
@@ -146,9 +149,9 @@ int execute_cmds(t_cmd_line **cmds, t_myvars **my_vars)
         node = node->next;
         aux++;
     }
-    while (wait < n_childs - 1)
+    while (wait < n_childs)
     {
-        waitpid(array[wait],&status, WEXITED);
+        waitpid(array[wait],&status, 0);
         wait++;
     }
     return (0);
