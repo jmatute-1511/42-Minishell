@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:13:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/13 21:00:46 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:56:05 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,36 @@ t_enviroment *create_env( char **envp)
     return (my_env);
     
 }
-void start_vars(t_myvars *myvars,char **envp)   
+char **enviroment_matrix(char **envp)
 {
+    char    **aux_envp;
+    int     size;
+    int     count;
+
+    size = 0;
+    count = 0;
+    if (envp)
+    {
+        while(envp[size])
+            size++;
+        aux_envp = (char **)malloc(sizeof(char *) * size + 1);
+        while (count < size)
+        {
+            aux_envp[count] = ft_strdup(envp[count]);
+            count++;
+        }
+        aux_envp[count] = NULL;
+    }
+    return(aux_envp);
+}
+
+t_myvars *start_vars(t_myvars *myvars,char **envp)   
+{
+
+    myvars = malloc(sizeof(t_myvars));
     myvars->first_pwd = getcwd(NULL, 0);
     myvars->export_env = create_export_env(envp);
     myvars->my_env = create_env(envp);
+    myvars->m_envp = enviroment_matrix(envp);
+    return(myvars);
 }

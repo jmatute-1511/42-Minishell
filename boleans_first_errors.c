@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 11:57:03 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/15 15:28:25 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:03:19 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ int bolean_errors_quotes(char *str)
 int first_filter_errors(char *str)
 {
 	if (bolean_errors_quotes(str))
+	{
+		printf("Myshell: quotes : error\n");
 		return(1);
+	}
 	return (0);
 }
 
@@ -89,7 +92,7 @@ int hdoc_without_arg(char *hdoc, char type)
 			count++;
 			while (hdoc[count])
 			{
-				if(hdoc[count] == '<' || hdoc[count] == '>')
+				if((hdoc[count] == '<' || hdoc[count] == '>') && signal == 0)
 					return (1);
 				else if (hdoc[count] != ' ' || hdoc[count] != '<' || hdoc[count] != '>')
 					signal = 1;
