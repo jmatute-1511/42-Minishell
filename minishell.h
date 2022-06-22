@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/16 15:43:17 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/21 20:10:19 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@
 #include <readline/history.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <limits.h>
 #include <errno.h>
 #include <string.h>
+#include <signal.h>
 
 #define VERDE_T        "\x1b[32m"	
 #define ROJO_F     "\x1b[41m"
@@ -33,6 +35,8 @@
 #define S_QUOTE 1 // single quotes
 #define FIRST 0
 #define FINAL 1
+#define READ_P 0
+#define WRITE_P 1
 
 typedef struct	s_enviroment
 {
@@ -43,6 +47,7 @@ void	*next;
 typedef struct	s_myvars
 {
 	char			*first_pwd;
+	char			**m_envp;
 	t_enviroment	*my_env;
 	t_enviroment	*export_env;
 }				t_myvars;
@@ -63,7 +68,15 @@ typedef struct s_cmd_line
 	void	*next;
 }				t_cmd_line;
 
-void			start_vars(t_myvars *myvars, char **envp) ;
+typedef struct s_pipes
+{
+	int				fd[2];
+	struct s_pipes	*next;
+	struct s_pipes	*prev;
+	
+} 				t_pipes;
+
+t_myvars		*start_vars(t_myvars *myvars, char **envp) ;
 char 			*ft_strchrdup_quote(char *str,char *chr);
 void			check_quotes(char str, int *pair_quote, int *single_quote);
 int				first_filter_errors(char *str);
@@ -97,4 +110,6 @@ int 			error_cmd(t_cmd_line **node, t_enviroment **myenv);
 void			free_lst_cmds(t_cmd_line **lst);
 int				select_built(t_cmd_line **node, t_myvars *my_vars);
 int				bolean_built(t_cmd_line **node);
+int 			execute_cmds(t_cmd_line **cmds, t_myvars **my_vars);
+int				size_of_lst(t_cmd_line **lst);
 #endif

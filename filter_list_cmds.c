@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/16 15:47:01 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/06/18 17:47:16 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ void add_input(t_cmd_line **node, char *type, char *output, int count)
 	char *join;
 	
 	name = ft_strldup(output,count);
-	if ((*node)->output )
+	if ((*node)->input)
 	{
-		join = ft_strnjoin(4, ((*node)->input),type, " ", name);
+		join = ft_strnjoin(4, (*node)->input, type, " ", name);
 		free((*node)->input);
 		(*node)->input = join;
 	}
@@ -51,7 +51,7 @@ void add_output(t_cmd_line **node, char *type, char *output, int count)
 	char *join;
 	
 	name = ft_strldup(output,count);
-	if ((*node)->output )
+	if ((*node)->output)
 	{
 		join = ft_strnjoin(4, ((*node)->output),type, " ", name);
 		free((*node)->output);
@@ -122,11 +122,13 @@ int add_arguments(t_cmd_line **node, char *str)
 	{
 		name = ft_strldup(str, count);
 		join = ft_strnjoin(3, (*node)->arguments, " ", name);
+		free((*node)->arguments);
+		(*node)->arguments = join;
 		free(name);
 	}
 	else 
 		(*node)->arguments= ft_strldup(str, count);
-	return (count);
+	return (count - 1);
 }
 
 void capture_arguments(t_cmd_line **node, char *str)
