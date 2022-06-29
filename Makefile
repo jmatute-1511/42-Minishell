@@ -23,7 +23,9 @@ NAME	= minishell
 CC		= gcc 
 RM		= rm -f
 
-CFLAGS	= -Wall -Wextra -Werror -lreadline #-fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror #-fsanitize=address
+
+LIBS	= -lreadline -L /Users/bremesar/.brew/opt/readline/lib -I /Users/bremesar/.brew/opt/readline/include
 
 .c.o: ${SRCS}
 			@${CC}  -c $< -o ${<:.c=.o}
@@ -31,7 +33,7 @@ CFLAGS	= -Wall -Wextra -Werror -lreadline #-fsanitize=address
 ${NAME}:	${OBJS} minishell.h Makefile 
 			@make -sC ${LIBFT_DIR}
 			@cp ./libft/libft.a .
-			@${CC} ${CFLAGS}  ${OBJS} -o ${NAME} libft.a
+			@${CC} ${CFLAGS}  ${OBJS} -o ${NAME} ${LIBS} libft.a
 			@echo "COMPILATION IS FINISHED"
 
 all:		${NAME}

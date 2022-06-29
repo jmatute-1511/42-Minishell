@@ -14,10 +14,20 @@
 
 void signal_handler(int signum)
 {
-	if (signum == SIGINT)
+	int g_proc;
+
+	g_proc = 0;
+	if (signum == SIGINT && g_proc != 0)
 	{
 		kill(0, SIGCONT);
     	write(0, "\n", 1);
+	}
+	if (signum == SIGINT && g_proc == 0)
+	{
+		write(0, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
@@ -29,6 +39,7 @@ int main(int argc,char **argv,char **envp)
 	int			*bolean;
 	
 	signal(SIGINT,signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 	myvars = start_vars(myvars,envp);
 	if (!myvars->my_env)
 		return(0);
