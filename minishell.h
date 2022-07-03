@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/21 20:10:19 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/03 19:22:45 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,6 @@ typedef struct s_cmd_line
 typedef struct s_pipes
 {
 	int				fd[2];
-	struct s_pipes	*next;
-	struct s_pipes	*prev;
-	
 } 				t_pipes;
 
 t_myvars		*start_vars(t_myvars *myvars, char **envp) ;
@@ -109,6 +106,7 @@ int 			error_cmd(t_cmd_line **node, t_enviroment **myenv);
 void			free_lst_cmds(t_cmd_line **lst);
 int				select_built(t_cmd_line **node, t_myvars *my_vars);
 int				bolean_built(t_cmd_line **node);
-int 			execute_cmds(t_cmd_line **cmds, t_myvars **my_vars);
+int 			execute_cmds(t_cmd_line *nodes, t_myvars *my_vars);
 int				size_of_lst(t_cmd_line **lst);
+int 			size_of_lst(t_cmd_line **lst);
 #endif

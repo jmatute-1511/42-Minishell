@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:55:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/18 15:07:13 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/03 16:35:28 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void print_echo(char *str)
 		clean = set_quotes(echo[a]);
 		if (clean != NULL)
 		{
-			printf("%s",clean);
+			ft_putstr_fd(clean, 1);
 			if (echo[a + 1] != NULL)
-				printf(" ");				
+				write(1, " ", 1);				
 			free(clean);
 		}
 		a++;
@@ -73,6 +73,6 @@ void    built_echo(char *str)
 	else
 	{
 		print_echo(&str[begin]);
-		printf("\n");
+		write(1, "\n", 1);
 	}
 }

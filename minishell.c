@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/24 19:43:32 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/03 19:22:27 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ int main(int argc,char **argv,char **envp)
 		add_history(str);
 		if(init_nodes(&lst, &myvars->my_env, str) == 0)
 		{
-			if (lst)
-				execute_cmds(&lst,&myvars);
+			execute_cmds(lst, myvars);
 		}
 		//print_cmd(&lst);
 	}

@@ -43,7 +43,7 @@ void built_cd(t_myvars *myvars,char *str)
     t_enviroment	*pwd;
     int				point;
 	char			*trim;
-
+    
 	point = ft_point_strchr(str, ' ');
 	trim = ft_strtrim(&str[point], " ");
     if (access(trim, X_OK) != 0 || myvars->my_env == NULL)

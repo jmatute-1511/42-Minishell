@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 12:14:18 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/18 15:17:33 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/03 19:17:46 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,18 @@ void print_env(t_enviroment *export_env, char *option)
 			printf("declare -x %s\n",aux->env_var);
 		aux = aux->next;
 	}
+}
+int size_of_lst(t_cmd_line **lst)
+{
+	int a;
+	t_cmd_line *aux;
+
+	a = 0;
+	aux = (*lst);
+	while(aux)
+	{
+		aux = aux->next;
+		a++;
+	}
+	return(a);
 }
