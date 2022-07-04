@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/18 17:47:16 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/04 13:00:12 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,11 +206,6 @@ int init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
 	while (aux)
 	{
 		charge_elements(&aux, myenv);
-		if (error_cmd(&aux, myenv))
-		{
-			free_lst_cmds(lst_cmds);
-			return (1);
-		}
 		aux = aux->next;
 	}
 	return (0);

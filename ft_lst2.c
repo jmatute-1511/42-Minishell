@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:00:35 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/01 14:41:47 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/04 18:24:47 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_cmd_line	*ft_cmd_nodenew(char *raw_cmd, size_t len) // create new node of cmds
 	t_cmd_line	*new;
 	char		*not_trim;
 
+	not_trim = NULL;
 	new = malloc(sizeof(t_cmd_line));
 	if (!new)
 		return (NULL);

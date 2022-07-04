@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 15:09:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/03 19:34:15 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/04 18:31:22 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void son_shell_execute(t_cmd_line *node, t_myvars *my_vars)
 	path = find_path_exec(node->first_arg, &my_vars->my_env);
 	expand = expand_str(my_vars->my_env,node->arguments);
 	quotes = set_quotes(expand);
-	if (select_built(&node, my_vars))
+	if (select_built(&node, &my_vars))
 		exit(0);
 	else
 		execve(path, ft_split(quotes, ' '), my_vars->m_envp);
@@ -76,7 +76,6 @@ void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids)
 		waitpid(pids[it], &status, 0);
 		it++;
 	}
-
 }
 t_pipes *create_pipes(int n_childs)
 {
@@ -85,14 +84,14 @@ t_pipes *create_pipes(int n_childs)
 	
 	it  = 0;
 	pipes = (t_pipes *)malloc(sizeof(t_pipes) * n_childs - 1);
-	while(it < n_childs - 1)
+	while(it < n_childs - 1 && n_childs > 1)
 	{
 		pipe(pipes[it].fd);
 		it++;
 	}
 	return(pipes);
 }
-int execute_cmds(t_cmd_line *nodes, t_myvars *my_vars)
+int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
 {
 	int		it;
 	int 	n_childs;
@@ -100,18 +99,25 @@ int execute_cmds(t_cmd_line *nodes, t_myvars *my_vars)
 	pid_t	*pids;
 	
 	it = 0;
-	n_childs = size_of_lst(&nodes);
+	n_childs = size_of_lst(nodes);
 	pids = (pid_t *)malloc(sizeof(pid_t) * n_childs);
 	child_pipe = create_pipes(n_childs);
+	if (n_childs == 1)
+	{
+		if (select_built(nodes, &my_vars))
+			return(0);
+	}
 	while(it < n_childs)
 	{
 		pids[it] = fork();
 		if (pids[it] == 0)
 		{
+			if (error_cmd(nodes,&my_vars->my_env))
+				exit(0);
 			son_shell_pipes(child_pipe, it, n_childs);
-			son_shell_execute(nodes, my_vars);
+			son_shell_execute(*nodes, my_vars);
 		}
-		nodes = nodes->next;
+		(*nodes) = (*nodes)->next;
 		it++;
 	}
 	close_pipes(child_pipe, n_childs, pids);
