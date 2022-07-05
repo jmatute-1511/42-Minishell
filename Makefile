@@ -25,13 +25,15 @@ RM		= rm -f
 
 CFLAGS	= -Wall -Wextra -Werror -lreadline #-fsanitize=address
 
+LIBS	= -lreadline -L /Users/bremesar/.brew/opt/readline/lib -I /Users/bremesar/.brew/opt/readline/include
+
 .c.o: ${SRCS}
 			@${CC}  -c $< -o ${<:.c=.o}
 
 ${NAME}:	${OBJS} minishell.h Makefile 
 			@make -sC ${LIBFT_DIR}
 			@cp ./libft/libft.a .
-			@${CC} ${CFLAGS}  ${OBJS} -o ${NAME} libft.a
+			@${CC} ${CFLAGS}  ${OBJS} -o ${NAME} ${LIBS} libft.a
 			@echo "COMPILATION IS FINISHED"
 
 all:		${NAME}
