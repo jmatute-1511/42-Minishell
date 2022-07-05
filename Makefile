@@ -23,7 +23,7 @@ NAME	= minishell
 CC		= gcc 
 RM		= rm -f
 
-CFLAGS	= -Wall -Wextra -Werror -lreadline #-fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror #-fsanitize=address
 
 LIBS	= -lreadline -L /Users/bremesar/.brew/opt/readline/lib -I /Users/bremesar/.brew/opt/readline/include
 
