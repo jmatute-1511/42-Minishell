@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 12:37:36 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/19 16:51:32 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/04 18:30:47 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static size_t	ft_set_f(char const *s1, char const *set)
 	size_t	b;
 
 	a = 0;
-	b = ft_strlen(s1) - 1;
+	b = ft_strlen(s1);
 	if (ft_set_i(s1, set) == ft_strlen(s1))
 		return (a);
 	while (set[a] && s1[b])

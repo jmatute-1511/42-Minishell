@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/16 15:43:17 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/04 21:08:07 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,26 @@
 #include <readline/history.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <limits.h>
 #include <errno.h>
 #include <string.h>
+#include <curses.h>
+#include <term.h>
+#include <fcntl.h>
 
+#define BBLU "\e[1;34m"
+#define WHTHB "e[1;35m"
 #define VERDE_T        "\x1b[32m"	
 #define ROJO_F     "\x1b[41m"
 #define ROJO_T     "\x1b[31m"
+#define COLOR_RESET "\e[0m"
 #define P_QUOTE 0 // Pair quotes
 #define S_QUOTE 1 // single quotes
 #define FIRST 0
 #define FINAL 1
+#define READ_P 0
+#define WRITE_P 1
 
 typedef struct	s_enviroment
 {
@@ -43,6 +52,7 @@ void	*next;
 typedef struct	s_myvars
 {
 	char			*first_pwd;
+	char			**m_envp;
 	t_enviroment	*my_env;
 	t_enviroment	*export_env;
 }				t_myvars;
@@ -63,7 +73,12 @@ typedef struct s_cmd_line
 	void	*next;
 }				t_cmd_line;
 
-void			start_vars(t_myvars *myvars, char **envp) ;
+typedef struct s_pipes
+{
+	int				fd[2];
+} 				t_pipes;
+
+t_myvars		*start_vars(t_myvars *myvars, char **envp) ;
 char 			*ft_strchrdup_quote(char *str,char *chr);
 void			check_quotes(char str, int *pair_quote, int *single_quote);
 int				first_filter_errors(char *str);
@@ -71,7 +86,7 @@ void			built_get_pwd(void);
 void			built_env(t_enviroment **myenv);
 void			built_echo(char *str);
 void			open_directory(char *str);
-void			built_cd(t_myvars *myvars,char *str);
+void			built_cd(t_myvars **myvars,char *str);
 t_enviroment	*ft_nodenew(char *new_var);
 void			ft_nodeadd_back(t_enviroment **lst, t_enviroment **new);
 void			ft_nodeadd_alphabet(t_enviroment **lst, t_enviroment **new);
@@ -95,6 +110,9 @@ char 			**routes_of_path(t_enviroment **myenv);
 char			*access_cmd(char **split_of_path, char *str);
 int 			error_cmd(t_cmd_line **node, t_enviroment **myenv);
 void			free_lst_cmds(t_cmd_line **lst);
-int				select_built(t_cmd_line **node, t_myvars *my_vars);
+int				select_built(t_cmd_line **node, t_myvars **my_vars);
 int				bolean_built(t_cmd_line **node);
+int 			execute_cmds(t_cmd_line **nodes, t_myvars *my_vars);
+int				size_of_lst(t_cmd_line **lst);
+int 			size_of_lst(t_cmd_line **lst);
 #endif

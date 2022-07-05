@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 12:14:18 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/18 15:17:33 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/04 14:02:56 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int ft_point_strstr(char *str)
 	}
 	return (count_str);
 }
+
 void check_quotes(char str, int *pair_quote, int *single_quote)
 {
 	if (str == '"' && *pair_quote == 0 && *single_quote == 0)
@@ -46,6 +47,7 @@ void check_quotes(char str, int *pair_quote, int *single_quote)
 	else if (str == '\''  && *single_quote == 1)
 		(*single_quote) -= 1;
 }
+
 int	comp_with_string(char chr, char *str)
 {
 	int count;
@@ -61,6 +63,7 @@ int	comp_with_string(char chr, char *str)
 	}
 	return(0);
 }
+
 char *ft_strchrdup_quote(char *str,char *chr)
 {
 	int     count;
@@ -83,6 +86,7 @@ char *ft_strchrdup_quote(char *str,char *chr)
 		line = ft_strldup(str, count);
 	return (line);
 }
+
 void print_env(t_enviroment *export_env, char *option)
 {
 	t_enviroment *aux;
@@ -96,4 +100,19 @@ void print_env(t_enviroment *export_env, char *option)
 			printf("declare -x %s\n",aux->env_var);
 		aux = aux->next;
 	}
+}
+
+int size_of_lst(t_cmd_line **lst)
+{
+	int a;
+	t_cmd_line *aux;
+
+	a = 0;
+	aux = (*lst);
+	while(aux)
+	{
+		aux = aux->next;
+		a++;
+	}
+	return(a);
 }
