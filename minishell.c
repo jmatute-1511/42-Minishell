@@ -14,7 +14,7 @@
 
 void signal_handler(int signum)
 {
-	printf("ID: %i, SIGNUM: %i\n", g_proc, signum);
+	//printf("ID: %i, SIGNUM: %i\n", g_proc, signum);
 	if (signum == SIGINT && g_proc != 0)
 	{
 		kill(g_proc, SIGCONT);
