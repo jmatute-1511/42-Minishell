@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-int g_proc; // id del fork.
-
 void signal_handler(int signum)
 {
 	if (signum == SIGINT && g_proc != 0)
@@ -67,7 +65,7 @@ int main(int argc,char **argv,char **envp)
 		init_nodes(&lst, &myvars->my_env, str);
 		if(lst)
 			execute_cmds(&lst, myvars);
-		//print_cmd(&lst);
+		print_cmd(&lst);
 		free(str);
 	}
 }

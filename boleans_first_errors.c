@@ -109,6 +109,8 @@ int hdoc_without_arg(char *hdoc, char type)
 
 int error_cmd(t_cmd_line **node, t_enviroment **myenv)
 {
+	if ((*node)->arguments == NULL)
+		return(0);
 	if ((*node)->raw_cmd == NULL)
 	{
 		printf("Myshell: parse error near '|' \n");

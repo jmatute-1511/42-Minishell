@@ -13,8 +13,6 @@
 
 #include "minishell.h"
 
-
-
 char *find_path_exec(char *str, t_enviroment **my_env)
 {
 	char	**split;
@@ -24,18 +22,19 @@ char *find_path_exec(char *str, t_enviroment **my_env)
 	path = access_cmd(split, str);
 	return (path); 
 }
-void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs)
+void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 {
 	int j;
 	int h;
 	char *buf;
 	
 	j = 0;
-	
 	if (it != 0)
 		dup2(pipe[it - 1].fd[READ_P], STDIN_FILENO);
 	if (it < n_childs - 1)
-		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);	
+		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);
+	if (node->input != NULL || node->output != NULL)
+		redirect_switch(node);
 	while (j < n_childs - 1)
 	{
 		close(pipe[j].fd[WRITE_P]);
@@ -53,6 +52,7 @@ void son_shell_execute(t_cmd_line *node, t_myvars *my_vars)
 	path = find_path_exec(node->first_arg, &my_vars->my_env);
 	expand = expand_str(my_vars->my_env,node->arguments);
 	quotes = set_quotes(expand);
+
 	if (select_built(&node, &my_vars))
 		exit(0);
 	else
@@ -102,7 +102,7 @@ int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
 	n_childs = size_of_lst(nodes);
 	pids = (pid_t *)malloc(sizeof(pid_t) * n_childs);
 	child_pipe = create_pipes(n_childs);
-	if (n_childs == 1)
+	if (n_childs == 1 && (*nodes)->arguments)
 	{
 		if (select_built(nodes, &my_vars))
 			return(0);
@@ -112,10 +112,14 @@ int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
 		pids[it] = fork();
 		if (pids[it] == 0)
 		{
+			g_proc = pids[it];
 			if (error_cmd(nodes,&my_vars->my_env))
 				exit(0);
-			son_shell_pipes(child_pipe, it, n_childs);
-			son_shell_execute(*nodes, my_vars);
+			son_shell_pipes(child_pipe, it, n_childs, *nodes);
+			if ((*nodes)->arguments != NULL)
+				son_shell_execute(*nodes, my_vars);
+			else
+				exit(0);
 		}
 		(*nodes) = (*nodes)->next;
 		it++;
