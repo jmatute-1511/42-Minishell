@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/21 20:10:19 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/04 21:08:07 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,16 @@
 #include <limits.h>
 #include <errno.h>
 #include <string.h>
-#include <signal.h>
+#include <curses.h>
+#include <term.h>
+#include <fcntl.h>
 
+#define BBLU "\e[1;34m"
+#define WHTHB "e[1;35m"
 #define VERDE_T        "\x1b[32m"	
 #define ROJO_F     "\x1b[41m"
 #define ROJO_T     "\x1b[31m"
+#define COLOR_RESET "\e[0m"
 #define P_QUOTE 0 // Pair quotes
 #define S_QUOTE 1 // single quotes
 #define FIRST 0
@@ -71,10 +76,9 @@ typedef struct s_cmd_line
 typedef struct s_pipes
 {
 	int				fd[2];
-	struct s_pipes	*next;
-	struct s_pipes	*prev;
-	
 } 				t_pipes;
+
+int g_proc; // id del fork.
 
 t_myvars		*start_vars(t_myvars *myvars, char **envp) ;
 char 			*ft_strchrdup_quote(char *str,char *chr);
@@ -84,7 +88,7 @@ void			built_get_pwd(void);
 void			built_env(t_enviroment **myenv);
 void			built_echo(char *str);
 void			open_directory(char *str);
-void			built_cd(t_myvars *myvars,char *str);
+void			built_cd(t_myvars **myvars,char *str);
 t_enviroment	*ft_nodenew(char *new_var);
 void			ft_nodeadd_back(t_enviroment **lst, t_enviroment **new);
 void			ft_nodeadd_alphabet(t_enviroment **lst, t_enviroment **new);
@@ -108,8 +112,15 @@ char 			**routes_of_path(t_enviroment **myenv);
 char			*access_cmd(char **split_of_path, char *str);
 int 			error_cmd(t_cmd_line **node, t_enviroment **myenv);
 void			free_lst_cmds(t_cmd_line **lst);
-int				select_built(t_cmd_line **node, t_myvars *my_vars);
+int				select_built(t_cmd_line **node, t_myvars **my_vars);
 int				bolean_built(t_cmd_line **node);
-int 			execute_cmds(t_cmd_line **cmds, t_myvars **my_vars);
+int 			execute_cmds(t_cmd_line **nodes, t_myvars *my_vars);
 int				size_of_lst(t_cmd_line **lst);
+int 			size_of_lst(t_cmd_line **lst);
+void			heredoc_initializer(char *text);
+void 			signal_handler(int signum);
+void			redirect_input(char *file);
+void			redirect_output(char *file);
+void			redirect_output_double(char *file);
+void			redirect_switch(t_cmd_line *node);
 #endif

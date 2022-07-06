@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/18 17:47:16 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/04 13:00:12 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void add_input(t_cmd_line **node, char *type, char *output, int count)
 	name = ft_strldup(output,count);
 	if ((*node)->input)
 	{
-		join = ft_strnjoin(4, (*node)->input, type, " ", name);
+		join = ft_strnjoin(4, (*node)->input, type, name, " ");
 		free((*node)->input);
 		(*node)->input = join;
 	}
 	else
-		(*node)->input = ft_strnjoin(3, type, " ", name);
+		(*node)->input = ft_strnjoin(3, type, name, " ");
 	free (name);
 }
 
@@ -53,12 +53,12 @@ void add_output(t_cmd_line **node, char *type, char *output, int count)
 	name = ft_strldup(output,count);
 	if ((*node)->output)
 	{
-		join = ft_strnjoin(4, ((*node)->output),type, " ", name);
+		join = ft_strnjoin(4, ((*node)->output),type, name, " ");
 		free((*node)->output);
 		(*node)->output = join;
 	}
 	else
-		(*node)->output = ft_strnjoin(3, type, " ", name);
+		(*node)->output = ft_strnjoin(3, type, name, " ");
 	free(name);
 }
 
@@ -206,11 +206,6 @@ int init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
 	while (aux)
 	{
 		charge_elements(&aux, myenv);
-		if (error_cmd(&aux, myenv))
-		{
-			free_lst_cmds(lst_cmds);
-			return (1);
-		}
 		aux = aux->next;
 	}
 	return (0);

@@ -6,13 +6,13 @@
 #    By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/03 17:19:28 by jmatute-          #+#    #+#              #
-#    Updated: 2022/06/21 17:50:55 by jmatute-         ###   ########.fr        #
+#    Updated: 2022/07/04 20:59:45 by jmatute-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS	= 	minishell.c built_echo.c built_pwd.c built_cd.c initialize_vars.c fts_lst.c \
 			ft_lst2.c ft_lst3.c built_export.c built_unset.c built_env.c list_cmds.c utils.c expansions.c \
-			quotes.c filter_list_cmds.c boleans_first_errors.c acces_cmds.c select_built.c execute.c
+			quotes.c filter_list_cmds.c boleans_first_errors.c acces_cmds.c select_built.c execute.c redirects.c
 
 LIBFT_DIR	= libft/
 
