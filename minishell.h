@@ -80,6 +80,8 @@ typedef struct s_pipes
 
 int g_proc; // id del fork.
 
+void			kill(int thread, int signal);
+void			rl_replace_line (const char *text, int clear_undo);
 t_myvars		*start_vars(t_myvars *myvars, char **envp) ;
 char 			*ft_strchrdup_quote(char *str,char *chr);
 void			check_quotes(char str, int *pair_quote, int *single_quote);
