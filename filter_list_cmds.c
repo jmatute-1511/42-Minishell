@@ -36,12 +36,12 @@ void add_input(t_cmd_line **node, char *type, char *output, int count)
 	name = ft_strldup(output,count);
 	if ((*node)->input)
 	{
-		join = ft_strnjoin(4, (*node)->input, type, " ", name);
+		join = ft_strnjoin(4, (*node)->input, type, name, " ");
 		free((*node)->input);
 		(*node)->input = join;
 	}
 	else
-		(*node)->input = ft_strnjoin(3, type, " ", name);
+		(*node)->input = ft_strnjoin(3, type, name, " ");
 	free (name);
 }
 
@@ -53,12 +53,12 @@ void add_output(t_cmd_line **node, char *type, char *output, int count)
 	name = ft_strldup(output,count);
 	if ((*node)->output)
 	{
-		join = ft_strnjoin(4, ((*node)->output),type, " ", name);
+		join = ft_strnjoin(4, ((*node)->output),type, name, " ");
 		free((*node)->output);
 		(*node)->output = join;
 	}
 	else
-		(*node)->output = ft_strnjoin(3, type, " ", name);
+		(*node)->output = ft_strnjoin(3, type, name, " ");
 	free(name);
 }
 
