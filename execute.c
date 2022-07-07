@@ -29,9 +29,9 @@ void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 	char *buf;
 	
 	j = 0;
-	if (it != 0)
+	if (it != 0 && node->input == NULL)
 		dup2(pipe[it - 1].fd[READ_P], STDIN_FILENO);
-	if (it < n_childs - 1)
+	if (it < n_childs - 1 && node->output == NULL)
 		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);
 	if (node->input != NULL || node->output != NULL)
 		redirect_switch(node);
