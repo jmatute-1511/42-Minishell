@@ -78,6 +78,10 @@ typedef struct s_pipes
 	int				fd[2];
 } 				t_pipes;
 
+int g_proc; // id del fork.
+
+void			kill(int thread, int signal);
+void			rl_replace_line (const char *text, int clear_undo);
 t_myvars		*start_vars(t_myvars *myvars, char **envp) ;
 char 			*ft_strchrdup_quote(char *str,char *chr);
 void			check_quotes(char str, int *pair_quote, int *single_quote);
@@ -115,4 +119,10 @@ int				bolean_built(t_cmd_line **node);
 int 			execute_cmds(t_cmd_line **nodes, t_myvars *my_vars);
 int				size_of_lst(t_cmd_line **lst);
 int 			size_of_lst(t_cmd_line **lst);
+void			heredoc_initializer(char *text);
+void 			signal_handler(int signum);
+void			redirect_input(char *file);
+void			redirect_output(char *file);
+void			redirect_output_double(char *file);
+void			redirect_switch(t_cmd_line *node);
 #endif
