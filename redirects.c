@@ -17,14 +17,14 @@
 
 void	redirect_switch(t_cmd_line *node)
 {
-	int reader;
-	char *input;
-	char *output;
+	int		reader;
+	char	*input;
+	char	*output;
 
 	if (node->input != NULL)
 	{
 		reader = 0;
-		while(node->input[reader])
+		while (node->input[reader])
 		{
 			if (node->input[reader] == '<' && node->input[reader + 1] != '<')
 			{
@@ -40,11 +40,10 @@ void	redirect_switch(t_cmd_line *node)
 			reader++;
 		}
 	}
-
 	reader = 0;
-	if(node->output != NULL)
+	if (node->output != NULL)
 	{
-		while(node->output[reader])
+		while (node->output[reader])
 		{
 			if (node->output[reader] == '>' && node->output[reader + 1] != '>')
 			{
