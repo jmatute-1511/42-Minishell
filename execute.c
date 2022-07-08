@@ -109,7 +109,8 @@ int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
 	}
 	while(it < n_childs)
 	{
-		pids[it] = fork();
+		g_proc = fork();
+		pids[it] = g_proc;
 		if (pids[it] == 0)
 		{
 			g_proc = pids[it];

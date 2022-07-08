@@ -24,12 +24,12 @@ static int	check_quote(char str, int *pair_quote, int *single_quote)
 		(*pair_quote)--;
 		return (1);
 	}
-	if (str == '\''  && *single_quote == 0 && *pair_quote == 0)
+	if (str == '\'' && *single_quote == 0 && *pair_quote == 0)
 	{
 		(*single_quote)++;
 		return (1);
 	}
-	else if (str == '\''  && *single_quote == 1)
+	else if (str == '\'' && *single_quote == 1)
 	{
 		(*single_quote)--;
 		return (1);
@@ -39,9 +39,9 @@ static int	check_quote(char str, int *pair_quote, int *single_quote)
 
 static int	lenght_without_quotes(char *str)
 {
-	int count;
-	int len;
-	int flag[2];
+	int	count;
+	int	len;
+	int	flag[2];
 
 	len = 0;
 	count = 0;
@@ -53,16 +53,16 @@ static int	lenght_without_quotes(char *str)
 		len++;
 		count++;
 	}
-	return(len);
+	return (len);
 }
 
-char    *set_quotes(char *str)
+char	*set_quotes(char *str)
 {
 	int		count;
-	int 	count2;
+	int		count2;
 	int		flag[2];
-	char	*set_quotes; 
-	
+	char	*set_quotes;
+
 	count = 0;
 	count2 = 0;
 	flag[P_QUOTE] = 0;
@@ -80,5 +80,5 @@ char    *set_quotes(char *str)
 		}
 	}
 	set_quotes[count2] = '\0';
-	return(set_quotes);
+	return (set_quotes);
 }
