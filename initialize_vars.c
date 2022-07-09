@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:13:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/21 17:56:05 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/09 12:22:41 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ char **enviroment_matrix(char **envp)
 
     size = 0;
     count = 0;
+    aux_envp = NULL;
     if (envp)
     {
         while(envp[size])
@@ -74,14 +75,42 @@ char **enviroment_matrix(char **envp)
     }
     return(aux_envp);
 }
+char **create_env_if_not_env()
+{
+    char **my_envp;
+
+    my_envp = (char **)malloc(sizeof(char *) * 4);
+    if (!my_envp)
+        return(NULL);
+    my_envp[0] = ft_strdup("PWD=/Users/jmatute-/Desktop/mini/minishell");
+    my_envp[1] = ft_strdup("SHLVL=1");
+    my_envp[2] = ft_strdup("_=/usr/bin/env");
+    my_envp[3] = NULL;
+    return(my_envp);
+}
 
 t_myvars *start_vars(t_myvars *myvars,char **envp)   
 {
+    char **my_envp;
 
-    myvars = malloc(sizeof(t_myvars));
-    myvars->first_pwd = getcwd(NULL, 0);
-    myvars->export_env = create_export_env(envp);
-    myvars->my_env = create_env(envp);
-    myvars->m_envp = enviroment_matrix(envp);
+    my_envp = NULL;
+    if (!*envp)
+    {
+        my_envp = create_env_if_not_env();
+        myvars = malloc(sizeof(t_myvars));
+        myvars->first_pwd = getcwd(NULL, 0);
+        myvars->export_env = create_export_env(my_envp);
+        myvars->my_env = create_env(my_envp);
+        myvars->m_envp = enviroment_matrix(my_envp);
+        myvars->stat = 0;
+    }
+    else{
+        myvars = malloc(sizeof(t_myvars));
+        myvars->first_pwd = getcwd(NULL, 0);
+        myvars->export_env = create_export_env(envp);
+        myvars->my_env = create_env(envp);
+        myvars->m_envp = enviroment_matrix(envp);
+        myvars->stat = 0;
+    }
     return(myvars);
 }

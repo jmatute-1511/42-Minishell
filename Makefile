@@ -6,7 +6,7 @@
 #    By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/03 17:19:28 by jmatute-          #+#    #+#              #
-#    Updated: 2022/07/04 20:59:45 by jmatute-         ###   ########.fr        #
+#    Updated: 2022/07/07 15:40:32 by jmatute-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ RM		= rm -f
 
 CFLAGS	= -Wall -Wextra -Werror #-fsanitize=address
 
-LIBS	= -lreadline -L /Users/bremesar/.brew/opt/readline/lib -I /Users/bremesar/.brew/opt/readline/include
+LIBS	= -lreadline -L /Users/jmatute-/.brew/opt/readline/lib -I /Users/jmatute-/.brew/opt/readline/include
 
 .c.o: ${SRCS}
 			@${CC}  -c $< -o ${<:.c=.o}

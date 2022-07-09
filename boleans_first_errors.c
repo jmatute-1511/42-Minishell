@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 11:57:03 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/21 17:03:19 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/09 03:11:11 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int hdoc_without_arg(char *hdoc, char type)
 	return (0);
 }
 
-int error_cmd(t_cmd_line **node, t_enviroment **myenv)
+int error_cmd(t_cmd_line **node, t_myvars **my_vars)
 {
 	if ((*node)->arguments == NULL)
 		return(0);
@@ -116,8 +116,6 @@ int error_cmd(t_cmd_line **node, t_enviroment **myenv)
 		printf("Myshell: parse error near '|' \n");
 		return (1);
 	}
-	if (cmd_not_found(node, myenv))
-		return (1);
 	if (hdoc_without_arg((*node)->raw_cmd, '<'))
 	{
 		printf("Myshell: parse error near \n");

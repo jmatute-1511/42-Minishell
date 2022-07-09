@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 12:14:18 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/04 14:02:56 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/07 17:44:01 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int check_chr(char c)
 {
 	if (c == ' ' || c == '$' || c == '\'' || c == '"')
 		return (1);
-	else if(ft_isalpha(c) == 0 && ft_isalnum(c) == 0)
-		return (1);
+	/*else if(ft_isalpha(c) == 0 && ft_isalnum(c) == 0)
+		return (1);*/
 	return (0);
 }
 

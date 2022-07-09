@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/04 21:08:31 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/09 12:33:08 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,6 @@ void signal_handler(int signum)
 	}
 }
 
-void print()
-{
-	char *str;
-	int a;
-	
-	a = open("./title.txt",O_RDONLY);
-	read(a, str, 638);
-	printf(BBLU"%s\n", str);
-}
-
 int main(int argc,char **argv,char **envp)
 {
 	t_myvars	*myvars;
@@ -48,9 +38,8 @@ int main(int argc,char **argv,char **envp)
 	signal(SIGINT,signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	myvars = start_vars(myvars,envp);
-	if (!myvars->my_env)
-		return(0);
-	//print();
+	/*if (!myvars->my_env)
+		return(0);*/
 	while (1)
 	{
 		str = NULL;
@@ -62,10 +51,10 @@ int main(int argc,char **argv,char **envp)
 		}
 		if (ft_strcmp(str,"") != 0)
 			add_history(str);
-		init_nodes(&lst, &myvars->my_env, str);
+		init_nodes(&lst, &myvars, str);
+		//print_cmd(&lst);
 		if(lst)
-			execute_cmds(&lst, myvars);
-		print_cmd(&lst);
+			execute_cmds(&lst, &myvars);
 		free(str);
 	}
 }
