@@ -12,8 +12,7 @@
 
 #include "minishell.h"
 
-
-void	ft_nodeadd_front(t_enviroment **alst, t_enviroment *new) // add in front new node of enviroment variables to lst
+void	ft_nodeadd_front(t_enviroment **alst, t_enviroment *new)
 {
 	if (alst && new)
 	{
@@ -22,8 +21,7 @@ void	ft_nodeadd_front(t_enviroment **alst, t_enviroment *new) // add in front ne
 	}
 }
 
-
-t_enviroment	*ft_nodenew(char *new_var) // create a new node of enviroment variables
+t_enviroment	*ft_nodenew(char *new_var)
 {
 	t_enviroment	*new;
 
@@ -35,11 +33,10 @@ t_enviroment	*ft_nodenew(char *new_var) // create a new node of enviroment varia
 	return (new);
 }
 
-
-void	ft_nodeadd_back(t_enviroment **lst, t_enviroment **new) // add a new node of enviroment variables to the end of the list
+void	ft_nodeadd_back(t_enviroment **lst, t_enviroment **new)
 {
 	t_enviroment	*aux;
-	
+
 	if (lst)
 	{
 		if (*lst == NULL)
@@ -54,36 +51,40 @@ void	ft_nodeadd_back(t_enviroment **lst, t_enviroment **new) // add a new node o
 	}
 }
 
-void	ft_nodeadd_alphabet(t_enviroment  **lst, t_enviroment **new) // alphabetize the list of enviroment variables 
+void	ft_nodeadd_alphabet_next(t_enviroment *aux, t_enviroment **new)
+{
+	t_enviroment	*aux_node;
+
+	aux_node = NULL;
+	while (aux)
+	{
+		if (ft_strcmp(aux->env_var, (*new)->env_var) > 0 && aux_node)
+		{
+			aux_node->next = (*new);
+			(*new)->next = aux;
+			break ;
+		}
+		aux_node = aux;
+		aux = aux->next;
+	}
+	if (aux == NULL)
+		aux_node->next = (*new);
+}
+
+void	ft_nodeadd_alphabet(t_enviroment **lst, t_enviroment **new)
 {
 	t_enviroment	*aux;
-	t_enviroment	*aux_node;
-	int				a;
-	
+
 	if ((*lst) == NULL)
-		(*lst)= (*new);
-	else if(ft_strcmp((*lst)->env_var,(*new)->env_var) > 0) 
-	{																	// to make short
-		 (*new)->next = (*lst) ;
-		 (*lst) = (*new);
+		(*lst) = (*new);
+	else if (ft_strcmp((*lst)->env_var, (*new)->env_var) > 0)
+	{
+		(*new)->next = (*lst);
+		(*lst) = (*new);
 	}
 	else
 	{
 		aux = (*lst);
-		aux_node = NULL;
-		while(aux)
-		{
-			if (ft_strcmp(aux->env_var, (*new)->env_var) > 0 && aux_node)
-			{
-				aux_node->next = (*new);
-				(*new)->next = aux;
-				break;
-			}
-			aux_node = aux;
-			aux = aux->next;
-		}
-		if (aux == NULL)
-			aux_node->next = (*new);
-		
+		ft_nodeadd_alphabet_next(aux, new);
 	}
 }

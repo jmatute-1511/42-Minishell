@@ -12,87 +12,40 @@
 
 #include "minishell.h"
 
-//usa el comando "bash" en la terminal para los ejemplos
-//haz el de <<
-
-void	redirect_switch(t_cmd_line *node)
+void	heredoc_finish(char *join_str)
 {
-	int reader;
-	char *input;
-	char *output;
+	int		filedesc;
+	char	*aux_str;
 
-	if (node->input != NULL)
-	{
-		reader = 0;
-		while(node->input[reader])
-		{
-			if (node->input[reader] == '<' && node->input[reader + 1] != '<')
-			{
-				input = ft_strldup(&node->input[reader + 1], ft_point_strchr(&node->input[reader + 1], ' '));
-				redirect_input(input);
-			}
-			if (node->input[reader] == '<' && node->input[reader + 1] == '<')
-			{
-				input = ft_strldup(&node->input[reader + 2], ft_point_strchr(&node->input[reader + 2], ' '));
-				heredoc_initializer(input);
-				reader++;
-			}
-			reader++;
-		}
-	}
-
-	reader = 0;
-	if(node->output != NULL)
-	{
-		while(node->output[reader])
-		{
-			if (node->output[reader] == '>' && node->output[reader + 1] != '>')
-			{
-				output = ft_strldup(&node->output[reader + 1], ft_point_strchr(&node->output[reader + 1], ' '));
-				redirect_output(output);
-			}
-			if (node->output[reader] == '>' && node->output[reader + 1] == '>')
-			{
-				output = ft_strldup(&node->output[reader + 2], ft_point_strchr(&node->output[reader + 2], ' '));
-				redirect_output_double(output);
-				reader++;
-			}
-			reader++;
-		}
-	}
+	aux_str = join_str;
+	join_str = ft_strjoin(aux_str, "\n");
+	free(aux_str);
+	filedesc = open("temp", O_WRONLY | O_TRUNC | O_CREAT);
+	write(filedesc, join_str, ft_strlen(join_str));
+	close(filedesc);
+	filedesc = open("temp", O_RDONLY);
+	dup2(filedesc, STDIN_FILENO);
+	close(filedesc);
 }
 
 void	heredoc_initializer(char *text)
 {
 	int		filedesc;
-	int		out_aux; //pipe duplicado auxiliar
+	int		out_aux;
 	char	*str;
-	char 	*join_str;
-	char 	*aux_str;
+	char	*join_str;
+	char	*aux_str;
 
 	join_str = NULL;
 	while (1)
 	{
 		str = readline(ROJO_T">"COLOR_RESET);
 		if (ft_strcmp(str, text) == 0)
-		{
-			aux_str = join_str;
-			join_str = ft_strjoin(aux_str, "\n");
-			free(aux_str);
-			filedesc = open("temp", O_WRONLY | O_TRUNC | O_CREAT);
-				if (filedesc < 0)
-					return ;
-			write(filedesc, join_str, ft_strlen(join_str));
-			close(filedesc);
-			filedesc = open("temp", O_RDONLY);
-			dup2(filedesc, STDIN_FILENO);
-			close(filedesc);
-			return;
-		}
+			return (heredoc_finish(join_str));
 		else
 		{
 			if (join_str == NULL)
-				join_str = ft_strdup(str); 
+				join_str = ft_strdup(str);
 			else
 			{
 				aux_str = join_str;
@@ -112,7 +65,6 @@ void	redirect_input(char *file)
 	filedesc = open(str, O_RDONLY);
 	if (filedesc < 0)
 	{
-		//cmd error
 		perror("open");
 		return ;
 	}
@@ -129,7 +81,6 @@ void	redirect_output(char *file)
 	filedesc = open(str, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
 	if (filedesc < 0)
 	{
-		//cmd error
 		perror("open");
 		return ;
 	}
@@ -146,7 +97,6 @@ void	redirect_output_double(char *file)
 	filedesc = open(str, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 	if (filedesc < 0)
 	{
-		//cmd error
 		perror("open");
 		return ;
 	}

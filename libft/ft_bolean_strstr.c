@@ -12,24 +12,24 @@
 
 #include "libft.h"
 
-int ft_bolean_strstr(char *str, char *find)
+int	ft_bolean_strstr(char *str, char *find)
 {
-    int after;
-    int begin;
+	int	after;
+	int	begin;
 
-    after = 0;
-    begin  = 0;
-    while (str[after])
-    {
-        while (str[after] == find[begin])
-        {
-            after++;
-            begin++;
-            if (begin == ft_strlen(find))
-                return(after);
-        }
-        begin  = 0;
-        after++;
-    }
-    return (0);
+	after = 0;
+	begin = 0;
+	while (str[after])
+	{
+		while (str[after] == find[begin])
+		{
+			after++;
+			begin++;
+			if (begin == ft_strlen(find))
+				return (after);
+		}
+		begin = 0;
+		after++;
+	}
+	return (0);
 }

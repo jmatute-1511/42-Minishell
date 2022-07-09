@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	ft_nodesize(t_enviroment *lst) // calculate lenght of list
+int	ft_nodesize(t_enviroment *lst)
 {
 	size_t			len;
 	t_enviroment	*aux;
@@ -27,16 +27,16 @@ int	ft_nodesize(t_enviroment *lst) // calculate lenght of list
 	return (len);
 }
 
-void free_lst_node(t_enviroment *node) // free enviroment vars
+void	free_lst_node(t_enviroment *node)
 {
-    t_enviroment *aux;
+	t_enviroment	*aux;
 
-    aux = node;
-    free(node->env_var);
-    free(node);
+	aux = node;
+	free(node->env_var);
+	free(node);
 }
 
-t_cmd_line	*ft_cmd_nodenew(char *raw_cmd, size_t len) // create new node of cmds 
+t_cmd_line	*ft_cmd_nodenew(char *raw_cmd, size_t len)
 {
 	t_cmd_line	*new;
 	char		*not_trim;
@@ -46,23 +46,23 @@ t_cmd_line	*ft_cmd_nodenew(char *raw_cmd, size_t len) // create new node of cmds
 	if (!new)
 		return (NULL);
 	not_trim = ft_strldup(raw_cmd, len);
-	new->input  = NULL;
+	new->input = NULL;
 	new->output = NULL;
 	new->first_arg = NULL;
-	new->arguments  = NULL;
+	new->arguments = NULL;
 	new->raw_cmd = ft_strtrim(not_trim, "| ");
 	new->next = NULL;
 	free(not_trim);
 	return (new);
 }
 
-void	ft_cmds_nodeadd_back(t_cmd_line **lst, t_cmd_line **new) // add a new node of cmds to the end of list
+void	ft_cmds_nodeadd_back(t_cmd_line **lst, t_cmd_line **new)
 {
 	t_cmd_line	*aux;
-	
+
 	if (lst)
 	{
-		if (*lst == NULL) 
+		if (*lst == NULL)
 		{
 			(*lst) = *new;
 			return ;
