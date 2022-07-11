@@ -12,14 +12,14 @@
 
 #include "libft.h"
 
-int ft_bolean_operator( char diff, char *str)
+int	ft_bolean_operator( char diff, char *str)
 {
-    int count;
+	int	count;
 
-    while(str[count])
-    {
-        if (str[count] == diff)
-            return(1);
-    }
-    return (0);
+	while (str[count])
+	{
+		if (str[count] == diff)
+			return (1);
+	}
+	return (0);
 }

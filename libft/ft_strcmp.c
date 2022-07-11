@@ -17,7 +17,7 @@ int	ft_strcmp(char *s1, char *s2)
 	size_t	count;
 	int		n;
 	int		s;
-	int 	l;
+	int		l;
 
 	count = 0;
 	while ((s1[count] || s2[count]))

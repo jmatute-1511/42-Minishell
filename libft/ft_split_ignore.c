@@ -12,39 +12,25 @@
 
 #include "libft.h"
 
-int bolean_str(char c, char *str)
-{
-	int a;
-
-	a = 0;
-	while(str[a])
-	{
-		if(str[a] == c)
-			return(1);
-		a++;
-	}
-	return(0);
-}
-
 static int	ft_count_word(char const *s, char c, char *ign)
 {
 	int	count;
 	int	word;
-    int flag;
+	int	flag;
 
 	count = 0;
 	word = 0;
-    flag = 0;
+	flag = 0;
 	if (s[0] != c)
 		word++;
 	if (!s[count])
 		return (0);
 	while (s[count])
 	{
-        if (flag  == 0 && bolean_str(s[count], ign))
-            flag += 1;
-        else if (flag  == 1 && bolean_str(s[count], ign))
-            flag -= 1;
+		if (flag == 0 && bolean_str(s[count], ign))
+			flag += 1;
+		else if (flag == 1 && bolean_str(s[count], ign))
+			flag -= 1;
 		if (s[count] == c && s[count + 1] != c && flag != 1)
 			word++;
 		count++;
@@ -52,71 +38,54 @@ static int	ft_count_word(char const *s, char c, char *ign)
 	return (word);
 }
 
-int len_word(const char *s, char c, char *ign)
-{
-    int len;
-    int flag;
-
-    flag = 0;    
-    len = 0;
-    while (s[len])
-    {
-        if (flag  == 0 && bolean_str(s[len], ign))
-            flag += 1;
-        else if (flag  == 1 && bolean_str(s[len], ign))
-            flag -= 1;
-        if (s[len] == c && flag == 0)
-            break;
-        len++;
-    }
-    return (len);
-}
 static char	*save_memory(char const *s, char c, char *ign)
 {
 	char	*save_memory;
 	int		len;
 	int		cpy;
-    int     flag;
+	int		flag;
 
 	cpy = 0;
-    flag = 0;
-    len = len_word(s, c, ign);
+	flag = 0;
+	len = len_word(s, c, ign);
 	save_memory = (char *)malloc(sizeof(char) * (len + 1));
 	if (!save_memory)
 		return (NULL);
 	while (s[cpy])
 	{
-        if (flag  == 0 && bolean_str(s[cpy], ign))
-            flag += 1;
-        else if (flag  == 1 && bolean_str(s[cpy], ign))
-            flag -= 1;
-        if (s[cpy] == c && flag == 0)
-            break ;
+		if (flag == 0 && bolean_str(s[cpy], ign))
+			flag += 1;
+		else if (flag == 1 && bolean_str(s[cpy], ign))
+			flag -= 1;
+		if (s[cpy] == c && flag == 0)
+			break ;
 		save_memory[cpy] = s[cpy];
 		cpy++;
 	}
 	save_memory[len] = '\0';
 	return (save_memory);
 }
-int return_pointer(const char *s, char c, char *ign, int count)
-{
-    int flag;
 
-    flag = 0;
-    if (!s[count])
-        return (count);
-    while (s[count])
-    {
-        if (flag  == 0 && bolean_str(s[count], ign))
-            flag += 1;
-        else if (flag  == 1 && bolean_str(s[count], ign))
-            flag -= 1;
-        if (s[count] == c && flag == 0)
-            break ;
-        count++;
-    }
-    return (count);
+int	return_pointer(const char *s, char c, char *ign, int count)
+{
+	int	flag;
+
+	flag = 0;
+	if (!s[count])
+		return (count);
+	while (s[count])
+	{
+		if (flag == 0 && bolean_str(s[count], ign))
+			flag += 1;
+		else if (flag == 1 && bolean_str(s[count], ign))
+			flag -= 1;
+		if (s[count] == c && flag == 0)
+			break ;
+		count++;
+	}
+	return (count);
 }
+
 char	**ft_split_ignore(char const *s, char c, char *ign)
 {
 	char	**matriz;

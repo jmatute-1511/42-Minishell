@@ -28,9 +28,15 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!p)
 		return (NULL);
 	while (s1[count])
-		(p[count] = s1[count]) && (count++);
+	{
+		p[count] = s1[count];
+		count++;
+	}
 	while (s2[count2])
-		(p[count] = s2[count2]) && (count += 1) && (count2 += 1);
+	{
+		p[count2 + count] = s2[count2];
+		count2 ++;
+	}
 	p[len] = '\0';
 	return (p);
 }
