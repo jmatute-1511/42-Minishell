@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:55:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/10 21:14:13 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 18:06:25 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int  after_option(char *str, char *find)
 	return (0);
 }
 
-void print_echo(char *str)
+void 	print_echo(char *str)
 {
 	char	**echo;
 	char	*clean;

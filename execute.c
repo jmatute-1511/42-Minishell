@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 15:09:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/11 14:53:03 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 18:41:18 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,9 @@ void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 	int j;
 	
 	j = 0;
-	if (it != 0 && node->input == NULL)
-	{
-		
+	if (it != 0)
 		dup2(pipe[it - 1].fd[READ_P], STDIN_FILENO);
-	}
-	if (it < n_childs - 1 && node->output == NULL)
+	if (it < n_childs - 1)
 		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);
 	if (node->input != NULL || node->output != NULL)
 		redirect_switch(node);
@@ -113,6 +110,8 @@ int execute_cmds(t_cmd_line **nodes, t_myvars **my_vars)
 	int 	n_childs;
 	t_pipes *child_pipe;
 	pid_t	*pids;
+	int aux_out;
+	int aux_in;
 	
 	it = 0;
 	n_childs = size_of_lst(nodes);
@@ -120,19 +119,26 @@ int execute_cmds(t_cmd_line **nodes, t_myvars **my_vars)
 	child_pipe = create_pipes(n_childs);
 	if (n_childs == 1 && (*nodes)->arguments)
 	{
+		aux_out = dup(STDOUT_FILENO);
+		aux_in = dup(STDIN_FILENO);
+		if ((*nodes)->input || (*nodes)->output)
+			redirect_switch((*nodes));
 		if (select_built(nodes, my_vars))
-		{	
+		{
 			(*my_vars)->stat = 0;
+			dup2(aux_out, STDOUT_FILENO);
+			close(aux_out);
+			dup2(aux_in, STDIN_FILENO);
+			close(aux_in);
 			return(0);
 		}
 	}
 	while(it < n_childs)
 	{
 		pids[it] = fork();
-		g_proc[0] = pids[it];
+		g_proc = pids[it];
 		if (pids[it] == 0)
 		{
-			g_proc[1] = pids[it];
 			if (error_cmd(nodes,my_vars))
 				exit(0);
 			son_shell_pipes(child_pipe, it, n_childs, *nodes);

@@ -6,26 +6,36 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/11 15:00:19 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 18:37:39 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 void	signal_handler(int signum)
 {
-	if (signum == SIGINT && g_proc != 0)
+	
+	if (signum == SIGINT && g_proc > 0)
 	{
 		kill(g_proc, SIGCONT);
-		write(0, "\n", 1);
+		// write(0, "\n", 1);
+		// rl_on_new_line();
+		// rl_replace_line("", 0);
+		// rl_redisplay();
 	}
-	if (signum == SIGINT && g_proc == 0)
+	else if (signum == SIGINT && g_proc == 0)
 	{
 		write(0, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+	}
+	else if (signum == SIGINT && g_proc < 0)
+	{
+		// write(0, "\n", 1);
+		// rl_on_new_line();
+		// rl_replace_line("", 0);
+		// rl_redisplay();
 	}
 }
 
@@ -55,6 +65,7 @@ int main(int argc,char **argv,char **envp)
 			add_history(str);
 		if (init_nodes(&lst, &myvars, str) == 0)
 		{
+			//print_cmd(&lst);
 			if(lst)
 				execute_cmds(&lst, &myvars);
 		}

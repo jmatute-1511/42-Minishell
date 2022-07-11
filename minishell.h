@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/11 14:55:32 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 15:39:10 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_myvars
 	int				stat;
 	t_enviroment	*pwd;
 	t_enviroment	*old_pwd;
+	t_enviroment	*home;
 }				t_myvars;
 
 typedef struct s_vars_env
@@ -128,4 +129,5 @@ void			redirect_output(char *file);
 void			redirect_output_double(char *file);
 void			redirect_switch(t_cmd_line *node);
 int 			cmd_not_found(t_cmd_line **node, t_enviroment **myenv);
+t_enviroment 	*find_path(t_enviroment *my_env, char *str);
 #endif

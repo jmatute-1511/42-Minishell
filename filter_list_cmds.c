@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/10 21:15:48 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 18:18:28 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,8 +241,10 @@ int error_hdoc(t_cmd_line *node)
 			if (node->input[a] == '<' &&  \
 			(node->input[a + 2] =='<' || node->input[a + 2] == '>'))
 				return(1);	
+			a++;
 		}
 	}
+	a = 0;
 	if (node->output)
 	{
 		while (node->output[a])
@@ -250,6 +252,7 @@ int error_hdoc(t_cmd_line *node)
 			if (node->output[a] == '<' &&  \
 			(node->output[a + 2] =='<' || node->output[a + 2] == '>'))
 				return(1);
+			a++;
 		}
 	}
 	return(0);
