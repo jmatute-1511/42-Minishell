@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 16:31:53 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/07 17:45:58 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/10 17:06:13 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ void	cpy_expand(t_myvars *my_vars, char *str, char **str_expand,\
 			*count2 += 1;
 		}
 	}
-	free(expand);
+	if(expand)
+		free(expand);
 }
 
 char	 *expand_str(t_myvars *my_vars, char *str)

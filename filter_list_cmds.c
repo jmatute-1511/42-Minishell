@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/08 14:46:45 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/10 21:15:48 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ int add_hdocs(t_cmd_line **node, char *str)
 	int count;
 	char *type;
 
+	count  = 0;
+	 
 	type = select_type_hdoc(str);
 	count = ft_strlen(type);
 	while (str[count] == ' ')
@@ -134,9 +136,7 @@ int add_arguments(t_cmd_line **node, char *str)
 void capture_arguments(t_cmd_line **node, char *str)
 {
 	int count;
-	int aux_count;
 	int flag[2];
-	char *type;
 	
 	count  = 0;
 	flag[P_QUOTE] = 0;
@@ -229,10 +229,35 @@ void charge_elements(t_cmd_line **node, t_myvars **my_vars)
 	}
 }
 
+int error_hdoc(t_cmd_line *node)
+{
+	int a;
+
+	a = 0;
+	if (node->input)
+	{
+		while (node->input[a] && node->input)
+		{
+			if (node->input[a] == '<' &&  \
+			(node->input[a + 2] =='<' || node->input[a + 2] == '>'))
+				return(1);	
+		}
+	}
+	if (node->output)
+	{
+		while (node->output[a])
+		{
+			if (node->output[a] == '<' &&  \
+			(node->output[a + 2] =='<' || node->output[a + 2] == '>'))
+				return(1);
+		}
+	}
+	return(0);
+}
+
 int init_nodes(t_cmd_line **lst_cmds,t_myvars **my_vars,char *str)
 {
 	t_cmd_line	*aux;
-	char		*str2;
 	
 	if (first_filter_errors(str))	
 		return (1);
@@ -241,6 +266,8 @@ int init_nodes(t_cmd_line **lst_cmds,t_myvars **my_vars,char *str)
 	while (aux)
 	{
 		charge_elements(&aux, my_vars);
+		if (error_hdoc(aux))
+			return(1);
 		aux = aux->next;
 	}
 	return (0);

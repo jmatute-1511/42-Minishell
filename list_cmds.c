@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:52:40 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/04 18:04:22 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/10 18:06:42 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	print_cmd(t_cmd_line **lst)
 		printf("INPUT :%s\n", aux->input);
 		printf("OUTPUT :%s\n", aux->output);
 		printf("FIRST ARG :%s\n", aux->first_arg);
-		printf("ARGUMENTS :%s\n", aux->arguments);
+		printf("ARGUMENTS :%s|\n", aux->arguments);
 		printf("RAW CMD :%s\n", aux->raw_cmd);
 		printf("------------------------------------------------------\n");
 		aux = aux->next;

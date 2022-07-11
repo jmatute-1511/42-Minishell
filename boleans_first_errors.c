@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 11:57:03 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/09 03:11:11 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/10 21:16:29 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int hdoc_without_arg(char *hdoc, char type)
 
 int error_cmd(t_cmd_line **node, t_myvars **my_vars)
 {
+	(void)my_vars;
 	if ((*node)->arguments == NULL)
 		return(0);
 	if ((*node)->raw_cmd == NULL)
@@ -128,3 +129,4 @@ int error_cmd(t_cmd_line **node, t_myvars **my_vars)
 	}
 	return (0);
 }
+

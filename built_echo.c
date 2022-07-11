@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:55:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/07 15:50:55 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/10 21:14:13 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void    built_echo(char *str)
 {
 	int		begin;
 	int		new_begin;
-	char	*echo;
 
 	begin = ft_point_strchr(str, ' ');
 	new_begin = after_option(str, "-n");

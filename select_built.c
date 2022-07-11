@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 14:21:11 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/09 12:55:34 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/10 18:01:40 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int	select_built(t_cmd_line **node,t_myvars **my_vars)
 	else if (strcmp((*node)->first_arg, "pwd") == 0)
 		built_get_pwd();
 	else if (strcmp((*node)->first_arg, "unset") == 0)
-		built_unset(&(*my_vars)->my_env,
-			&(*my_vars)->export_env, (*node)->arguments);
+		built_unset(&(*my_vars)->my_env, \
+		&(*my_vars)->export_env, (*node)->arguments);
 	if (bolean_built(node))
 		return (1);
 	return (0);

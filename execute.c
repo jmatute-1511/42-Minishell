@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 15:09:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/09 12:39:30 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 14:53:03 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,17 @@ char *find_path_exec(char *str, t_enviroment **my_env)
 	path = access_cmd(split, str);
 	return (path); 
 }
+
 void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 {
 	int j;
-	int h;
-	char *buf;
 	
 	j = 0;
 	if (it != 0 && node->input == NULL)
+	{
+		
 		dup2(pipe[it - 1].fd[READ_P], STDIN_FILENO);
+	}
 	if (it < n_childs - 1 && node->output == NULL)
 		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);
 	if (node->input != NULL || node->output != NULL)
@@ -43,6 +45,7 @@ void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 	}
 	
 }
+
 void son_shell_execute(t_cmd_line *node, t_myvars **my_vars)
 {
 	char *path;
@@ -74,6 +77,11 @@ void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids, t_myvars **my_v
 			close(child_pipe[it].fd[WRITE_P]);
 			close(child_pipe[it].fd[READ_P]);
 		}
+		it++;
+	}
+	it = 0;
+	while (it < n_childs)
+	{
 		waitpid(pids[it], &status, 0);
 		if (WIFEXITED(status))
 			(*my_vars)->stat = WEXITSTATUS(status);
@@ -81,8 +89,9 @@ void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids, t_myvars **my_v
 			(*my_vars)->stat = 130;
 		else if (status == 32512)
 			(*my_vars)->stat = 127;
-		it++;
+			it++;
 	}
+	
 }
 t_pipes *create_pipes(int n_childs)
 {
@@ -119,11 +128,11 @@ int execute_cmds(t_cmd_line **nodes, t_myvars **my_vars)
 	}
 	while(it < n_childs)
 	{
-		g_proc = fork();
-		pids[it] = g_proc;
+		pids[it] = fork();
+		g_proc[0] = pids[it];
 		if (pids[it] == 0)
 		{
-			g_proc = pids[it];
+			g_proc[1] = pids[it];
 			if (error_cmd(nodes,my_vars))
 				exit(0);
 			son_shell_pipes(child_pipe, it, n_childs, *nodes);
