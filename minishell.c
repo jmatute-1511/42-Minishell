@@ -14,7 +14,6 @@
 
 void signal_handler(int signum)
 {
-	//printf("ID: %i, SIGNUM: %i\n", g_proc, signum);
 	if (signum == SIGINT && g_proc != 0)
 	{
 		kill(g_proc, SIGCONT);
@@ -64,8 +63,9 @@ int main(int argc,char **argv,char **envp)
 		if (ft_strcmp(str,"") != 0)
 			add_history(str);
 		init_nodes(&lst, &myvars->my_env, str);
+		if(lst)
+			execute_cmds(&lst, myvars);
 		print_cmd(&lst);
-		execute_cmds(&lst, myvars);
 		free(str);
 	}
 }

@@ -29,10 +29,9 @@ void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 	char *buf;
 	
 	j = 0;
-	
-	if (it != 0)
+	if (it != 0 && node->input == NULL)
 		dup2(pipe[it - 1].fd[READ_P], STDIN_FILENO);
-	if (it < n_childs - 1)
+	if (it < n_childs - 1 && node->output == NULL)
 		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);
 	if (node->input != NULL || node->output != NULL)
 		redirect_switch(node);
@@ -103,7 +102,7 @@ int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
 	n_childs = size_of_lst(nodes);
 	pids = (pid_t *)malloc(sizeof(pid_t) * n_childs);
 	child_pipe = create_pipes(n_childs);
-	if (n_childs == 1)
+	if (n_childs == 1 && (*nodes)->arguments)
 	{
 		if (select_built(nodes, &my_vars))
 			return(0);
@@ -117,7 +116,10 @@ int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
 			if (error_cmd(nodes,&my_vars->my_env))
 				exit(0);
 			son_shell_pipes(child_pipe, it, n_childs, *nodes);
-			son_shell_execute(*nodes, my_vars);
+			if ((*nodes)->arguments != NULL)
+				son_shell_execute(*nodes, my_vars);
+			else
+				exit(0);
 		}
 		(*nodes) = (*nodes)->next;
 		it++;

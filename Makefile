@@ -11,8 +11,9 @@
 # **************************************************************************** #
 
 SRCS	= 	minishell.c built_echo.c built_pwd.c built_cd.c initialize_vars.c fts_lst.c \
-			ft_lst2.c ft_lst3.c built_export.c built_unset.c built_env.c list_cmds.c utils.c expansions.c \
-			quotes.c filter_list_cmds.c boleans_first_errors.c acces_cmds.c select_built.c execute.c redirects.c
+			ft_lst2.c ft_lst3.c built_export.c built_unset.c built_env.c list_cmds.c utils.c utils2.c \
+			expansions.c quotes.c filter_list_cmds.c boleans_first_errors.c acces_cmds.c select_built.c execute.c \
+			redirects.c redirects2.c
 
 LIBFT_DIR	= libft/
 

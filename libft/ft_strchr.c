@@ -16,7 +16,7 @@ char	*ft_strchr(const char *s, int c)
 {
 	size_t		count;
 	char		*cpy_s;
-	int 		len;
+	int			len;
 
 	cpy_s = (char *)s;
 	count = 0;

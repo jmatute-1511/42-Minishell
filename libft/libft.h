@@ -19,7 +19,6 @@
 # include <limits.h>
 # include <stdarg.h>
 
-char	*ft_itoa(int n);
 char	*ft_strdup(const char *s);
 char	*ft_strchr(const char *s, int c);
 char	**ft_split(char const *s, char c);
@@ -31,9 +30,8 @@ char	*ft_strldup(char *str, size_t len);
 char	*ft_strtrim(char *s1, char *set);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-int 	ft_bolean_strstr(char *str, char *find);
+int		ft_bolean_strstr(char *str, char *find);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
-char 	**ft_apend(char *str_matrix, int nstrings,  ...);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
 int		ft_isalnum(int c);
@@ -41,9 +39,8 @@ int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
-int		ft_atoi(const char *str);
 long	ft_long_atoi(const char *str);
-int		ft_strcmp(char *s1,char *s2);
+int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, size_t n);
 int		ft_memcmp(const void *str1, const void *str2, size_t n);
 void	ft_putnbr_fd(int n, int fd);
@@ -62,6 +59,8 @@ size_t	ft_strlcpy(char *dst, const	char *src, size_t dstsize);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 void	free_matrix(char **matrix);
 int		ft_bolean_operator( char diff, char *str);
+int		bolean_str(char c, char *str);
+int		len_word(const char *s, char c, char *ign);
 
 typedef struct s_list
 {

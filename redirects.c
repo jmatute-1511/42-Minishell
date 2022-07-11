@@ -3,83 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   redirects.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bremesar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 14:43:58 by bremesar          #+#    #+#             */
-/*   Updated: 2022/06/18 14:44:05 by bremesar         ###   ########.fr       */
+/*   Updated: 2022/07/08 14:42:17 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//usa el comando "bash" en la terminal para los ejemplos
-//haz el de <<
-
-void	redirect_switch(t_cmd_line *node)
+void	heredoc_finish(char *join_str)
 {
-	int reader;
-	char *input;
-	char *output;
+	int		filedesc;
+	char	*aux_str;
 
-	if (node->input != NULL)
-	{
-		reader = 0;
-		while(node->input[reader])
-		{
-			if (node->input[reader] == '<' && node->input[reader + 1] != '<')
-			{
-				input = ft_strldup(&node->input[reader + 1], ft_point_strchr(&node->input[reader + 1], ' '));
-				redirect_input(input);
-			}
-			reader++;
-		}
-	}
-
-	reader = 0;
-	if(node->output != NULL)
-	{
-		while(node->output[reader])
-		{
-			if (node->output[reader] == '>' && node->output[reader + 1] != '>')
-			{
-				output = ft_strldup(&node->output[reader + 1], ft_point_strchr(&node->output[reader + 1], ' '));
-				redirect_output(output);
-			}
-			if (node->output[reader] == '>' && node->output[reader + 1] == '>')
-			{
-				output = ft_strldup(&node->output[reader + 2], ft_point_strchr(&node->output[reader + 2], ' '));
-				redirect_output_double(output);
-				reader++;
-			}
-			reader++;
-		}
-	}
+	aux_str = join_str;
+	join_str = ft_strjoin(aux_str, "\n");
+	free(aux_str);
+	filedesc = open("temp", O_WRONLY | O_TRUNC | O_CREAT);
+	write(filedesc, join_str, ft_strlen(join_str));
+	close(filedesc);
+	filedesc = open("temp", O_RDONLY);
+	dup2(filedesc, STDIN_FILENO);
+	close(filedesc);
 }
 
 void	heredoc_initializer(char *text)
 {
 	int		filedesc;
-	int		out_aux; //pipe duplicado auxiliar
+	int		out_aux;
 	char	*str;
+	char	*join_str;
+	char	*aux_str;
 
-	filedesc = open("temp", O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
-	if (filedesc < 0)
-		return ;
-	out_aux = dup(1);
+	join_str = NULL;
 	while (1)
 	{
 		str = readline(ROJO_T">"COLOR_RESET);
 		if (ft_strcmp(str, text) == 0)
-		{
-			dup2(out_aux, 1);
-			close(filedesc);
-			return;
-		}
+			return (heredoc_finish(join_str));
 		else
 		{
-			dup2(filedesc, 1);
-			printf("%s\n", str);
-			dup2(out_aux, 1);
+			if (join_str == NULL)
+				join_str = ft_strdup(str);
+			else
+			{
+				aux_str = join_str;
+				join_str = ft_strnjoin(3, aux_str, "\n", str);
+				free(aux_str);
+			}
 		}
 	}
 }
@@ -93,7 +65,6 @@ void	redirect_input(char *file)
 	filedesc = open(str, O_RDONLY);
 	if (filedesc < 0)
 	{
-		//cmd error
 		perror("open");
 		return ;
 	}
@@ -110,7 +81,6 @@ void	redirect_output(char *file)
 	filedesc = open(str, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
 	if (filedesc < 0)
 	{
-		//cmd error
 		perror("open");
 		return ;
 	}
@@ -127,7 +97,6 @@ void	redirect_output_double(char *file)
 	filedesc = open(str, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 	if (filedesc < 0)
 	{
-		//cmd error
 		perror("open");
 		return ;
 	}

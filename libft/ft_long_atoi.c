@@ -29,7 +29,8 @@ long	ft_long_atoi(const char *str)
 	{
 		if (str[count] == '-')
 			neg = -1;
-		 (sign += 1) && (count += 1);
+		sign++;
+		count++;
 	}
 	while (ft_isdigit(str[count]) && sign <= 1)
 		save = save * 10 + (str[count++] - 48);
