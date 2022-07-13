@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 20:38:50 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/18 16:23:42 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/10 18:25:13 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ char **parse_str_unset(char *str)
     int     a;
     
     a = 0;
-    str_aux = ft_strtrim(&str[ft_point_strchr(str, ' ')], " ");
-    split = ft_split_ignore(str_aux, ' ', "\"'");
+    str_aux = ft_strtrim(str, " ");
+    split = ft_split(&str_aux[ft_point_strchr(str_aux, ' ')], ' ');
     while (split[a])
     {
         aux = set_quotes(split[a]);
@@ -76,9 +76,9 @@ void bucle_unset_env(char **split, t_enviroment**my_env)
     {
         aux_myenv = (*my_env);
         prev_aux = NULL;
+        point = ft_point_strchr(split[a], '=');
         while (aux_myenv)
         {
-            point = ft_point_strchr(split[a], '=');
             if(ft_strncmp(aux_myenv->env_var, split[a], point) == 0)
                 unset_myenv(my_env,&aux_myenv,&prev_aux);
             prev_aux = aux_myenv;
@@ -113,7 +113,6 @@ void bucle_unset_export(char **split,t_enviroment **export_env)
 void built_unset(t_enviroment **myenv, t_enviroment **export_env, char *str)
 {
     char            **split;
-    
     split = parse_str_unset(str);
     bucle_unset_env(split, myenv);
     bucle_unset_export(split,export_env);

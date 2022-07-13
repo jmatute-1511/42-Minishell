@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 15:09:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/04 18:31:22 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 18:41:18 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,15 @@ char *find_path_exec(char *str, t_enviroment **my_env)
 	path = access_cmd(split, str);
 	return (path); 
 }
+
 void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 {
 	int j;
-	int h;
-	char *buf;
 	
 	j = 0;
-	if (it != 0 && node->input == NULL)
+	if (it != 0)
 		dup2(pipe[it - 1].fd[READ_P], STDIN_FILENO);
-	if (it < n_childs - 1 && node->output == NULL)
+	if (it < n_childs - 1)
 		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);
 	if (node->input != NULL || node->output != NULL)
 		redirect_switch(node);
@@ -43,23 +42,25 @@ void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 	}
 	
 }
-void son_shell_execute(t_cmd_line *node, t_myvars *my_vars)
+
+void son_shell_execute(t_cmd_line *node, t_myvars **my_vars)
 {
 	char *path;
 	char *quotes;
 	char *expand;
 
-	path = find_path_exec(node->first_arg, &my_vars->my_env);
-	expand = expand_str(my_vars->my_env,node->arguments);
+	path = find_path_exec(node->first_arg, &(*my_vars)->my_env);
+	expand = expand_str(*my_vars,node->arguments);
 	quotes = set_quotes(expand);
-
-	if (select_built(&node, &my_vars))
+	if (cmd_not_found(&node, &(*my_vars)->my_env))
+		exit(127);
+	if (select_built(&node, my_vars))
 		exit(0);
 	else
-		execve(path, ft_split(quotes, ' '), my_vars->m_envp);
+		execve(path, ft_split(quotes, ' '), (*my_vars)->m_envp);
 }
 
-void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids)
+void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids, t_myvars **my_vars)
 {
 	int it;
 	int status;
@@ -73,9 +74,21 @@ void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids)
 			close(child_pipe[it].fd[WRITE_P]);
 			close(child_pipe[it].fd[READ_P]);
 		}
-		waitpid(pids[it], &status, 0);
 		it++;
 	}
+	it = 0;
+	while (it < n_childs)
+	{
+		waitpid(pids[it], &status, 0);
+		if (WIFEXITED(status))
+			(*my_vars)->stat = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			(*my_vars)->stat = 130;
+		else if (status == 32512)
+			(*my_vars)->stat = 127;
+			it++;
+	}
+	
 }
 t_pipes *create_pipes(int n_childs)
 {
@@ -91,12 +104,14 @@ t_pipes *create_pipes(int n_childs)
 	}
 	return(pipes);
 }
-int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
+int execute_cmds(t_cmd_line **nodes, t_myvars **my_vars)
 {
 	int		it;
 	int 	n_childs;
 	t_pipes *child_pipe;
 	pid_t	*pids;
+	int aux_out;
+	int aux_in;
 	
 	it = 0;
 	n_childs = size_of_lst(nodes);
@@ -104,16 +119,27 @@ int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
 	child_pipe = create_pipes(n_childs);
 	if (n_childs == 1 && (*nodes)->arguments)
 	{
-		if (select_built(nodes, &my_vars))
+		aux_out = dup(STDOUT_FILENO);
+		aux_in = dup(STDIN_FILENO);
+		if ((*nodes)->input || (*nodes)->output)
+			redirect_switch((*nodes));
+		if (select_built(nodes, my_vars))
+		{
+			(*my_vars)->stat = 0;
+			dup2(aux_out, STDOUT_FILENO);
+			close(aux_out);
+			dup2(aux_in, STDIN_FILENO);
+			close(aux_in);
 			return(0);
+		}
 	}
 	while(it < n_childs)
 	{
 		pids[it] = fork();
+		g_proc = pids[it];
 		if (pids[it] == 0)
 		{
-			g_proc = pids[it];
-			if (error_cmd(nodes,&my_vars->my_env))
+			if (error_cmd(nodes,my_vars))
 				exit(0);
 			son_shell_pipes(child_pipe, it, n_childs, *nodes);
 			if ((*nodes)->arguments != NULL)
@@ -124,6 +150,6 @@ int execute_cmds(t_cmd_line **nodes, t_myvars *my_vars)
 		(*nodes) = (*nodes)->next;
 		it++;
 	}
-	close_pipes(child_pipe, n_childs, pids);
+	close_pipes(child_pipe, n_childs, pids, my_vars);
 	return (0);
 }

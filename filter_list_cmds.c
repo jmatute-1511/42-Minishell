@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/04 13:00:12 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 18:18:28 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ int add_hdocs(t_cmd_line **node, char *str)
 	int count;
 	char *type;
 
+	count  = 0;
+	 
 	type = select_type_hdoc(str);
 	count = ft_strlen(type);
 	while (str[count] == ' ')
@@ -134,9 +136,7 @@ int add_arguments(t_cmd_line **node, char *str)
 void capture_arguments(t_cmd_line **node, char *str)
 {
 	int count;
-	int aux_count;
 	int flag[2];
-	char *type;
 	
 	count  = 0;
 	flag[P_QUOTE] = 0;
@@ -177,7 +177,41 @@ void capture_first_arg(t_cmd_line **node)
 		(*node)->first_arg = ft_strldup(str, count);
 	}
 }
-void charge_elements(t_cmd_line **node, t_enviroment **myenv)
+void expand_argument(t_cmd_line **node, t_myvars **my_vars)
+{
+	char *a;
+	char *b;
+	char *c;
+	
+	a = NULL;
+	b = NULL;
+	if ((*node)->arguments)
+	{
+		a = expand_str((*my_vars),(*node)->arguments);
+		free((*node)->arguments);
+		(*node)->arguments = a;
+	}
+	if ((*node)->first_arg)
+	{
+		b = expand_str((*my_vars),(*node)->first_arg);
+		free((*node)->first_arg);
+		(*node)->first_arg = b;
+	}
+	if ((*node)->input)
+	{
+		c = set_quotes((*node)->input);
+		free((*node)->input);
+		(*node)->input = c;
+	}
+	if ((*node)->output)
+	{
+		c = set_quotes((*node)->output);
+		free((*node)->output);
+		(*node)->output = c;
+	}
+		
+}
+void charge_elements(t_cmd_line **node, t_myvars **my_vars)
 {
 	char	*aux;
 	int		count;
@@ -191,13 +225,42 @@ void charge_elements(t_cmd_line **node, t_enviroment **myenv)
 	{
 		capture_arguments(node, aux);
 		capture_first_arg(node);
+		expand_argument(node, my_vars);
 	}
 }
 
-int init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
+int error_hdoc(t_cmd_line *node)
+{
+	int a;
+
+	a = 0;
+	if (node->input)
+	{
+		while (node->input[a] && node->input)
+		{
+			if (node->input[a] == '<' &&  \
+			(node->input[a + 2] =='<' || node->input[a + 2] == '>'))
+				return(1);	
+			a++;
+		}
+	}
+	a = 0;
+	if (node->output)
+	{
+		while (node->output[a])
+		{
+			if (node->output[a] == '<' &&  \
+			(node->output[a + 2] =='<' || node->output[a + 2] == '>'))
+				return(1);
+			a++;
+		}
+	}
+	return(0);
+}
+
+int init_nodes(t_cmd_line **lst_cmds,t_myvars **my_vars,char *str)
 {
 	t_cmd_line	*aux;
-	char		*str2;
 	
 	if (first_filter_errors(str))	
 		return (1);
@@ -205,7 +268,9 @@ int init_nodes(t_cmd_line **lst_cmds,t_enviroment **myenv,char *str)
 	aux = (*lst_cmds);
 	while (aux)
 	{
-		charge_elements(&aux, myenv);
+		charge_elements(&aux, my_vars);
+		if (error_hdoc(aux))
+			return(1);
 		aux = aux->next;
 	}
 	return (0);

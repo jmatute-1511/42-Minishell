@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 14:43:58 by bremesar          #+#    #+#             */
-/*   Updated: 2022/07/08 14:42:17 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 18:35:47 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	heredoc_finish(char *join_str)
 
 void	heredoc_initializer(char *text)
 {
-	int		filedesc;
-	int		out_aux;
 	char	*str;
 	char	*join_str;
 	char	*aux_str;

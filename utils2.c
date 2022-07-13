@@ -3,34 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bremesar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/11 12:34:04 by bremesar          #+#    #+#             */
-/*   Updated: 2022/07/11 12:34:06 by bremesar         ###   ########.fr       */
+/*   Created: 2022/07/08 14:24:36 by bremesar          #+#    #+#             */
+/*   Updated: 2022/07/10 21:00:11 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_chr(char c)
+void	print_env(t_enviroment *export_env, char *option)
 {
-	if (c == ' ' || c == '$' || c == '\'' || c == '"')
-		return (1);
-	else if (ft_isalpha(c) == 0 && ft_isalnum(c) == 0)
-		return (1);
-	return (0);
+	t_enviroment	*aux;
+
+	aux = export_env;
+	while (aux)
+	{
+		if (ft_strcmp("env", option) == 0)
+			printf("%s\n", aux->env_var);
+		else if (ft_strcmp("export", option) == 0)
+			printf("declare -x %s\n", aux->env_var);
+		aux = aux->next;
+	}
 }
 
-int	ft_point_strstr(char *str)
+int	size_of_lst(t_cmd_line **lst)
 {
-	int	count_str;
+	int			a;
+	t_cmd_line	*aux;
 
-	count_str = 0;
-	while (str[count_str])
+	a = 0;
+	aux = (*lst);
+	while (aux)
 	{
-		if (check_chr(str[count_str]))
-			return (count_str);
-		count_str++;
+		aux = aux->next;
+		a++;
 	}
-	return (count_str);
+	return (a);
 }

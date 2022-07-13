@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 17:56:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/25 17:14:58 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/09 03:07:10 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,17 @@ char *access_cmd(char **split_of_path, char *str)
 		if (access(str, X_OK))
 			return(str);
 	}
-	while(split_of_path[count])
+	if (split_of_path)
 	{
-		cmd = ft_strnjoin(3, split_of_path[count], "/", str);
-		if(access(cmd, X_OK) == 0)
-			return(cmd);
-		free(cmd);
-		cmd = NULL;
-		count++;
+		while(split_of_path[count])
+		{
+			cmd = ft_strnjoin(3, split_of_path[count], "/", str);
+			if(access(cmd, X_OK) == 0)
+				return(cmd);
+			free(cmd);
+			cmd = NULL;
+			count++;
+		}
 	}
 	return(NULL);
 }
