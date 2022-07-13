@@ -28,33 +28,35 @@ void	signal_handler(int signum)
 	}
 }
 
-int main(int argc,char **argv,char **envp)
+void	set_signals(void)
+{
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_myvars	*myvars;
 	t_cmd_line	*lst;
 	char		*str;
 
 	myvars = NULL;
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
+	set_signals();
 	(void)argc;
 	(void)argv;
-	myvars = start_vars(myvars,envp);
+	myvars = start_vars(myvars, envp);
 	while (1)
 	{
 		g_proc = 0;
 		str = NULL;
 		str = readline(ROJO_T"Myshell%---->"COLOR_RESET);
 		if (str == NULL)
-		{
-			printf("exit\n");
-			return (0);
-		}
+			return ((int)printf("exit\n"));
 		if (ft_strcmp(str, "") != 0)
 			add_history(str);
 		if (init_nodes(&lst, &myvars, str) == 0)
 		{
-			if(lst)
+			if (lst)
 				execute_cmds(&lst, &myvars);
 		}
 		free(str);
