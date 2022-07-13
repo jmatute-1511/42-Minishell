@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:13:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/10 21:47:59 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/11 15:39:46 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,9 @@ t_myvars	*start_vars(t_myvars *myvars, char **envp)
 	myvars->export_env = create_export_env(now_env);
 	myvars->my_env = create_env(now_env);
 	myvars->m_envp = enviroment_matrix(now_env);
+	myvars->pwd = find_path(myvars->my_env, "PWD=");
+	myvars->old_pwd=find_path(myvars->my_env, "OLDPWD=");
+	myvars->home =find_path(myvars->my_env,"HOME=");
 	myvars->stat = 0;
 	return(myvars);
 }

@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 15:09:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/11 14:53:03 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/14 01:07:59 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,20 @@ void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
 	int j;
 	
 	j = 0;
-	if (it != 0 && node->input == NULL)
-	{
-		
+	if (node->input != NULL)
+		handle_input(node);
+	else if (it != 0)
 		dup2(pipe[it - 1].fd[READ_P], STDIN_FILENO);
-	}
-	if (it < n_childs - 1 && node->output == NULL)
+	if (node->output != NULL)
+		handle_output(node);
+	else if (it < n_childs - 1)
 		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);
-	if (node->input != NULL || node->output != NULL)
-		redirect_switch(node);
 	while (j < n_childs - 1)
 	{
 		close(pipe[j].fd[WRITE_P]);
 		close(pipe[j].fd[READ_P]);
 		j++;
 	}
-	
 }
 
 void son_shell_execute(t_cmd_line *node, t_myvars **my_vars)
@@ -52,15 +50,28 @@ void son_shell_execute(t_cmd_line *node, t_myvars **my_vars)
 	char *quotes;
 	char *expand;
 
-	path = find_path_exec(node->first_arg, &(*my_vars)->my_env);
-	expand = expand_str(*my_vars,node->arguments);
-	quotes = set_quotes(expand);
-	if (cmd_not_found(&node, &(*my_vars)->my_env))
-		exit(127);
-	if (select_built(&node, my_vars))
-		exit(0);
+	path = NULL;
+	expand = NULL;
+	quotes = NULL;
+	if (node->arguments != NULL && error_cmd(&node,my_vars) == 0)
+	{
+		quotes = set_quotes(node->first_arg);
+		path = find_path_exec(quotes, &(*my_vars)->my_env);
+		free(quotes);
+		expand = expand_str(*my_vars,node->arguments);
+		quotes = set_quotes(expand);
+		if (cmd_not_found(&node, &(*my_vars)->my_env))
+			exit(127);
+		if (select_built(&node, my_vars))
+			exit(0);
+		else
+			execve(path, ft_split(quotes, ' '), (*my_vars)->m_envp);
+		free(quotes);
+		free(expand);
+		free(path);
+	}
 	else
-		execve(path, ft_split(quotes, ' '), (*my_vars)->m_envp);
+		exit(0);
 }
 
 void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids, t_myvars **my_vars)
@@ -70,13 +81,10 @@ void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids, t_myvars **my_v
 	
 	it = 0;
 	status = 0;
-	while (it < n_childs)
+	while (it < n_childs - 1)
 	{
-		if (it < n_childs - 1)
-		{
-			close(child_pipe[it].fd[WRITE_P]);
-			close(child_pipe[it].fd[READ_P]);
-		}
+		close(child_pipe[it].fd[WRITE_P]);
+		close(child_pipe[it].fd[READ_P]);
 		it++;
 	}
 	it = 0;
@@ -89,10 +97,10 @@ void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids, t_myvars **my_v
 			(*my_vars)->stat = 130;
 		else if (status == 32512)
 			(*my_vars)->stat = 127;
-			it++;
+		it++;
 	}
-	
 }
+
 t_pipes *create_pipes(int n_childs)
 {
 	int it;
@@ -107,43 +115,59 @@ t_pipes *create_pipes(int n_childs)
 	}
 	return(pipes);
 }
-int execute_cmds(t_cmd_line **nodes, t_myvars **my_vars)
+
+
+void one_child_built(t_cmd_line **node, t_myvars **my_vars, int *it)
 {
-	int		it;
-	int 	n_childs;
+	int aux_out;
+	int aux_in;
+	
+	aux_out = dup(STDOUT_FILENO);
+	aux_in = dup(STDIN_FILENO);
+	if ((*node)->input || (*node)->output)
+		redirect_switch((*node));
+	if (select_built(node, my_vars))
+	{
+		(*my_vars)->stat = 0;
+		dup2(aux_out, STDOUT_FILENO);
+		close(aux_out);
+		dup2(aux_in, STDIN_FILENO);
+		close(aux_in);
+	}
+	(*it)++;
+}
+
+void create_process(t_cmd_line **nodes, t_myvars **my_vars, int n_childs, int *it)
+{
 	t_pipes *child_pipe;
 	pid_t	*pids;
 	
-	it = 0;
-	n_childs = size_of_lst(nodes);
 	pids = (pid_t *)malloc(sizeof(pid_t) * n_childs);
 	child_pipe = create_pipes(n_childs);
-	if (n_childs == 1 && (*nodes)->arguments)
+	while(*it < n_childs)
 	{
-		if (select_built(nodes, my_vars))
-		{	
-			(*my_vars)->stat = 0;
-			return(0);
-		}
-	}
-	while(it < n_childs)
-	{
-		pids[it] = fork();
-		g_proc[0] = pids[it];
-		if (pids[it] == 0)
+		pids[(*it)] = fork();
+		g_proc = pids[(*it)];
+		if (pids[(*it)] == 0)
 		{
-			g_proc[1] = pids[it];
-			if (error_cmd(nodes,my_vars))
-				exit(0);
-			son_shell_pipes(child_pipe, it, n_childs, *nodes);
-			if ((*nodes)->arguments != NULL)
-				son_shell_execute(*nodes, my_vars);
-			else
-				exit(0);
+			son_shell_pipes(child_pipe, (*it), n_childs, *nodes);
+			son_shell_execute(*nodes, my_vars);
 		}
 		(*nodes) = (*nodes)->next;
-		it++;
+		(*it)++;
 	}
 	close_pipes(child_pipe, n_childs, pids, my_vars);
+}
+
+int execute_cmds(t_cmd_line **nodes, t_myvars **my_vars)
+{
+	int 	n_childs;
+	int		it;
+
+	it = 0;
+	n_childs = size_of_lst(nodes);
+	if ((*nodes)->arguments  && bolean_built(nodes))
+		one_child_built(nodes, my_vars, &it);
+	create_process(nodes, my_vars, n_childs, &it);
 	return (0);
 }

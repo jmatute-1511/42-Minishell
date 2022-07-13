@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/10 21:15:48 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/13 17:09:50 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,25 @@ int add_hdocs(t_cmd_line **node, char *str)
 	free(type);
 	return (count);
 }
-int add_arguments(t_cmd_line **node, char *str)
+
+void complement_add_arguments(t_cmd_line **node, char *str, int count)
 {
 	char *name;
 	char *join;
+	
+	if((*node)->arguments)
+	{
+		name = ft_strldup(str, count);
+		join = ft_strnjoin(3, (*node)->arguments, " ", name);
+		free((*node)->arguments);
+		(*node)->arguments = join;
+		free(name);
+	}
+	else 
+		(*node)->arguments= ft_strldup(str, count);
+}
+int add_arguments(t_cmd_line **node, char *str)
+{
 	int count;
 	int flag[2];
 	
@@ -120,16 +135,7 @@ int add_arguments(t_cmd_line **node, char *str)
 		check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 		count++;
 	}
-	if((*node)->arguments)
-	{
-		name = ft_strldup(str, count);
-		join = ft_strnjoin(3, (*node)->arguments, " ", name);
-		free((*node)->arguments);
-		(*node)->arguments = join;
-		free(name);
-	}
-	else 
-		(*node)->arguments= ft_strldup(str, count);
+	complement_add_arguments(node, str, count);
 	return (count - 1);
 }
 
@@ -177,26 +183,24 @@ void capture_first_arg(t_cmd_line **node)
 		(*node)->first_arg = ft_strldup(str, count);
 	}
 }
+
+char *expansions( char **str, t_myvars **my_vars)
+{
+	char *expanded;
+	
+	expanded = expand_str((*my_vars),(*str));
+	free((*str));
+	return(expanded);
+}
+
 void expand_argument(t_cmd_line **node, t_myvars **my_vars)
 {
-	char *a;
-	char *b;
 	char *c;
-	
-	a = NULL;
-	b = NULL;
+		
 	if ((*node)->arguments)
-	{
-		a = expand_str((*my_vars),(*node)->arguments);
-		free((*node)->arguments);
-		(*node)->arguments = a;
-	}
+		(*node)->arguments = expansions(&(*node)->arguments, my_vars);
 	if ((*node)->first_arg)
-	{
-		b = expand_str((*my_vars),(*node)->first_arg);
-		free((*node)->first_arg);
-		(*node)->first_arg = b;
-	}
+		(*node)->first_arg = expansions(&(*node)->first_arg, my_vars);
 	if ((*node)->input)
 	{
 		c = set_quotes((*node)->input);
@@ -208,9 +212,9 @@ void expand_argument(t_cmd_line **node, t_myvars **my_vars)
 		c = set_quotes((*node)->output);
 		free((*node)->output);
 		(*node)->output = c;
-	}
-		
+	}	
 }
+
 void charge_elements(t_cmd_line **node, t_myvars **my_vars)
 {
 	char	*aux;
@@ -229,27 +233,18 @@ void charge_elements(t_cmd_line **node, t_myvars **my_vars)
 	}
 }
 
-int error_hdoc(t_cmd_line *node)
+int error_hdoc(char *str, char type, char c_type)
 {
 	int a;
 
 	a = 0;
-	if (node->input)
+	if (str)
 	{
-		while (node->input[a] && node->input)
+		while (str[a] && str)
 		{
-			if (node->input[a] == '<' &&  \
-			(node->input[a + 2] =='<' || node->input[a + 2] == '>'))
+			if (str[a] == type && (str[a + 2] == type || str[a + 2] == c_type))
 				return(1);	
-		}
-	}
-	if (node->output)
-	{
-		while (node->output[a])
-		{
-			if (node->output[a] == '<' &&  \
-			(node->output[a + 2] =='<' || node->output[a + 2] == '>'))
-				return(1);
+			a++;
 		}
 	}
 	return(0);
@@ -266,7 +261,7 @@ int init_nodes(t_cmd_line **lst_cmds,t_myvars **my_vars,char *str)
 	while (aux)
 	{
 		charge_elements(&aux, my_vars);
-		if (error_hdoc(aux))
+		if (error_hdoc(aux->input,'<', '>') || error_hdoc(aux->input,'>', '<'))
 			return(1);
 		aux = aux->next;
 	}

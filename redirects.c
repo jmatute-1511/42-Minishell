@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 14:43:58 by bremesar          #+#    #+#             */
-/*   Updated: 2022/07/10 21:17:16 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/13 17:28:51 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	heredoc_initializer(char *text)
 	join_str = NULL;
 	while (1)
 	{
-		str = readline(ROJO_T">"COLOR_RESET);
+		str = readline(YEL">"COLOR_RESET);
 		if (ft_strcmp(str, text) == 0)
 			return (heredoc_finish(join_str));
 		else
