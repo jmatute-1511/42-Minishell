@@ -135,10 +135,11 @@ int execute_cmds(t_cmd_line **nodes, t_myvars **my_vars)
 	}
 	while(it < n_childs)
 	{
-		pids[it] = fork();
-		g_proc = pids[it];
+		g_proc = fork();
+		pids[it] = g_proc;
 		if (pids[it] == 0)
 		{
+			signal(SIGINT, SIG_DFL);
 			if (error_cmd(nodes,my_vars))
 				exit(0);
 			son_shell_pipes(child_pipe, it, n_childs, *nodes);
