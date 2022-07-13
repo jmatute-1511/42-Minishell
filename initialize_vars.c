@@ -62,44 +62,45 @@ char	**enviroment_matrix(char **envp)
 	count = 0;
 	aux_envp = NULL;
 	if (*envp)
-	 {
-		  while(envp[size])
-				size++;
-		  aux_envp = (char **)malloc(sizeof(char *) * size + 1);
-		  while (count < size)
-		  {
-			   aux_envp[count] = ft_strdup(envp[count]);
+	{
+		while (envp[size])
+			size++;
+		aux_envp = (char **)malloc(sizeof(char *) * size + 1);
+		while (count < size)
+		{
+			aux_envp[count] = ft_strdup(envp[count]);
 			count++;
 		}
 		aux_envp[count] = NULL;
 	}
-	return(aux_envp);
+	return (aux_envp);
 }
-char **create_env_if_not_env()
+
+char	**create_env_if_not_env(void)
 {
-	char **my_envp;
+	char	**my_envp;
 
 	my_envp = (char **)malloc(sizeof(char *) * 4);
 	if (!my_envp)
-		return(NULL);
+		return (NULL);
 	my_envp[0] = ft_strdup(getcwd(NULL, 0));
 	my_envp[1] = ft_strdup("SHLVL=1");
 	my_envp[2] = ft_strdup("_=/usr/bin/env");
 	my_envp[3] = NULL;
-	return(my_envp);
+	return (my_envp);
 }
 
 t_myvars	*start_vars(t_myvars *myvars, char **envp)
 {
-	char **my_envp;
-	char **now_env;
+	char	**my_envp;
+	char	**now_env;
 
-    now_env = envp;
+	now_env = envp;
 	if (!*envp)
 	{
 		my_envp = NULL;
 		my_envp = create_env_if_not_env();
-        now_env = my_envp;
+		now_env = my_envp;
 	}
 	myvars = malloc(sizeof(t_myvars));
 	myvars->first_pwd = getcwd(NULL, 0);
@@ -107,8 +108,8 @@ t_myvars	*start_vars(t_myvars *myvars, char **envp)
 	myvars->my_env = create_env(now_env);
 	myvars->m_envp = enviroment_matrix(now_env);
 	myvars->pwd = find_path(myvars->my_env, "PWD=");
-	myvars->old_pwd=find_path(myvars->my_env, "OLDPWD=");
-	myvars->home =find_path(myvars->my_env,"HOME=");
+	myvars->old_pwd = find_path(myvars->my_env, "OLDPWD=");
+	myvars->home = find_path(myvars->my_env, "HOME=");
 	myvars->stat = 0;
-	return(myvars);
+	return (myvars);
 }
