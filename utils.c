@@ -16,8 +16,6 @@ int	check_chr(char c)
 {
 	if (c == ' ' || c == '$' || c == '\'' || c == '"')
 		return (1);
-	/*else if(ft_isalpha(c) == 0 && ft_isalnum(c) == 0)
-		return (1);*/
 	return (0);
 }
 
