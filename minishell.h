@@ -133,4 +133,8 @@ void			redirect_output_double(char *file);
 void			redirect_switch(t_cmd_line *node);
 int				cmd_not_found(t_cmd_line **node, t_enviroment **myenv);
 t_enviroment	*find_path(t_enviroment *my_env, char *str);
+int				add_hdocs(t_cmd_line **node, char *str);
+void			expand_continue(t_cmd_line **node);
+void			capture_arguments(t_cmd_line **node, char *str);
+void			capture_first_arg(t_cmd_line **node);
 #endif
