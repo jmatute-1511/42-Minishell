@@ -29,7 +29,7 @@ int	bolean_built(t_cmd_line **node)
 	return (0);
 }
 
-int	select_built(t_cmd_line **node,t_myvars **my_vars)
+int	select_built(t_cmd_line **node, t_myvars **my_vars)
 {	
 	if (strcmp((*node)->first_arg, "echo") == 0)
 		built_echo(ft_strtrim((*node)->arguments, " "));

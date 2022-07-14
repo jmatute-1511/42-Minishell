@@ -12,28 +12,28 @@
 
 #include "minishell.h"
 
-char *select_type_hdoc(char  *raw_cmd)
+char	*select_type_hdoc(char *raw_cmd)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	if (raw_cmd[count] == '<' && raw_cmd[count + 1] != '<')
-		return(ft_strdup("<"));
+		return (ft_strdup("<"));
 	else if (raw_cmd[count] == '<' && raw_cmd[count + 1] == '<')
-		return(ft_strdup("<<"));
+		return (ft_strdup("<<"));
 	else if (raw_cmd[count] == '>' && raw_cmd[count + 1] != '>')
-		return(ft_strdup(">"));
+		return (ft_strdup(">"));
 	else if (raw_cmd[count] == '>' && raw_cmd[count + 1] == '>')
-		return(ft_strdup(">>"));
-	return(NULL);
+		return (ft_strdup(">>"));
+	return (NULL);
 }
 
-void add_input(t_cmd_line **node, char *type, char *output, int count)
+void	add_input(t_cmd_line **node, char *type, char *output, int count)
 {
-	char *name;
-	char *join;
-	
-	name = ft_strldup(output,count);
+	char	*name;
+	char	*join;
+
+	name = ft_strldup(output, count);
 	if ((*node)->input)
 	{
 		join = ft_strnjoin(4, (*node)->input, type, name, " ");
@@ -45,15 +45,15 @@ void add_input(t_cmd_line **node, char *type, char *output, int count)
 	free (name);
 }
 
-void add_output(t_cmd_line **node, char *type, char *output, int count)
+void	add_output(t_cmd_line **node, char *type, char *output, int count)
 {
-	char *name;
-	char *join;
-	
-	name = ft_strldup(output,count);
+	char	*name;
+	char	*join;
+
+	name = ft_strldup(output, count);
 	if ((*node)->output)
 	{
-		join = ft_strnjoin(4, ((*node)->output),type, name, " ");
+		join = ft_strnjoin(4, ((*node)->output), type, name, " ");
 		free((*node)->output);
 		(*node)->output = join;
 	}
@@ -62,20 +62,21 @@ void add_output(t_cmd_line **node, char *type, char *output, int count)
 	free(name);
 }
 
-int add_types_hdocs(t_cmd_line **node, char *type, char *output)
+int	add_types_hdocs(t_cmd_line **node, char *type, char *output)
 {
-	int count;
-	int flag[2];
-	
-	count  = 0;
+	int	count;
+	int	flag[2];
+
+	count = 0;
 	flag[P_QUOTE] = 0;
 	flag[S_QUOTE] = 0;
-	if(output[count])
+	if (output[count])
 	{
-		while(output[count])
+		while (output[count])
 		{
-			if (output[count] == ' ' && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
-				break;
+			if (output[count] == ' '
+				&& flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
+				break ;
 			check_quotes(output[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 			count++;
 		}
@@ -84,16 +85,15 @@ int add_types_hdocs(t_cmd_line **node, char *type, char *output)
 		else if (type[0] == '>')
 			add_output(node, type, output, count);
 	}
-	return(count);
+	return (count);
 }
 
-int add_hdocs(t_cmd_line **node, char *str)
+int	add_hdocs(t_cmd_line **node, char *str)
 {
-	int count;
-	char *type;
+	int		count;
+	char	*type;
 
-	count  = 0;
-	 
+	count = 0;
 	type = select_type_hdoc(str);
 	count = ft_strlen(type);
 	while (str[count] == ' ')
