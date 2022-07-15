@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 17:03:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/09 13:04:10 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/14 16:03:43 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	free_matrix(char **matrix);
 int		ft_bolean_operator( char diff, char *str);
 int		bolean_str(char c, char *str);
 int		len_word(const char *s, char c, char *ign);
+int		ft_atoi(const char *str);
 
 typedef struct s_list
 {

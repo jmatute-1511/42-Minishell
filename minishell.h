@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/14 01:35:23 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/14 15:43:31 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void			built_env(t_enviroment **myenv);
 void			built_echo(char *str);
 void			open_directory(char *str);
 void			built_cd(t_myvars **myvars, char *str);
+void			built_exit(char *str, t_myvars **my_vars);
 t_enviroment	*ft_nodenew(char *new_var);
 void			ft_nodeadd_back(t_enviroment **lst, t_enviroment **new);
 void			ft_nodeadd_alphabet(t_enviroment **lst, t_enviroment **new);

@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 14:21:11 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/10 18:01:40 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/14 15:45:06 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	bolean_built(t_cmd_line **node)
 		return (1);
 	else if (strcmp((*node)->first_arg, "unset") == 0)
 		return (1);
+	else if (strcmp((*node)->first_arg, "exit") == 0)
+		return(1);
 	return (0);
 }
 
@@ -45,6 +47,8 @@ int	select_built(t_cmd_line **node, t_myvars **my_vars)
 	else if (strcmp((*node)->first_arg, "unset") == 0)
 		built_unset(&(*my_vars)->my_env, \
 		&(*my_vars)->export_env, (*node)->arguments);
+	else if (strcmp((*node)->first_arg, "exit") == 0)
+		built_exit((*node)->arguments, my_vars);
 	if (bolean_built(node))
 		return (1);
 	return (0);
