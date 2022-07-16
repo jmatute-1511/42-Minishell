@@ -6,11 +6,31 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 15:59:01 by bremesar          #+#    #+#             */
-/*   Updated: 2022/07/14 01:31:14 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 18:32:46 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+void handle_heredoc(t_cmd_line *node)
+{
+	int		reader;
+	char	*input;
+
+	reader = 0;
+	while (node->input[reader])
+	{
+		if (node->input[reader] == '<' && node->input[reader + 1] == '<')
+		{
+			input = ft_strldup(&node->input[reader + 2],
+					ft_point_strchr(&node->input[reader + 2], ' '));
+			heredoc_initializer(input);
+			reader++;
+		}
+		reader++;
+	}
+}
 
 void	handle_input(t_cmd_line *node)
 {
@@ -29,10 +49,8 @@ void	handle_input(t_cmd_line *node)
 				redirect_input(input);
 			}
 			if (node->input[reader] == '<' && node->input[reader + 1] == '<')
-			{
-				input = ft_strldup(&node->input[reader + 2],
-						ft_point_strchr(&node->input[reader + 2], ' '));
-				heredoc_initializer(input);
+			{	
+				heredoc_finish();
 				reader++;
 			}
 			reader++;

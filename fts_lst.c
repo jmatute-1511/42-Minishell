@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 20:28:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/05/19 17:13:22 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 05:22:24 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_enviroment	*ft_nodenew(char *new_var)
 	return (new);
 }
 
-void	ft_nodeadd_back(t_enviroment **lst, t_enviroment **new)
+void		ft_nodeadd_back(t_enviroment **lst, t_enviroment **new)
 {
 	t_enviroment	*aux;
 

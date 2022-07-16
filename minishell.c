@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/15 23:41:20 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 18:31:54 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,32 @@ void print(void)
 	printf(BBLU" \\/_/\\/_/\\/_/\\/_/\\/_/\\/_/\\/_/\\/___/   \\/_/\\/_/\\/____/\\/____/\\/____/\n");
 }
 
+void free_cmds(t_cmd_line **lst)
+{
+	t_cmd_line *aux;
+	t_cmd_line *aux2;
+	
+	aux2 = NULL;
+	aux = (*lst);
+	while (aux)
+	{
+		if (aux->input)
+			free(aux->input);
+		if(aux->output)
+			free(aux->output);
+		if (aux->first_arg)
+			free(aux->first_arg);
+		if(aux->arguments)
+			free(aux->arguments);
+		if(aux->raw_cmd)
+			free(aux->raw_cmd);
+		aux2 = aux;
+		aux = aux->next;
+		free(aux2);
+	}
+	(*lst) = NULL;	
+}
+
 int main(int argc,char **argv,char **envp)
 {
 	t_myvars	*myvars;
@@ -64,6 +90,7 @@ int main(int argc,char **argv,char **envp)
 	myvars = start_vars(myvars,envp);
 	while (1)
 	{
+		g_proc = 0;
 		str = NULL;
 		str = readline(YEL"Myshell%---->"COLOR_RESET);
 		if (str == NULL)

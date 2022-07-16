@@ -32,20 +32,20 @@ static void change_location(t_enviroment **env_var, t_enviroment **old_var, char
 
     chdir(str);
     current = getcwd(NULL, 0);
-    if ((*env_var))
+    if ((*env_var) && current != NULL)
     {
         free((*env_var)->env_var);
         (*env_var)->env_var = ft_strjoin ("PWD=", current);
     }
-    if ((*old_var))
+    if ((*old_var) && actual != NULL)
     {
         free((*old_var)->env_var);
         (*old_var)->env_var = ft_strjoin("OLDPWD=",actual);
     }
+    free(current);
 }
 void go_back_home(t_myvars **my_vars)
 {
-
     int     point;
     char    *home;
     char    *current;
@@ -68,9 +68,9 @@ void go_back_home(t_myvars **my_vars)
             free((*my_vars)->pwd->env_var);
             (*my_vars)->pwd->env_var= ft_strjoin("PWD=",home);
         }
-        free(home);
     }
-
+    free(current);
+    free(home);
 }
 void built_cd(t_myvars **myvars,char *str)
 {
@@ -82,12 +82,15 @@ void built_cd(t_myvars **myvars,char *str)
     
 	point = ft_point_strchr(str, ' ');
 	trim = ft_strtrim(&str[point], " ");
-    actual = getcwd(NULL,0);
     if (trim == NULL)
         go_back_home(myvars);
     if (access(trim, X_OK) != 0 || (*myvars)->my_env == NULL)
-        return ;
+         return ;
+    actual = getcwd(NULL,0);
     pwd = find_path((*myvars)->my_env, "PWD=");
     old_pwd = find_path((*myvars)->my_env, "OLDPWD=");
     change_location(&pwd, &old_pwd, trim, actual);
+    free(actual);
+    if (trim)
+        free(trim);
 }

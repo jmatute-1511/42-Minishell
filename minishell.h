@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/14 15:43:31 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 20:09:19 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int				init_nodes(t_cmd_line **lst_cmds,
 void			add_first_arg(t_cmd_line **node, t_enviroment **myenv);
 char			**routes_of_path(t_enviroment **myenv);
 char			*access_cmd(char **split_of_path, char *str);
-int				error_cmd(t_cmd_line **node, t_myvars **my_vars);
+int				error_cmd(t_cmd_line **node);
 void			free_lst_cmds(t_cmd_line **lst);
 int				select_built(t_cmd_line **node, t_myvars **my_vars);
 int				bolean_built(t_cmd_line **node);
@@ -145,4 +145,9 @@ int				add_hdocs(t_cmd_line **node, char *str);
 void			expand_continue(t_cmd_line **node);
 void			capture_arguments(t_cmd_line **node, char *str);
 void			capture_first_arg(t_cmd_line **node);
+char			**enviroment_matrix(t_enviroment *my_env);
+void			heredoc_finish();
+void			handle_heredoc(t_cmd_line *node);
+void			free_cmds(t_cmd_line **lst);
+void			shell_level(char **m_envp);
 #endif

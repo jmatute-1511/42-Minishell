@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/13 17:09:50 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 18:14:38 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,18 +218,15 @@ void expand_argument(t_cmd_line **node, t_myvars **my_vars)
 void charge_elements(t_cmd_line **node, t_myvars **my_vars)
 {
 	char	*aux;
-	int		count;
-	int		flag[2];
+	int		count;	
 
 	count = 0;
-	flag[P_QUOTE] = 0;
-	flag[S_QUOTE] = 0;	
 	aux = (*node)->raw_cmd;
 	if(aux)
 	{
 		capture_arguments(node, aux);
-		capture_first_arg(node);
 		expand_argument(node, my_vars);
+		capture_first_arg(node);
 	}
 }
 
@@ -242,8 +239,11 @@ int error_hdoc(char *str, char type, char c_type)
 	{
 		while (str[a] && str)
 		{
-			if (str[a] == type && (str[a + 2] == type || str[a + 2] == c_type))
-				return(1);	
+			if (str[a] == type && (str[a + 2] == type || str[a + 2] == c_type || str[a + 2] == '\0'))
+			{
+				printf("Myshell: parse error near `%c'\n",type);
+				return(1);
+			}	
 			a++;
 		}
 	}
@@ -261,7 +261,7 @@ int init_nodes(t_cmd_line **lst_cmds,t_myvars **my_vars,char *str)
 	while (aux)
 	{
 		charge_elements(&aux, my_vars);
-		if (error_hdoc(aux->input,'<', '>') || error_hdoc(aux->input,'>', '<'))
+		if (error_hdoc(aux->input,'<', '>') || error_hdoc(aux->input,'>', '<') || error_cmd(&aux))
 			return(1);
 		aux = aux->next;
 	}

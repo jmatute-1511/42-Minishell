@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 14:21:11 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/14 15:45:06 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 18:44:43 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,14 @@ int	bolean_built(t_cmd_line **node)
 
 int	select_built(t_cmd_line **node, t_myvars **my_vars)
 {	
+	char *trim;
+	
 	if (strcmp((*node)->first_arg, "echo") == 0)
-		built_echo(ft_strtrim((*node)->arguments, " "));
+	{
+		trim = ft_strtrim((*node)->arguments, " ");
+		built_echo(trim);
+		free(trim);
+	}
 	else if (strcmp((*node)->first_arg, "cd") == 0)
 		built_cd(my_vars, (*node)->arguments);
 	else if (strcmp((*node)->first_arg, "env") == 0)

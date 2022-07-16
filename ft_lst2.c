@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 17:00:35 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/04 18:24:47 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 15:38:07 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_cmd_line	*ft_cmd_nodenew(char *raw_cmd, size_t len)
 	new->output = NULL;
 	new->first_arg = NULL;
 	new->arguments = NULL;
-	new->raw_cmd = ft_strtrim(not_trim, "| ");
+	new->raw_cmd = ft_strtrim(not_trim, " |");
 	new->next = NULL;
 	free(not_trim);
 	return (new);

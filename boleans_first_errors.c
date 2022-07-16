@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 11:57:03 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/14 01:30:06 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 18:09:19 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int cmd_not_found(t_cmd_line **node, t_enviroment **myenv)
 			printf("Myshell: %s : comand not found\n", str);
 			return (1);
 		}
+		free_matrix(split_env);
 	}
 	return (0);
 }
@@ -92,7 +93,7 @@ int hdoc_without_arg(char *hdoc, char type)
 			count++;
 			while (hdoc[count])
 			{
-				if((hdoc[count] == '<' || hdoc[count] == '>') && signal == 0)
+				if((hdoc[count] == '<' || hdoc[count] == '>' || hdoc[count] == '\0') && signal == 0)
 					return (1);
 				else if (hdoc[count] != ' ' || hdoc[count] != '<' || hdoc[count] != '>')
 					signal = 1;
@@ -107,11 +108,8 @@ int hdoc_without_arg(char *hdoc, char type)
 	return (0);
 }
 
-int error_cmd(t_cmd_line **node, t_myvars **my_vars)
+int error_cmd(t_cmd_line **node)
 {
-	(void)my_vars;
-	if ((*node)->arguments == NULL)
-		return(0);
 	if ((*node)->raw_cmd == NULL)
 	{
 		printf("Myshell: parse error near '|' \n");
@@ -119,12 +117,12 @@ int error_cmd(t_cmd_line **node, t_myvars **my_vars)
 	}
 	if (hdoc_without_arg((*node)->raw_cmd, '<'))
 	{
-		printf("Myshell: parse error near \n");
+		printf("Myshell: `<' parse error near \n");
 		return (1);
 	}
 	if (hdoc_without_arg((*node)->raw_cmd, '>'))
 	{
-		printf("Myshell: parse error near \n");
+		printf("Myshell: `>' parse error near \n");
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:52:40 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/10 18:06:42 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 12:30:34 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_cmd_line	*list_cmds(char *str)
 	int			pipe;	
 	t_cmd_line	*lst;
 	t_cmd_line	*add_back;
+	
 
 	count = 0;
 	lst = NULL;
@@ -83,8 +84,8 @@ void	print_cmd(t_cmd_line **lst)
 		printf("INPUT :%s\n", aux->input);
 		printf("OUTPUT :%s\n", aux->output);
 		printf("FIRST ARG :%s\n", aux->first_arg);
-		printf("ARGUMENTS :%s|\n", aux->arguments);
-		printf("RAW CMD :%s\n", aux->raw_cmd);
+		printf("ARGUMENTS :%s\n", aux->arguments);
+		printf("RAW CMD :%s|\n", aux->raw_cmd);
 		printf("------------------------------------------------------\n");
 		aux = aux->next;
 	}
