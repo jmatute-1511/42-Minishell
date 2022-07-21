@@ -6,13 +6,13 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/16 18:31:54 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/21 21:14:16 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	signal_handler(int signum)
+void			signal_handler(int signum)
 {
 	
 	if (signum == SIGINT && g_proc > 0)
@@ -23,7 +23,7 @@ void	signal_handler(int signum)
 		// rl_replace_line("", 0);
 		// rl_redisplay();
 	}
-	else if (signum == SIGINT && g_proc == 0)
+	if (signum == SIGINT && g_proc == 0)
 	{
 		write(0, "\n", 1);
 		rl_on_new_line();
@@ -75,17 +75,22 @@ void free_cmds(t_cmd_line **lst)
 	(*lst) = NULL;	
 }
 
+void f_leaks()
+{
+	system("leaks minishell");
+}
 int main(int argc,char **argv,char **envp)
 {
 	t_myvars	*myvars;
 	t_cmd_line	*lst;
 	char		*str;
 
-	myvars = NULL;
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
 	(void)argc;
 	(void)argv;
+	myvars = NULL;
+	atexit(f_leaks);
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 	print();
 	myvars = start_vars(myvars,envp);
 	while (1)
@@ -95,6 +100,7 @@ int main(int argc,char **argv,char **envp)
 		str = readline(YEL"Myshell%---->"COLOR_RESET);
 		if (str == NULL)
 		{
+			free_vars(&myvars);
 			printf("exit\n");
 			return (0);
 		}

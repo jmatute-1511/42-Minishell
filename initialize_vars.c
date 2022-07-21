@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:13:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/16 20:13:26 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:58:21 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_enviroment	*create_export_env(char **envp)
 {
 	t_enviroment	*export_env;
 	t_enviroment	*new;
-	char			*str;
 	int				count;
 
 	count = 0;
@@ -25,11 +24,7 @@ t_enviroment	*create_export_env(char **envp)
 		return (NULL);
 	while (envp[count])
 	{
-		str = ft_strdup(envp[count]);
-		if (ft_strncmp(envp[count], "SHLVL=", ft_point_strchr(envp[count], '=')) == 0)
-			shell_level(&str);
-		new = ft_nodenew(str);
-		free(str);
+		new = ft_nodenew(envp[count]);
 		ft_nodeadd_alphabet(&export_env, &new);
 		count++;
 	}
@@ -40,7 +35,6 @@ t_enviroment	*create_env(char **envp)
 {
 	t_enviroment	*my_env;
 	t_enviroment	*new;
-	char			*str;
 	int				count;
 
 	count = 0;
@@ -49,10 +43,7 @@ t_enviroment	*create_env(char **envp)
 		return (NULL);
 	while (envp[count])
 	{
-		str = ft_strdup(envp[count]);
-		if (ft_strncmp(envp[count], "SHLVL=", ft_point_strchr(envp[count], '=')) == 0)
-			shell_level(&str);
-		new = ft_nodenew(str);
+		new = ft_nodenew(envp[count]);
 		ft_nodeadd_back(&my_env, &new);
 		count++;
 	}
@@ -102,7 +93,30 @@ char	**create_env_if_not_env(void)
 	my_envp[3] = NULL;
 	return (my_envp);
 }
-
+void enviroment_free(t_enviroment *vars_env)
+{
+	t_enviroment *aux;
+	
+	aux = vars_env;
+	while(vars_env)
+	{
+		vars_env = vars_env->next;
+		free(aux);
+		aux = vars_env;		
+	}
+}
+void free_vars(t_myvars **my_vars)
+{
+	if ((*my_vars)->first_pwd)
+		free((*my_vars)->first_pwd);
+	if ((*my_vars)->export_env)
+		enviroment_free((*my_vars)->export_env);
+	if((*my_vars)->my_env)
+		enviroment_free((*my_vars)->my_env);
+	(*my_vars)->pwd = NULL;
+	(*my_vars)->old_pwd=NULL;
+	(*my_vars)->home =NULL;
+}
 t_myvars	*start_vars(t_myvars *myvars, char **envp)
 {
 	char	**my_envp;
@@ -123,6 +137,8 @@ t_myvars	*start_vars(t_myvars *myvars, char **envp)
 	myvars->old_pwd=find_path(myvars->my_env, "OLDPWD=");
 	myvars->home =find_path(myvars->my_env,"HOME=");
 	myvars->stat = 0;
+	myvars->hdoc =  NULL;
+	myvars->pipe_hdoc = NULL;
 	if(!*envp)
 		free_matrix(now_env);
 	return (myvars);

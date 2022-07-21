@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/16 20:09:19 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:58:36 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,10 @@ typedef struct s_enviroment
 	char	*env_var;
 	void	*next;
 }				t_enviroment;
-
-typedef struct s_myvars
+typedef struct s_pipes
 {
-	char			*first_pwd;
-	char			**m_envp;
-	t_enviroment	*my_env;
-	t_enviroment	*export_env;
-	int				stat;
-	t_enviroment	*pwd;
-	t_enviroment	*old_pwd;
-	t_enviroment	*home;
-}				t_myvars;
-
+	int				fd[2];
+}				t_pipes;
 typedef struct s_vars_env
 {
 	t_enviroment	*my_env;
@@ -79,10 +70,22 @@ typedef struct s_cmd_line
 	void	*next;
 }				t_cmd_line;
 
-typedef struct s_pipes
+typedef struct s_myvars
 {
-	int				fd[2];
-}				t_pipes;
+	int				stat;
+	int				n_childs;
+	char			**m_envp;
+	char			*first_pwd;
+	t_enviroment	*pwd;
+	t_enviroment	*home;
+	t_enviroment	*my_env;
+	t_enviroment	*old_pwd;
+	t_enviroment	*export_env;
+	char			*hdoc;
+	t_pipes 		*pipe_hdoc;
+}				t_myvars;
+
+
 
 int	g_proc;
 
@@ -128,16 +131,15 @@ int				select_built(t_cmd_line **node, t_myvars **my_vars);
 int				bolean_built(t_cmd_line **node);
 int				execute_cmds(t_cmd_line **nodes, t_myvars **my_vars);
 int				size_of_lst(t_cmd_line **lst);
-void			heredoc_initializer(char *text);
+void			heredoc_initializer(char *text, t_myvars **my_vars);
 void			signal_handler(int signum);
 void			redirect_input(char *file);
 void			redirect_output(char *file);
-void			redirect_output_double(char *file);
-void			redirect_switch(t_cmd_line *node);
+void			redirect_output_double(char *file);	
 int 			cmd_not_found(t_cmd_line **node, t_enviroment **myenv);
 t_enviroment 	*find_path(t_enviroment *my_env, char *str);
 void			handle_output(t_cmd_line *node);
-void			handle_input(t_cmd_line *node);
+void			handle_input(t_cmd_line *node, t_myvars **my_vars);
 int				bolean_built(t_cmd_line **node);
 int				cmd_not_found(t_cmd_line **node, t_enviroment **myenv);
 t_enviroment	*find_path(t_enviroment *my_env, char *str);
@@ -146,8 +148,9 @@ void			expand_continue(t_cmd_line **node);
 void			capture_arguments(t_cmd_line **node, char *str);
 void			capture_first_arg(t_cmd_line **node);
 char			**enviroment_matrix(t_enviroment *my_env);
-void			heredoc_finish();
-void			handle_heredoc(t_cmd_line *node);
+void			heredoc_finish(t_myvars **my_vars);
+void			handle_heredoc(t_cmd_line *node, t_myvars **my_vars);
 void			free_cmds(t_cmd_line **lst);
 void			shell_level(char **m_envp);
+void			free_vars(t_myvars **my_vars);
 #endif

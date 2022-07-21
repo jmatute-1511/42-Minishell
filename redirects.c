@@ -6,27 +6,22 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 14:43:58 by bremesar          #+#    #+#             */
-/*   Updated: 2022/07/16 18:39:28 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/21 18:15:54 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	heredoc_finish()
+void	heredoc_finish(t_myvars **my_vars)
 {
-	int		filedesc;
-
-	filedesc = open("./temp", O_RDONLY);
-	dup2(filedesc, STDIN_FILENO);
-	close(filedesc);
+	if ((*my_vars)->pipe_hdoc != NULL)
+		dup2((*my_vars)->pipe_hdoc->fd[READ_P], STDIN_FILENO);	
 }
-
-void	heredoc_initializer(char *text)
+void	heredoc_initializer(char *text, t_myvars **my_vars)
 {
 	char	*str;
 	char	*join_str;
 	char	*aux_str;
-	int		filedesc;
 
 	join_str = NULL;
 	while (1)
@@ -54,10 +49,7 @@ void	heredoc_initializer(char *text)
 		}
 		free(str);
 	}
-	filedesc = open("temp", O_WRONLY | O_TRUNC | O_CREAT);
-	write(filedesc, join_str, ft_strlen(join_str));
-	free(join_str);
-	close(filedesc);
+	(*my_vars)->hdoc = join_str;
 }
 
 void	redirect_input(char *file)

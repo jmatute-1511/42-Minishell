@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 15:09:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/16 20:06:02 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/21 18:53:54 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,34 @@ char *find_path_exec(char *str, t_enviroment **my_env)
 
 	split = routes_of_path(my_env);
 	path = access_cmd(split, str);
-	free_matrix(split);
+	if (split)
+		free_matrix(split);
 	return (path); 
 }
 
-void 	son_shell_pipes(t_pipes *pipe, int it, int n_childs, t_cmd_line *node)
+void 	son_shell_pipes(t_pipes *pipe, int it, t_myvars **my_vars, t_cmd_line *node)
 {
 	int j;
 	
 	j = 0;
 	if (node->input != NULL)
-		handle_input(node);
+		handle_input(node, my_vars);
 	else if (it != 0)
 		dup2(pipe[it - 1].fd[READ_P], STDIN_FILENO);
 	if (node->output != NULL)
 		handle_output(node);
-	else if (it < n_childs - 1)
+	else if (it < (*my_vars)->n_childs - 1)
 		dup2(pipe[it].fd[WRITE_P], STDOUT_FILENO);
-	while (j < n_childs - 1)
+	while (j < (*my_vars)->n_childs - 1)
 	{
 		close(pipe[j].fd[WRITE_P]);
 		close(pipe[j].fd[READ_P]);
 		j++;
+	}
+	if ((*my_vars)->pipe_hdoc)
+	{
+		close((*my_vars)->pipe_hdoc->fd[READ_P]);
+		close((*my_vars)->pipe_hdoc->fd[WRITE_P]);
 	}
 }
 
@@ -80,25 +86,24 @@ void son_shell_execute(t_cmd_line *node, t_myvars **my_vars)
 	char *expand;
 
 	f_quotes = set_quotes(node->first_arg);
-	path = find_path_exec(f_quotes, &(*my_vars)->my_env);;
 	expand = expand_str(*my_vars,node->arguments);
 	quotes = set_quotes(expand);
 	(*my_vars)->m_envp = enviroment_matrix((*my_vars)->my_env);
-	if(ft_strcmp(path, "./minishell") == 0 || ft_strcmp(path, "minishell") == 0)
-		shell_level((*my_vars)->m_envp);
 	if (node->arguments != NULL && error_cmd(&node) == 0)
 	{
+		
 		if (cmd_not_found(&node, &(*my_vars)->my_env))
 			exit(127);
-		if (select_built(&node, my_vars))
+		else if (select_built(&node, my_vars))
 			exit(0);
 		else
+		{
+			path = find_path_exec(f_quotes, &(*my_vars)->my_env);;
+			if(ft_strcmp(path, "./minishell") == 0 || ft_strcmp(path, "minishell") == 0)
+				shell_level((*my_vars)->m_envp);
 			execve(path, ft_split(quotes, ' '), (*my_vars)->m_envp);
+		}
 	}
-	free(path);
-	free(expand);
-	free(quotes);
-	free(f_quotes);
 	exit(0);
 }
 
@@ -114,6 +119,13 @@ void close_pipes(t_pipes *child_pipe, int n_childs, pid_t *pids, t_myvars **my_v
 		close(child_pipe[it].fd[WRITE_P]);
 		close(child_pipe[it].fd[READ_P]);
 		it++;
+	}
+	if ((*my_vars)->pipe_hdoc != NULL)
+	{
+		close((*my_vars)->pipe_hdoc->fd[READ_P]);
+		close((*my_vars)->pipe_hdoc->fd[WRITE_P]);
+		free((*my_vars)->pipe_hdoc);
+		(*my_vars)->pipe_hdoc = NULL;
 	}
 	it = 0;
 	while (it < n_childs)
@@ -153,8 +165,10 @@ void one_child_built(t_cmd_line **node, t_myvars **my_vars, int *it)
 	aux_out = dup(STDOUT_FILENO);
 	aux_in = dup(STDIN_FILENO);
 	error_cmd(node);
-	if ((*node)->input || (*node)->output)
-		redirect_switch((*node));
+	if ((*node)->input)
+		handle_input((*node), my_vars);
+	if ((*node)->output)
+		handle_output((*node));
 	if (select_built(node, my_vars))
 	{
 		(*my_vars)->stat = 0;
@@ -165,7 +179,35 @@ void one_child_built(t_cmd_line **node, t_myvars **my_vars, int *it)
 	}
 	(*it)++;
 }
+void loop_hdoc(t_cmd_line **nodes, t_myvars **my_vars)
+{
+	t_cmd_line *aux;
+	pid_t pid;
 
+	aux = (*nodes);
+	(*my_vars)->pipe_hdoc = malloc(sizeof(t_pipes) * 1);
+	pipe((*my_vars)->pipe_hdoc->fd);
+	pid = fork();
+	g_proc = pid;
+	if (pid == 0)
+	{
+		while(aux)
+		{
+			if (aux->input != NULL)
+				handle_heredoc(aux, my_vars);
+			aux= aux->next;	
+		}
+		if((*my_vars)->hdoc != NULL)
+		{
+			ft_putstr_fd((*my_vars)->hdoc, (*my_vars)->pipe_hdoc->fd[WRITE_P]);
+			free((*my_vars)->hdoc);
+		}
+		close((*my_vars)->pipe_hdoc->fd[READ_P]);
+		close((*my_vars)->pipe_hdoc->fd[WRITE_P]);
+		exit(0);
+	}
+	waitpid(pid, NULL, 0);
+}
 void create_process(t_cmd_line **nodes, t_myvars **my_vars, int n_childs, int *it)
 {
 	t_pipes *child_pipe;
@@ -175,15 +217,16 @@ void create_process(t_cmd_line **nodes, t_myvars **my_vars, int n_childs, int *i
 	pids = (pid_t *)malloc(sizeof(pid_t) * n_childs);
 	child_pipe = create_pipes(n_childs);
 	aux = (*nodes);
+	loop_hdoc(nodes, my_vars);
 	while(*it < n_childs)
-	{
-		if ((*nodes)->input != NULL)
-			handle_heredoc((*nodes));
+	{	
+		
 		pids[(*it)] = fork();
 		g_proc = pids[(*it)];
 		if (pids[(*it)] == 0)
 		{	
-			son_shell_pipes(child_pipe, (*it), n_childs, *nodes);
+			
+			son_shell_pipes(child_pipe, (*it), my_vars, *nodes);
 			son_shell_execute(*nodes, my_vars);
 		}
 		(*nodes) = (*nodes)->next;
@@ -197,13 +240,13 @@ void create_process(t_cmd_line **nodes, t_myvars **my_vars, int n_childs, int *i
 
 int execute_cmds(t_cmd_line **nodes, t_myvars **my_vars)
 {
-	int 	n_childs;
 	int		it;
 
 	it = 0;
-	n_childs = size_of_lst(nodes);
-	if ((*nodes)->arguments  && bolean_built(nodes))
+	(*my_vars)->n_childs = size_of_lst(nodes);
+	if ((*nodes)->arguments  && bolean_built(nodes) && (*my_vars)->n_childs == 1)
 		one_child_built(nodes, my_vars, &it);
-	create_process(nodes, my_vars, n_childs, &it);
+	else
+		create_process(nodes, my_vars, (*my_vars)->n_childs , &it);
 	return (0);
 }

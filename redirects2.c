@@ -6,14 +6,14 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 15:59:01 by bremesar          #+#    #+#             */
-/*   Updated: 2022/07/16 18:32:46 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/21 16:00:05 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-void handle_heredoc(t_cmd_line *node)
+void handle_heredoc(t_cmd_line *node, t_myvars **my_vars)
 {
 	int		reader;
 	char	*input;
@@ -25,14 +25,14 @@ void handle_heredoc(t_cmd_line *node)
 		{
 			input = ft_strldup(&node->input[reader + 2],
 					ft_point_strchr(&node->input[reader + 2], ' '));
-			heredoc_initializer(input);
+			heredoc_initializer(input, my_vars);
 			reader++;
 		}
 		reader++;
 	}
 }
 
-void	handle_input(t_cmd_line *node)
+void	handle_input(t_cmd_line *node, t_myvars **my_vars)
 {
 	int		reader;
 	char	*input;
@@ -50,7 +50,7 @@ void	handle_input(t_cmd_line *node)
 			}
 			if (node->input[reader] == '<' && node->input[reader + 1] == '<')
 			{	
-				heredoc_finish();
+				heredoc_finish(my_vars);
 				reader++;
 			}
 			reader++;
@@ -83,10 +83,4 @@ void	handle_output(t_cmd_line *node)
 		}
 		reader++;
 	}
-}
-
-void	redirect_switch(t_cmd_line *node)
-{
-	handle_input(node);
-	handle_output(node);
-}
+}		

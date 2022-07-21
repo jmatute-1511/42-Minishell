@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 17:56:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/16 16:55:08 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/21 18:52:25 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ char *access_cmd(char **split_of_path, char *str)
 	char	*cmd;
 
 	count  = 0;
+	if(access(str, X_OK) == 0)
+		return(str);
 	if (split_of_path)
 	{
 		while(split_of_path[count])
@@ -50,12 +52,7 @@ char *access_cmd(char **split_of_path, char *str)
 			cmd = NULL;
 			count++;
 		}
-	}
-	if(access(str, X_OK) == 0)
-		return(str);
-	if(ft_strncmp("./", str, 2) == 0)
-	{
-		if (access(str, X_OK))
+		if(access(str, X_OK) == 0)
 			return(str);
 	}
 	return(NULL);

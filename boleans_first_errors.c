@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 11:57:03 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/16 18:09:19 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/21 18:50:28 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,15 @@ int cmd_not_found(t_cmd_line **node, t_enviroment **myenv)
 	
 	if ((*node)->first_arg)
 	{
+		if (access((*node)->first_arg, X_OK) == 0)
+			return(0);
 		cmd = NULL;
 		str = set_quotes((*node)->first_arg);
+		if (str[0] == '\0')
+		{
+			printf("Myshell: %s : comand not found\n", str);
+			return (1);
+		}
 		free((*node)->first_arg);
 		(*node)->first_arg = str;
 		split_env = routes_of_path(myenv);

@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/16 18:14:38 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/17 21:54:36 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void complement_add_arguments(t_cmd_line **node, char *str, int count)
 		name = ft_strldup(str, count);
 		join = ft_strnjoin(3, (*node)->arguments, " ", name);
 		free((*node)->arguments);
+		(*node)->arguments = NULL;
 		(*node)->arguments = join;
 		free(name);
 	}
