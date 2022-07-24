@@ -6,13 +6,13 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 04:26:51 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/09 11:41:31 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/24 19:20:07 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void built_env(t_enviroment **myenv)
+void	built_env(t_enviroment **myenv)
 {
-    print_env(*myenv, "env");
+	print_env(*myenv, "env");
 }

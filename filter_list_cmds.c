@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 12:23:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/17 21:54:36 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/24 20:33:29 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,12 @@ int	add_hdocs(t_cmd_line **node, char *str)
 	return (count);
 }
 
-void complement_add_arguments(t_cmd_line **node, char *str, int count)
+void	complement_add_arguments(t_cmd_line **node, char *str, int count)
 {
-	char *name;
-	char *join;
-	
-	if((*node)->arguments)
+	char	*name;
+	char	*join;
+
+	if ((*node)->arguments)
 	{
 		name = ft_strldup(str, count);
 		join = ft_strnjoin(3, (*node)->arguments, " ", name);
@@ -117,22 +117,23 @@ void complement_add_arguments(t_cmd_line **node, char *str, int count)
 		(*node)->arguments = join;
 		free(name);
 	}
-	else 
-		(*node)->arguments= ft_strldup(str, count);
+	else
+		(*node)->arguments = ft_strldup(str, count);
 }
-int add_arguments(t_cmd_line **node, char *str)
+
+int	add_arguments(t_cmd_line **node, char *str)
 {
-	int count;
-	int flag[2];
-	
-	count  = 0;
+	int	count;
+	int	flag[2];
+
+	count = 0;
 	flag[P_QUOTE] = 0;
 	flag[S_QUOTE] = 0;
 	while (str[count])
 	{
-		if ((str[count]  == '<' || str[count] == '>') && \
+		if ((str[count] == '<' || str[count] == '>') && \
 		flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
-			break;
+			break ;
 		check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 		count++;
 	}
@@ -140,19 +141,19 @@ int add_arguments(t_cmd_line **node, char *str)
 	return (count - 1);
 }
 
-void capture_arguments(t_cmd_line **node, char *str)
+void	capture_arguments(t_cmd_line **node, char *str)
 {
-	int count;
-	int flag[2];
-	
-	count  = 0;
+	int	count;
+	int	flag[2];
+
+	count = 0;
 	flag[P_QUOTE] = 0;
 	flag[S_QUOTE] = 0;
 	while (str[count])
 	{
-		if(flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
+		if (flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
 		{
-			if(str[count] == '<' || str[count] == '>')
+			if (str[count] == '<' || str[count] == '>')
 				count += add_hdocs(node, &str[count]);
 			else if (str[count] != ' ')
 				count += add_arguments(node, &str[count]);
@@ -162,22 +163,22 @@ void capture_arguments(t_cmd_line **node, char *str)
 	}
 }
 
-void capture_first_arg(t_cmd_line **node)
+void	capture_first_arg(t_cmd_line **node)
 {
-	int count;
-	int flag[2];
+	int		count;
+	int		flag[2];
 	char	*str;
-	
+
 	count = 0;
 	flag[P_QUOTE] = 0;
 	flag[S_QUOTE] = 0;
 	if ((*node)->arguments)
 	{
 		str = (*node)->arguments;
-		while(str[count])
+		while (str[count])
 		{
 			if (str[count] == ' ' && flag[P_QUOTE] == 0 && flag[S_QUOTE] == 0)
-				break;
+				break ;
 			check_quotes(str[count], &flag[P_QUOTE], &flag[S_QUOTE]);
 			count++;
 		}
@@ -185,45 +186,39 @@ void capture_first_arg(t_cmd_line **node)
 	}
 }
 
-char *expansions( char **str, t_myvars **my_vars)
+char	*expansions( char **str, t_myvars **my_vars)
 {
-	char *expanded;
-	
-	expanded = expand_str((*my_vars),(*str));
+	char	*expanded;
+
+	expanded = expand_str((*my_vars), (*str));
 	free((*str));
-	return(expanded);
+	return (expanded);
 }
 
-void expand_argument(t_cmd_line **node, t_myvars **my_vars)
+void	expand_argument(t_cmd_line **node, t_myvars **my_vars)
 {
-	char *c;
-		
+	char	*c;
+
 	if ((*node)->arguments)
 		(*node)->arguments = expansions(&(*node)->arguments, my_vars);
 	if ((*node)->first_arg)
 		(*node)->first_arg = expansions(&(*node)->first_arg, my_vars);
-	if ((*node)->input)
-	{
-		c = set_quotes((*node)->input);
-		free((*node)->input);
-		(*node)->input = c;
-	}
 	if ((*node)->output)
 	{
 		c = set_quotes((*node)->output);
 		free((*node)->output);
 		(*node)->output = c;
-	}	
+	}
 }
 
-void charge_elements(t_cmd_line **node, t_myvars **my_vars)
+void	charge_elements(t_cmd_line **node, t_myvars **my_vars)
 {
 	char	*aux;
 	int		count;	
 
 	count = 0;
 	aux = (*node)->raw_cmd;
-	if(aux)
+	if (aux)
 	{
 		capture_arguments(node, aux);
 		expand_argument(node, my_vars);
@@ -231,40 +226,44 @@ void charge_elements(t_cmd_line **node, t_myvars **my_vars)
 	}
 }
 
-int error_hdoc(char *str, char type, char c_type)
+int	error_hdoc(char *str, char type, char c_type)
 {
-	int a;
+	int	a;
 
 	a = 0;
 	if (str)
 	{
 		while (str[a] && str)
 		{
-			if (str[a] == type && (str[a + 2] == type || str[a + 2] == c_type || str[a + 2] == '\0'))
+			if (str[a] == type && (str[a + 2] == type || \
+			str[a + 2] == c_type || str[a + 2] == '\0'))
 			{
-				printf("Myshell: parse error near `%c'\n",type);
-				return(1);
-			}	
+				printf("Myshell: parse error near `%c'\n", type);
+				return (1);
+			}
+			if (str[a] == type && str[a + 1] == type)
+				a++;
 			a++;
 		}
 	}
-	return(0);
+	return (0);
 }
 
-int init_nodes(t_cmd_line **lst_cmds,t_myvars **my_vars,char *str)
+int	init_nodes(t_cmd_line **lst_cmds, t_myvars **my_vars, char *str)
 {
 	t_cmd_line	*aux;
-	
-	if (first_filter_errors(str))	
+
+	if (first_filter_errors(str))
 		return (1);
 	*lst_cmds = list_cmds(str);
 	aux = (*lst_cmds);
 	while (aux)
 	{
 		charge_elements(&aux, my_vars);
-		if (error_hdoc(aux->input,'<', '>') || error_hdoc(aux->input,'>', '<') || error_cmd(&aux))
-			return(1);
+		if (error_hdoc(aux->input, '<', '>') || \
+		error_hdoc(aux->input, '>', '<') || error_cmd(&aux))
+			return (1);
 		aux = aux->next;
 	}
 	return (0);
-} 
+}

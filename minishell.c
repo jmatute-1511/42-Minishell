@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/21 21:14:16 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/24 21:49:27 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,7 @@ void			signal_handler(int signum)
 {
 	
 	if (signum == SIGINT && g_proc > 0)
-	{
 		kill(g_proc, SIGCONT);
-		// write(0, "\n", 1);
-		// rl_on_new_line();
-		// rl_replace_line("", 0);
-		// rl_redisplay();
-	}
 	if (signum == SIGINT && g_proc == 0)
 	{
 		write(0, "\n", 1);
@@ -30,23 +24,15 @@ void			signal_handler(int signum)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else if (signum == SIGINT && g_proc < 0)
-	{
-		// write(0, "\n", 1);
-		// rl_on_new_line();
-		// rl_replace_line("", 0);
-		// rl_redisplay();
-	}
 }
 void print(void)
 {
-	printf(YEL"                                   __              ___    ___      \n");
-	printf(YEL"           __          __         /\\ \\            /\\_ \\  /\\_ \\     \n");
-	printf(BYEL"  ___ ___ /\\_\\    ___ /\\_\\    ____\\ \\ \\___      __\\//\\ \\ \\//\\ \\    \n");
-	printf(BGRN"/' __` __`\\/\\ \\ /' _ `\\/\\ \\  /',__\\\\ \\  _ `\\  /'__`\\\\ \\ \\  \\ \\ \\   \n");
-	printf(GRN"/\\ \\/\\ \\/\\ \\ \\ \\/\\ \\/\\ \\ \\ \\/\\__, `\\\\ \\ \\ \\ \\/\\  __/ \\_\\ \\_ \\_\\ \\_ \n");
-	printf(BLU"\\ \\_\\ \\_\\ \\_\\ \\_\\ \\_\\ \\_\\ \\_\\/\\____/ \\ \\_\\ \\_\\ \\____\\/\\____\\/\\____\\\n");
-	printf(BBLU" \\/_/\\/_/\\/_/\\/_/\\/_/\\/_/\\/_/\\/___/   \\/_/\\/_/\\/____/\\/____/\\/____/\n");
+	printf(YEL"• ▌ ▄ ·. ▪   ▐ ▄ ▪  .▄▄ ·  ▄ .▄▄▄▄ .▄▄▌  ▄▄▌  \n");
+	printf(BYEL"·██ ▐███▪██ •█▌▐███ ▐█ ▀. ██▪▐█▀▄.▀·██•  ██•  \n");
+	printf(BGRN"▐█ ▌▐▌▐█·▐█·▐█▐▐▌▐█·▄▀▀▀█▄██▀▐█▐▀▀▪▄██▪  ██▪  \n");
+	printf(GRN"██ ██▌▐█▌▐█▌██▐█▌▐█▌▐█▄▪▐███▌▐▀▐█▄▄▌▐█▌▐▌▐█▌▐▌\n");
+	printf(BLU"▀▀  █▪▀▀▀▀▀▀▀▀ █▪▀▀▀ ▀▀▀▀ ▀▀▀ · ▀▀▀ .▀▀▀ .▀▀▀ \n");
+	printf(COLOR_RESET" \n");
 }
 
 void free_cmds(t_cmd_line **lst)
@@ -75,10 +61,6 @@ void free_cmds(t_cmd_line **lst)
 	(*lst) = NULL;	
 }
 
-void f_leaks()
-{
-	system("leaks minishell");
-}
 int main(int argc,char **argv,char **envp)
 {
 	t_myvars	*myvars;
@@ -88,7 +70,7 @@ int main(int argc,char **argv,char **envp)
 	(void)argc;
 	(void)argv;
 	myvars = NULL;
-	atexit(f_leaks);
+	//atexit(f_leaks);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	print();
@@ -97,12 +79,12 @@ int main(int argc,char **argv,char **envp)
 	{
 		g_proc = 0;
 		str = NULL;
-		str = readline(YEL"Myshell%---->"COLOR_RESET);
+		str = readline("Myshell%---->");
 		if (str == NULL)
 		{
 			free_vars(&myvars);
 			printf("exit\n");
-			return (0);
+			exit(myvars->stat);
 		}
 		if (ft_strcmp(str, "") != 0)
 			add_history(str);

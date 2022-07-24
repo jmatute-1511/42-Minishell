@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:52:40 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/16 12:30:34 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/24 20:39:00 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_cmd_line	*list_cmds(char *str)
 	int			pipe;	
 	t_cmd_line	*lst;
 	t_cmd_line	*add_back;
-	
 
 	count = 0;
 	lst = NULL;

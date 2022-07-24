@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/21 20:58:36 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/24 21:27:44 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@
 # include <term.h>
 # include <fcntl.h>
 
-
-#define BYEL "\e[1;33m"
-#define YEL "\e[0;33m"
-#define GRN "\e[0;32m"
-#define BGRN "\e[1;32m"	
-#define BLU "\e[0;34m"
-#define BBLU "\e[1;34m"
+# define BYEL "\e[1;33m"
+# define YEL "\e[0;33m"
+# define GRN "\e[0;32m"
+# define BGRN "\e[1;32m"	
+# define BLU "\e[0;34m"
+# define BBLU "\e[1;34m"
 # define COLOR_RESET "\e[0m"
 # define P_QUOTE 0 // Pair quotes
 # define S_QUOTE 1 // single quotes
@@ -73,6 +72,7 @@ typedef struct s_cmd_line
 typedef struct s_myvars
 {
 	int				stat;
+	char			*hdoc;
 	int				n_childs;
 	char			**m_envp;
 	char			*first_pwd;
@@ -80,12 +80,10 @@ typedef struct s_myvars
 	t_enviroment	*home;
 	t_enviroment	*my_env;
 	t_enviroment	*old_pwd;
+	t_enviroment	*ultimate_cmd;
 	t_enviroment	*export_env;
-	char			*hdoc;
-	t_pipes 		*pipe_hdoc;
+	t_pipes			*pipe_hdoc;
 }				t_myvars;
-
-
 
 int	g_proc;
 
@@ -118,7 +116,7 @@ int				len_string(char *str);
 t_cmd_line		*list_cmds(char *str);
 void			print_cmd(t_cmd_line **lst);
 int				ft_point_strstr(char *str);
-char			*expand_str(t_myvars *my_vras, char *str);
+char			*expand_str(t_myvars *my_vars, char *str);
 char			*set_quotes(char *str);
 int				init_nodes(t_cmd_line **lst_cmds,
 					t_myvars **mmyvars, char *str);
@@ -131,13 +129,13 @@ int				select_built(t_cmd_line **node, t_myvars **my_vars);
 int				bolean_built(t_cmd_line **node);
 int				execute_cmds(t_cmd_line **nodes, t_myvars **my_vars);
 int				size_of_lst(t_cmd_line **lst);
-void			heredoc_initializer(char *text, t_myvars **my_vars);
+void			heredoc_initializer(char *text, t_myvars **my_vars, int flag);
 void			signal_handler(int signum);
 void			redirect_input(char *file);
 void			redirect_output(char *file);
 void			redirect_output_double(char *file);	
-int 			cmd_not_found(t_cmd_line **node, t_enviroment **myenv);
-t_enviroment 	*find_path(t_enviroment *my_env, char *str);
+int				cmd_not_found(t_cmd_line **node, t_enviroment **myenv);
+t_enviroment	*find_path(t_enviroment *my_env, char *str);
 void			handle_output(t_cmd_line *node);
 void			handle_input(t_cmd_line *node, t_myvars **my_vars);
 int				bolean_built(t_cmd_line **node);

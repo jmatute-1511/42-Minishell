@@ -6,54 +6,54 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 17:56:32 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/21 18:52:25 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/24 18:47:43 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **routes_of_path(t_enviroment **myenv)
+char	**routes_of_path(t_enviroment **myenv)
 {
-	t_enviroment    *aux;
-	char            **split_of_path;
-	int count;
+	t_enviroment	*aux;
+	char			**split_of_path;
+	int				count;
 
 	count = 0;
-	split_of_path =  NULL;
+	split_of_path = NULL;
 	aux = (*myenv);
 	while (aux)
 	{
 		if (ft_strncmp(aux->env_var, "PATH=", 5) == 0)
 		{
 			split_of_path = ft_split(&aux->env_var[5], ':');
-			break;
+			break ;
 		}
 		aux = aux->next;
 	}
-	return(split_of_path);
+	return (split_of_path);
 }
 
-char *access_cmd(char **split_of_path, char *str)
+char	*access_cmd(char **split_of_path, char *str)
 {
-	int count;
+	int		count;
 	char	*cmd;
 
-	count  = 0;
-	if(access(str, X_OK) == 0)
-		return(str);
+	count = 0;
+	if (access(str, X_OK) == 0)
+		return (str);
 	if (split_of_path)
 	{
-		while(split_of_path[count])
+		while (split_of_path[count])
 		{
 			cmd = ft_strnjoin(3, split_of_path[count], "/", str);
-			if(access(cmd, X_OK) == 0)
-				return(cmd);
+			if (access(cmd, X_OK) == 0)
+				return (cmd);
 			free(cmd);
 			cmd = NULL;
 			count++;
 		}
-		if(access(str, X_OK) == 0)
-			return(str);
+		if (access(str, X_OK) == 0)
+			return (str);
 	}
-	return(NULL);
+	return (NULL);
 }

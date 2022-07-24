@@ -6,11 +6,26 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 14:24:36 by bremesar          #+#    #+#             */
-/*   Updated: 2022/07/10 21:00:11 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/24 19:41:50 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_point_strchr(char *s, char c)
+{
+	size_t		count;
+	char		*cpy_s;
+
+	cpy_s = (char *)s;
+	count = 0;
+	while (cpy_s[count] && cpy_s[count] != c)
+		count++;
+	if (cpy_s[count] != '\0')
+		return (count);
+	else
+		return (ft_strlen(s));
+}
 
 void	print_env(t_enviroment *export_env, char *option)
 {
