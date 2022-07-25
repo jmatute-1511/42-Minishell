@@ -6,82 +6,83 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:13:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/21 17:56:05 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/25 17:18:25 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_enviroment *create_export_env(char **envp)
+void	enviroment_free(t_enviroment *vars_env)
 {
-    t_enviroment	*export_env;
-    t_enviroment    *new;
-    char			*str;
-	int				count;
-    
-    count = 0;
-    export_env = NULL;
-    if (envp == NULL)
-        return (NULL);
-    while (envp[count])
-    {
-        str = ft_strdup(envp[count]);
-        new = ft_nodenew(str);
-        ft_nodeadd_alphabet(&export_env, &new);
-        count++;
-    }
-    return (export_env);
-}
-t_enviroment *create_env( char **envp)
-{
-    t_enviroment	*my_env;
-    t_enviroment    *new;
-    int				count;
-    
-    
-    count = 0;
-    my_env  = NULL;
-    if (envp == NULL)
-        return (NULL);
-    while (envp[count])
-    {
-        new = ft_nodenew(envp[count]);
-        ft_nodeadd_back(&my_env, &new);
-        count++;
-    }
-    return (my_env);
-    
-}
-char **enviroment_matrix(char **envp)
-{
-    char    **aux_envp;
-    int     size;
-    int     count;
+	t_enviroment	*aux;
 
-    size = 0;
-    count = 0;
-    if (envp)
-    {
-        while(envp[size])
-            size++;
-        aux_envp = (char **)malloc(sizeof(char *) * size + 1);
-        while (count < size)
-        {
-            aux_envp[count] = ft_strdup(envp[count]);
-            count++;
-        }
-        aux_envp[count] = NULL;
-    }
-    return(aux_envp);
+	aux = vars_env;
+	while (vars_env)
+	{
+		vars_env = vars_env->next;
+		free(aux->env_var);
+		free(aux);
+		aux = vars_env;
+	}
 }
 
-t_myvars *start_vars(t_myvars *myvars,char **envp)   
+void	free_vars(t_myvars **my_vars)
 {
+	if ((*my_vars)->first_pwd)
+		free((*my_vars)->first_pwd);
+	if ((*my_vars)->export_env)
+		enviroment_free((*my_vars)->export_env);
+	if ((*my_vars)->my_env)
+		enviroment_free((*my_vars)->my_env);
+	(*my_vars)->pwd = NULL;
+	(*my_vars)->old_pwd = NULL;
+	(*my_vars)->home = NULL;
+}
 
-    myvars = malloc(sizeof(t_myvars));
-    myvars->first_pwd = getcwd(NULL, 0);
-    myvars->export_env = create_export_env(envp);
-    myvars->my_env = create_env(envp);
-    myvars->m_envp = enviroment_matrix(envp);
-    return(myvars);
+void	change_ucmd(t_enviroment **myenv, t_enviroment **export_env)
+{
+	t_enviroment	*aux_env;
+	t_enviroment	*export_aux;
+
+	aux_env = find_path((*myenv), "_=");
+	export_aux = find_path((*export_env), "_=");
+	if (aux_env)
+	{
+		free(aux_env->env_var);
+		aux_env->env_var = ft_strdup("_=/usr/bin/env");
+	}
+	if (export_aux)
+	{
+		free(export_aux->env_var);
+		export_aux->env_var = ft_strdup("_=/usr/bin/env");
+	}
+}
+
+t_myvars	*start_vars(char **envp)
+{
+	char		**my_envp;
+	char		**now_env;
+	t_myvars	*myvars;
+
+	now_env = envp;
+	if (!*envp)
+	{
+		my_envp = NULL;
+		my_envp = create_env_if_not_env();
+		now_env = my_envp;
+	}
+	myvars = malloc(sizeof(t_myvars));
+	myvars->first_pwd = getcwd(NULL, 0);
+	myvars->export_env = create_export_env(now_env);
+	myvars->my_env = create_env(now_env);
+	myvars->pwd = find_path(myvars->my_env, "PWD=");
+	myvars->old_pwd = find_path(myvars->my_env, "OLDPWD=");
+	myvars->home = find_path(myvars->my_env, "HOME=");
+	myvars->stat = 0;
+	myvars->hdoc = NULL;
+	myvars->pipe_hdoc = NULL;
+	if (!*envp)
+		free_matrix(now_env);
+	change_ucmd(&myvars->my_env, &myvars->export_env);
+	return (myvars);
 }

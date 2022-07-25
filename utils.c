@@ -6,11 +6,32 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 12:14:18 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/04 14:02:56 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/09 12:55:44 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_chr(char c)
+{
+	if (c == ' ' || c == '$' || c == '\'' || c == '"')
+		return (1);
+	return (0);
+}
+
+int	ft_point_strstr(char *str)
+{
+	int	count_str;
+
+	count_str = 0;
+	while (str[count_str])
+	{
+		if (check_chr(str[count_str]))
+			return (count_str);
+		count_str++;
+	}
+	return (count_str);
+}
 
 void	check_quotes(char str, int *pair_quote, int *single_quote)
 {
@@ -44,7 +65,7 @@ char	*ft_strchrdup_quote(char *str, char *chr)
 {
 	int		count;
 	char	*line;
-	int		flag[2];	
+	int		flag[2];
 
 	count = 0;
 	line = NULL;
@@ -61,34 +82,4 @@ char	*ft_strchrdup_quote(char *str, char *chr)
 	if (count != 0)
 		line = ft_strldup(str, count);
 	return (line);
-}
-
-void	print_env(t_enviroment *export_env, char *option)
-{
-	t_enviroment	*aux;
-
-	aux = export_env;
-	while (aux)
-	{
-		if (ft_strcmp("env", option) == 0)
-			printf("%s\n", aux->env_var);
-		else if (ft_strcmp("export", option) == 0)
-			printf("declare -x %s\n", aux->env_var);
-		aux = aux->next;
-	}
-}
-
-int	size_of_lst(t_cmd_line **lst)
-{
-	int			a;
-	t_cmd_line	*aux;
-
-	a = 0;
-	aux = (*lst);
-	while (aux)
-	{
-		aux = aux->next;
-		a++;
-	}
-	return (a);
 }

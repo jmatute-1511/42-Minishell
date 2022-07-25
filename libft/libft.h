@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 17:03:57 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/06/18 15:05:39 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/16 13:50:56 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_strrchr(const char *str, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strnjoin(int nstrings, ...);
 char	*ft_strldup(char *str, size_t len);
-char	*ft_strtrim(char *s1, char *set);
+char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_bolean_strstr(char *str, char *find);
@@ -39,6 +39,7 @@ int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
+char	*ft_itoa(int n);
 long	ft_long_atoi(const char *str);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, size_t n);
@@ -61,6 +62,7 @@ void	free_matrix(char **matrix);
 int		ft_bolean_operator( char diff, char *str);
 int		bolean_str(char c, char *str);
 int		len_word(const char *s, char c, char *ign);
+int		ft_atoi(const char *str);
 
 typedef struct s_list
 {
