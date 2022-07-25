@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:13:30 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/24 20:38:34 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/25 17:18:25 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	**create_env_if_not_env(void)
 	if (!my_envp)
 		return (NULL);
 	my_envp[0] = ft_strjoin("PWD=", getcwd(NULL, 0));
-	my_envp[1] = ft_strdup("SHLVL=2");
+	my_envp[1] = ft_strdup("SHLVL=1");
 	my_envp[2] = ft_strdup("_=/usr/bin/env");
 	my_envp[3] = NULL;
 	return (my_envp);
@@ -142,10 +142,11 @@ void	change_ucmd(t_enviroment **myenv, t_enviroment **export_env)
 	}
 }
 
-t_myvars	*start_vars(t_myvars *myvars, char **envp)
+t_myvars	*start_vars(char **envp)
 {
-	char	**my_envp;
-	char	**now_env;
+	char		**my_envp;
+	char		**now_env;
+	t_myvars	*myvars;
 
 	now_env = envp;
 	if (!*envp)

@@ -6,15 +6,14 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/24 21:49:27 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/25 17:16:56 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void			signal_handler(int signum)
+void	signal_handler(int signum)
 {
-	
 	if (signum == SIGINT && g_proc > 0)
 		kill(g_proc, SIGCONT);
 	if (signum == SIGINT && g_proc == 0)
@@ -25,7 +24,8 @@ void			signal_handler(int signum)
 		rl_redisplay();
 	}
 }
-void print(void)
+
+void	print(void)
 {
 	printf(YEL"• ▌ ▄ ·. ▪   ▐ ▄ ▪  .▄▄ ·  ▄ .▄▄▄▄ .▄▄▌  ▄▄▌  \n");
 	printf(BYEL"·██ ▐███▪██ •█▌▐███ ▐█ ▀. ██▪▐█▀▄.▀·██•  ██•  \n");
@@ -35,33 +35,40 @@ void print(void)
 	printf(COLOR_RESET" \n");
 }
 
-void free_cmds(t_cmd_line **lst)
+void	free_cmds(t_cmd_line **lst)
 {
-	t_cmd_line *aux;
-	t_cmd_line *aux2;
-	
+	t_cmd_line	*aux;
+	t_cmd_line	*aux2;
+
 	aux2 = NULL;
 	aux = (*lst);
 	while (aux)
 	{
 		if (aux->input)
 			free(aux->input);
-		if(aux->output)
+		if (aux->output)
 			free(aux->output);
 		if (aux->first_arg)
 			free(aux->first_arg);
-		if(aux->arguments)
+		if (aux->arguments)
 			free(aux->arguments);
-		if(aux->raw_cmd)
+		if (aux->raw_cmd)
 			free(aux->raw_cmd);
 		aux2 = aux;
 		aux = aux->next;
 		free(aux2);
 	}
-	(*lst) = NULL;	
+	(*lst) = NULL;
 }
 
-int main(int argc,char **argv,char **envp)
+void	exit_my_shell(t_myvars **my_vars)
+{
+	free_vars(my_vars);
+	printf("exit\n");
+	exit((*my_vars)->stat);
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_myvars	*myvars;
 	t_cmd_line	*lst;
@@ -69,29 +76,21 @@ int main(int argc,char **argv,char **envp)
 
 	(void)argc;
 	(void)argv;
-	myvars = NULL;
-	//atexit(f_leaks);
+	myvars = start_vars(envp);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	print();
-	myvars = start_vars(myvars,envp);
 	while (1)
 	{
 		g_proc = 0;
-		str = NULL;
 		str = readline("Myshell%---->");
 		if (str == NULL)
-		{
-			free_vars(&myvars);
-			printf("exit\n");
-			exit(myvars->stat);
-		}
+			exit_my_shell(&myvars);
 		if (ft_strcmp(str, "") != 0)
 			add_history(str);
 		if (init_nodes(&lst, &myvars, str) == 0)
 		{
-			//print_cmd(&lst);
-			if(lst)
+			if (lst)
 				execute_cmds(&lst, &myvars);
 		}
 		free(str);

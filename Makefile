@@ -6,7 +6,7 @@
 #    By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/03 17:19:28 by jmatute-          #+#    #+#              #
-#    Updated: 2022/07/24 19:34:23 by jmatute-         ###   ########.fr        #
+#    Updated: 2022/07/25 16:25:54 by jmatute-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ ${NAME}:	${OBJS} minishell.h Makefile
 			@cp ./libft/libft.a .
 			@${CC} ${CFLAGS}  ${OBJS} ${LIBS} -o ${NAME} libft.a
 			@echo "COMPILATION IS FINISHED"
+			@bash -c "stty -ctlecho"
 
 all:		${NAME}
 

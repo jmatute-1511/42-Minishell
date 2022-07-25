@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 15:09:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/24 21:58:27 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/25 16:31:27 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,11 +163,12 @@ void	create_hdocs(t_cmd_line *aux, t_myvars **my_vars)
 	}
 }
 
-void signal_handler_son(int signum)
+void	signal_handler_son(int signum)
 {
 	if (signum == SIGINT)
 		exit(0);
 }
+
 void	loop_hdoc(t_cmd_line **nodes, t_myvars **my_vars)
 {
 	t_cmd_line	*aux;
@@ -176,7 +177,7 @@ void	loop_hdoc(t_cmd_line **nodes, t_myvars **my_vars)
 	aux = (*nodes);
 	(*my_vars)->pipe_hdoc = malloc(sizeof(t_pipes) * 1);
 	pipe((*my_vars)->pipe_hdoc->fd);
-	pid= fork();
+	pid = fork();
 	g_proc = pid;
 	if (pid == 0)
 	{

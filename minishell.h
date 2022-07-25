@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:23:12 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/24 21:27:44 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/25 17:16:25 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	g_proc;
 
 void			kill(int thread, int signal);
 void			rl_replace_line(const char *text, int clear_undo);
-t_myvars		*start_vars(t_myvars *myvars, char **envp);
+t_myvars		*start_vars(char **envp);
 char			*ft_strchrdup_quote(char *str, char *chr);
 void			check_quotes(char str, int *pair_quote, int *single_quote);
 int				first_filter_errors(char *str);
