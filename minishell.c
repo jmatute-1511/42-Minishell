@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 15:46:48 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/25 17:16:56 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/26 17:29:45 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ void	signal_handler(int signum)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	if (signum == SIGQUIT && g_proc == 0)
+	{
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if(signum == SIGQUIT && g_proc > 0)
+	{
+		kill(g_proc, SIGCONT);
+		write(1, "Quit: 3\n", 9);
+	}
+	
 }
 
 void	print(void)
@@ -78,7 +90,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	myvars = start_vars(envp);
 	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, signal_handler);
 	print();
 	while (1)
 	{
