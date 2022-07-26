@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 20:38:50 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/24 19:49:26 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/26 16:40:32 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_enviroment **prev_aux)
 void	unset_myenv(t_enviroment **myenv, t_enviroment **aux_myenv, \
 t_enviroment **prev_aux)
 {
+	
 	if ((*prev_aux) == NULL)
 	{
 		(*myenv) = (*myenv)->next;

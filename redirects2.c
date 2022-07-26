@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 15:59:01 by bremesar          #+#    #+#             */
-/*   Updated: 2022/07/24 21:42:29 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/26 14:49:13 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,20 @@ void	continue_handle_hdoc(t_cmd_line *node, int *reader, t_myvars **my_vars)
 {
 	int		quote;
 	char	*input;
+	int		count;
 
 	quote = 0;
+	count = 0;
+	while (node->input[count])
+	{
+		if(node->input[count] == '"' || node->input[count] == '\'')
+			quote = 1;
+		count++;
+	}
 	if (node->input[*reader] == '<' && node->input[*reader + 1] == '<')
 	{
-		if (node->input[(*reader) + 2] == '"' || \
-		node->input[(*reader) + 2] == '\'')
-			quote = 1;
 		input = ft_strldup(&node->input[(*reader) + 2],
-				ft_point_strchr(&node->input[(*reader) + 2], ' '));
+				ft_point_strchr(&node->input[(*reader) + 2], '<'));
 		heredoc_initializer(input, my_vars, quote);
 		(*reader)++;
 	}

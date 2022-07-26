@@ -6,7 +6,7 @@
 /*   By: jmatute- <jmatute-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:07:46 by jmatute-          #+#    #+#             */
-/*   Updated: 2022/07/24 19:15:49 by jmatute-         ###   ########.fr       */
+/*   Updated: 2022/07/26 16:39:36 by jmatute-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,35 @@ char *str, char *actual)
 
 	chdir (str);
 	current = getcwd(NULL, 0);
-	if ((*env_var) && current != NULL)
+	if ((*env_var) != NULL && current != NULL)
 	{
 		free((*env_var)->env_var);
 		(*env_var)->env_var = ft_strjoin ("PWD=", current);
 	}
-	if ((*old_var) && actual != NULL)
+	if ((*old_var)!= NULL && actual != NULL)
 	{
 		free((*old_var)->env_var);
 		(*old_var)->env_var = ft_strjoin("OLDPWD=", actual);
 	}
-	free(current);
+	if (current)
+		free(current);
 }
 
 void	go_back_home(t_myvars **my_vars)
 {
-	int		point;
-	char	*home;
-	char	*current;
+	int				point;
+	char			*home;
+	char			*current;
+	t_enviroment	*aux_home;
 
 	point = 0;
 	home = NULL;
+	aux_home = find_path((*my_vars)->my_env, "HOME=");
 	current = getcwd(NULL, 0);
-	if ((*my_vars)->home)
+	if (aux_home)
 	{
-		point = ft_point_strchr((*my_vars)->home->env_var, '=');
-		home = ft_strdup(&(*my_vars)->home->env_var[point + 1]);
+		point = ft_point_strchr(aux_home->env_var, '=');
+		home = ft_strdup(&aux_home->env_var[point + 1]);
 		chdir(home);
 		if ((*my_vars)->old_pwd)
 		{
@@ -72,7 +75,8 @@ void	go_back_home(t_myvars **my_vars)
 		}
 	}
 	free(current);
-	free(home);
+	if (home)
+		free(home);
 }
 
 void	built_cd(t_myvars **myvars, char *str)
@@ -93,7 +97,8 @@ void	built_cd(t_myvars **myvars, char *str)
 	pwd = find_path((*myvars)->my_env, "PWD=");
 	old_pwd = find_path((*myvars)->my_env, "OLDPWD=");
 	change_location(&pwd, &old_pwd, trim, actual);
-	free(actual);
+	if (actual)
+		free(actual);
 	if (trim)
 		free(trim);
 }
